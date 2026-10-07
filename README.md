@@ -67,38 +67,3 @@ Kiểm tra này chỉ xác nhận cấu trúc, liên kết và quy tắc Git, kh
 | [results/week1/](results/week1/README.md) – [week4/](results/week4/README.md) | Kết quả, log và ảnh thực tế cần lưu làm minh chứng |
 | [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md) | Mẫu PR và bằng chứng kiểm tra |
 
-## Quy trình Git của nhóm
-
-Repo được tạo private vì tài liệu có thông tin sinh viên. Dùng đúng ba nhánh lâu dài: `main` cho phiên bản ổn định và tiến độ chính thức; `dev/chau`, `dev/huy` cho từng thành viên. Khung đầu tiên được commit vào `main`; các thay đổi tiếp theo đi qua nhánh thành viên và PR vào `main`.
-
-Clone và chọn **một** nhánh của mình:
-
-```sh
-git clone https://github.com/ndhuy1127/os-producer-consumer.git
-cd os-producer-consumer
-git switch dev/chau
-# Huy dùng: git switch dev/huy
-git status
-git fetch origin
-git merge origin/main
-```
-
-Clone repo private cần quyền truy cập. Chưa mời collaborator; username và quyền truy cập thành viên cần được xác nhận trước khi mời.
-
-Trước khi sửa, kiểm tra nhánh và working tree; giữ mọi thay đổi chưa commit. Khi nhận việc chưa rõ thành viên, xác nhận người thực hiện trước khi chọn nhánh. Đồng bộ `origin/main` vào nhánh đang làm; giải quyết xung đột để giữ đúng nội dung của cả hai.
-
-Cập nhật phần việc, [tiến độ](docs/progress.md) và báo cáo tuần tương ứng bằng kết quả thực tế. Trước mỗi commit:
-
-```sh
-git status
-git ls-files
-# Stage đúng các đường dẫn liên quan, không dùng git add -f.
-git diff --cached --name-only
-git diff --cached
-```
-
-Danh sách tracked/staged không được có `AGENTS.md` ở bất kỳ cấp nào. Nếu đã tracked, kiểm tra trạng thái rồi dùng `git rm --cached -- AGENTS.md` (hoặc đúng đường dẫn lồng nhau), giữ bản local và quy tắc ignore; không viết lại lịch sử đã chia sẻ.
-
-Commit nhỏ, thông điệp rõ (`docs:`, `chore:`, `feat:`, `fix:`, `test:`); push nhánh thành viên rồi tạo PR vào `main`. Trước merge, đọc diff và review chéo: PR tài liệu kiểm tra nội dung/liên kết; PR code nêu lệnh build/test và kết quả thực chạy. Chỉ merge thay đổi ổn định; chưa có chương trình hoặc bộ test thì phải ghi rõ.
-
-Giữ cả hai nhánh thành viên sau merge. Trước việc tiếp theo, mỗi thành viên fetch và merge `origin/main` vào nhánh của mình. Không force-push, reset làm mất thay đổi hoặc tự tạo thêm nhánh lâu dài. Chỉ lưu minh chứng cần thiết; loại build, log debug và bản tạm. Khi đóng gói bài nộp, dùng các file tracked (ví dụ `git archive`) và kiểm tra không có `AGENTS.md`/secret.
