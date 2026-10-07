@@ -1,0 +1,104 @@
+# os-producer-consumer
+
+Bài tập lớn môn Hệ điều hành: **Xây dựng chương trình giải quyết bài toán Người sản xuất – Người tiêu thụ với bộ đệm giới hạn bằng luồng và semaphore trên Linux**.
+
+Giảng viên: **Nguyễn Quang Minh**.
+
+| Thành viên | Mã sinh viên | Nhánh làm việc |
+| --- | --- | --- |
+| Lê Hải Châu | 20233283 | `dev/chau` |
+| Nguyễn Đức Huy | 20233448 | `dev/huy` |
+
+## Mục tiêu và trạng thái
+
+Sản phẩm dự kiến là chương trình dòng lệnh bằng C, dùng POSIX Threads và POSIX semaphore: bộ đệm vòng FIFO, một hoặc nhiều producer/consumer, cấu hình sức chứa/số luồng/số phần tử/độ trễ, log hoạt động, tổng kết kiểm tra dữ liệu và kết thúc hữu hạn.
+
+Hiện có khung quản lý dự án, Makefile và mẫu tài liệu. **Chưa có chương trình C, bộ kiểm thử thuật toán hoặc kết quả demo.** Các nhiệm vụ học thuật chưa được xác nhận hoàn thành. Kế hoạch kéo dài 4 tuần; chưa có ngày bắt đầu hoặc hạn nộp. Xem [kế hoạch](docs/plan.md), [tiến độ](docs/progress.md) và [báo cáo tuần](docs/reports/README.md).
+
+## Môi trường và build
+
+Môi trường phát triển/demo: Ubuntu trong WSL; có thể dùng VS Code. Trong Ubuntu, chuẩn bị công cụ:
+
+```sh
+sudo apt update
+sudo apt install build-essential git
+cc --version
+make --version
+```
+
+Từ Git root trong Ubuntu:
+
+```sh
+make help
+make
+make test
+make clean
+```
+
+Ở khung hiện tại, `make` và `make test` trả mã lỗi và thông báo chưa triển khai. Khi có nguồn trong `src/*.c`, Makefile biên dịch với `-pthread` và tạo `bin/producer-consumer`. Khi đó có thể chạy `./bin/producer-consumer`; cú pháp tham số sẽ được cập nhật sau khi triển khai. Chưa có lệnh chạy thí nghiệm hoặc kiểm thử chương trình chính thức.
+
+Kiểm tra khung quản lý với Python 3 nếu có:
+
+```sh
+python3 scripts/check_scaffold.py
+```
+
+Kiểm tra này chỉ xác nhận cấu trúc, liên kết và quy tắc Git, không nghiệm thu thuật toán.
+
+## Cấu trúc
+
+| Đường dẫn | Vai trò |
+| --- | --- |
+| `README.md` | Giới thiệu, môi trường và quy trình Git chung |
+| `AGENTS.md` (chỉ local) | Hướng dẫn Codex; không commit, push hoặc đưa vào gói nộp |
+| [.gitignore](.gitignore) | Bỏ file build, cache, file tạm, secret và mọi `AGENTS.md` |
+| [.gitattributes](.gitattributes) | Giữ dòng LF để Makefile và script dùng được khi clone từ Windows sang WSL |
+| [Makefile](Makefile) | Chuẩn bị build C với `-pthread` và dọn file build |
+| [src/](src/README.md), [include/](include/README.md) | Nguồn C và header khi triển khai |
+| [tests/](tests/README.md) | Kiểm thử bộ đệm và chương trình khi triển khai |
+| [scripts/](scripts/README.md) | Kiểm tra khung, script kiểm thử và demo |
+| [docs/plan.md](docs/plan.md) | Kế hoạch 4 tuần và phân công |
+| [docs/design.md](docs/design.md) | Mẫu thiết kế bộ đệm, đồng bộ và cách dừng |
+| [docs/test-plan.md](docs/test-plan.md) | Ca kiểm thử dự kiến và tiêu chí |
+| [docs/progress.md](docs/progress.md) | Nhiệm vụ, người phụ trách, trạng thái và minh chứng |
+| [docs/reports/](docs/reports/README.md) | Hướng dẫn và báo cáo chung tuần 1–4 |
+| [docs/final-report/](docs/final-report/README.md) | Báo cáo cuối kỳ khi có |
+| [docs/slides/](docs/slides/README.md) | Slide khi có |
+| [results/week1/](results/week1/README.md) – [week4/](results/week4/README.md) | Kết quả, log và ảnh thực tế cần lưu làm minh chứng |
+| [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md) | Mẫu PR và bằng chứng kiểm tra |
+
+## Quy trình Git của nhóm
+
+Repo được tạo private vì tài liệu có thông tin sinh viên. Dùng đúng ba nhánh lâu dài: `main` cho phiên bản ổn định và tiến độ chính thức; `dev/chau`, `dev/huy` cho từng thành viên. Khung đầu tiên được commit vào `main`; các thay đổi tiếp theo đi qua nhánh thành viên và PR vào `main`.
+
+Clone và chọn **một** nhánh của mình:
+
+```sh
+git clone https://github.com/ndhuy1127/os-producer-consumer.git
+cd os-producer-consumer
+git switch dev/chau
+# Huy dùng: git switch dev/huy
+git status
+git fetch origin
+git merge origin/main
+```
+
+Clone repo private cần quyền truy cập. Chưa mời collaborator; username và quyền truy cập thành viên cần được xác nhận trước khi mời.
+
+Trước khi sửa, kiểm tra nhánh và working tree; giữ mọi thay đổi chưa commit. Khi nhận việc chưa rõ thành viên, xác nhận người thực hiện trước khi chọn nhánh. Đồng bộ `origin/main` vào nhánh đang làm; giải quyết xung đột để giữ đúng nội dung của cả hai.
+
+Cập nhật phần việc, [tiến độ](docs/progress.md) và báo cáo tuần tương ứng bằng kết quả thực tế. Trước mỗi commit:
+
+```sh
+git status
+git ls-files
+# Stage đúng các đường dẫn liên quan, không dùng git add -f.
+git diff --cached --name-only
+git diff --cached
+```
+
+Danh sách tracked/staged không được có `AGENTS.md` ở bất kỳ cấp nào. Nếu đã tracked, kiểm tra trạng thái rồi dùng `git rm --cached -- AGENTS.md` (hoặc đúng đường dẫn lồng nhau), giữ bản local và quy tắc ignore; không viết lại lịch sử đã chia sẻ.
+
+Commit nhỏ, thông điệp rõ (`docs:`, `chore:`, `feat:`, `fix:`, `test:`); push nhánh thành viên rồi tạo PR vào `main`. Trước merge, đọc diff và review chéo: PR tài liệu kiểm tra nội dung/liên kết; PR code nêu lệnh build/test và kết quả thực chạy. Chỉ merge thay đổi ổn định; chưa có chương trình hoặc bộ test thì phải ghi rõ.
+
+Giữ cả hai nhánh thành viên sau merge. Trước việc tiếp theo, mỗi thành viên fetch và merge `origin/main` vào nhánh của mình. Không force-push, reset làm mất thay đổi hoặc tự tạo thêm nhánh lâu dài. Chỉ lưu minh chứng cần thiết; loại build, log debug và bản tạm. Khi đóng gói bài nộp, dùng các file tracked (ví dụ `git archive`) và kiểm tra không có `AGENTS.md`/secret.

@@ -1,0 +1,35 @@
+# Codex: local only, at every directory level
+AGENTS.md
+# Generated build products
+/build/
+/bin/
+*.o
+*.a
+*.so
+*.so.*
+*.exe
+*.out
+*.d
+# Caches and temporary files
+__pycache__/
+*.py[cod]
+.cache/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.tmp
+*.bak
+*.debug.log
+.DS_Store
+Thumbs.db
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+/secrets/
+/private/
+# Keep selected evidence in results/: do not ignore *.log, *.csv or images.
