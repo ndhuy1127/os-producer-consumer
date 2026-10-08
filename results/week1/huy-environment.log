@@ -1,0 +1,83 @@
+W1-H real environment checks on Huy workstation; Ubuntu-24.04 WSL distribution.
+User-facing validation date: 08/10/2026, Asia/Saigon. No project start/deadline assigned.
+
+$ uname -r
+6.18.33.2-microsoft-standard-WSL2
+exit_code=0
+
+$ cat /etc/os-release
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+exit_code=0
+
+$ gcc --version
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+exit_code=0
+
+$ make --version
+GNU Make 4.3
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2020 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+exit_code=0
+
+$ git --version
+git version 2.43.0
+exit_code=0
+
+$ python3 --version
+Python 3.12.3
+exit_code=0
+
+$ git rev-parse --show-toplevel
+/mnt/d/os-producer-consumer
+exit_code=0
+
+$ git branch --show-current
+dev/huy
+exit_code=0
+
+$ git rev-parse HEAD origin/main origin/dev/huy origin/dev/chau
+a004c2ddf90999486f87126260c70087026b8972
+a004c2ddf90999486f87126260c70087026b8972
+2255719563be43c08b2f64652aec0f148440ddfd
+2c8d7f61415c1dc730c8e4dbde4c991a37bfdfa6
+exit_code=0
+
+$ git rev-parse origin/dev/chau
+2c8d7f61415c1dc730c8e4dbde4c991a37bfdfa6
+exit_code=0
+Source retrieval: git show 2c8d7f61415c1dc730c8e4dbde4c991a37bfdfa6:examples/thread_lifecycle.c
+SHA256 thread_lifecycle.c: fdd1703d18ae1491352c5cbb8c03ab3fff71d74bf4a0b67ef9191c31529d5df0
+
+$ gcc -std=c11 -Wall -Wextra -Wpedantic -pthread thread_lifecycle.c -o thread-demo
+
+exit_code=0
+
+$ timeout 5s ./thread-demo
+worker 1: sum(1..10) = 55
+joined worker 1: result = 55, expected = 55, OK
+worker 3: sum(1..30) = 465
+worker 2: sum(1..20) = 210
+joined worker 2: result = 210, expected = 210, OK
+joined worker 3: result = 465, expected = 465, OK
+completed: all 3 workers joined and verified
+exit_code=0
+CHECK PASS: 3 correct worker results, 3 correct joins, completion at end. Execution order unrestricted.
+Temporary source/binary removed outside repo. No Producer-Consumer/semaphore behavior tested.

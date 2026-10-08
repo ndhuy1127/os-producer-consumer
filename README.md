@@ -13,7 +13,7 @@ Giảng viên: **Nguyễn Quang Minh**.
 
 Sản phẩm dự kiến là chương trình dòng lệnh bằng C, dùng POSIX Threads và POSIX semaphore: bộ đệm vòng FIFO, một hoặc nhiều producer/consumer, cấu hình sức chứa/số luồng/số phần tử/độ trễ, log hoạt động, tổng kết kiểm tra dữ liệu và kết thúc hữu hạn.
 
-Phần Tuần 1 của Châu đã có [lý thuyết](docs/theory-week1-chau.md), [thiết kế và giả mã](docs/design.md) cùng [ví dụ tạo/join 3 luồng](examples/thread_lifecycle.c) đã biên dịch/chạy trên Ubuntu 24.04 trong WSL. Minh chứng ở [results/week1](results/week1/README.md). **Chưa triển khai chương trình Producer–Consumer, bộ đệm vòng, CLI hoặc bộ kiểm thử thuật toán.** Thiết kế/API/log còn cần Huy xác nhận; W1-H và mốc chung Tuần 1 chưa được kiểm chứng đầy đủ. Kế hoạch kéo dài 4 tuần; chưa có ngày bắt đầu hoặc hạn nộp. Xem [kế hoạch](docs/plan.md), [tiến độ](docs/progress.md) và [báo cáo tuần](docs/reports/README.md).
+Đã tích hợp phần Tuần 1 của Châu và Huy: [lý thuyết](docs/theory-week1-chau.md), [thiết kế/giả mã chung](docs/design.md), [ví dụ tạo/join 3 luồng](examples/thread_lifecycle.c), [bộ đệm vòng tuần tự](docs/buffer-week1-huy.md), 12 ca kiểm thử và [đặc tả cấu hình/log](docs/config-log-week1-huy.md). Codex rà soát và chốt giao diện theo yêu cầu Châu; không ghi nhận Huy đã phê duyệt hoặc hai thành viên đã đọc chéo trực tiếp. **Bản chung đã kiểm tra đạt trên máy Châu**, đủ tiêu chí kỹ thuật Tuần 1; [minh chứng tích hợp](results/week1/group-validation.md) ghi kết quả/phạm vi, trạng thái bàn giao Git xem [PR #2](https://github.com/ndhuy1127/os-producer-consumer/pull/2). Chưa triển khai producer/consumer, lớp semaphore, CLI parser hoặc log runtime; các phần đó thuộc Tuần 2. Kế hoạch kéo dài 4 tuần; chưa có ngày bắt đầu/hạn nộp. Xem [tiến độ](docs/progress.md) và [báo cáo tuần](docs/reports/week1.md).
 
 ## Môi trường và build
 
@@ -21,7 +21,7 @@ Môi trường phát triển/demo: Ubuntu trong WSL; có thể dùng VS Code. Tr
 
 ```sh
 sudo apt update
-sudo apt install build-essential git
+sudo apt install build-essential git python3
 cc --version
 make --version
 ```
@@ -29,13 +29,16 @@ make --version
 Từ Git root trong Ubuntu:
 
 ```sh
-make help
-make
-make test
 make clean
+make thread-demo buffer-test
+timeout 5s ./bin/thread-demo
+make test
+make help
 ```
 
-Hiện `make` mặc định và `make test` vẫn trả mã lỗi 2 và thông báo chưa triển khai chương trình/kiểm thử chính. Khi có nguồn trong `src/*.c`, Makefile biên dịch với `-pthread` và tạo `bin/producer-consumer`; cú pháp tham số sẽ cập nhật sau triển khai.
+`make buffer-test` build `bin/buffer-test`; `make test-buffer` và `make test` chạy kiểm thử bộ đệm **tuần tự**, kỳ vọng `Sequential buffer tests: 12/12 PASS`, exit 0. Test dùng wrapper malloc/free để thử lỗi cấp phát và theo dõi thu hồi mảng; wrapper chỉ liên kết vào binary test. Không dùng kết quả này để nghiệm thu Producer–Consumer/semaphore.
+
+`make` mặc định vẫn trả 2 khi chưa có entry point thật `src/main.c`, kể cả khi `src/buffer.c` tồn tại. Khi có main, target chính chỉ dùng `src/*.c`, không ghép main của ví dụ hoặc test. `make clean` dọn build/bin của cả hai target.
 
 Build/chạy ví dụ Tuần 1 độc lập của Châu, không cần tham số:
 
@@ -62,14 +65,16 @@ Kiểm tra này chỉ xác nhận cấu trúc, liên kết và quy tắc Git, kh
 | `AGENTS.md` (chỉ local) | Hướng dẫn Codex; không commit, push hoặc đưa vào gói nộp |
 | [.gitignore](.gitignore) | Bỏ file build, cache, file tạm, secret và mọi `AGENTS.md` |
 | [.gitattributes](.gitattributes) | Giữ dòng LF để Makefile và script dùng được khi clone từ Windows sang WSL |
-| [Makefile](Makefile) | Build ví dụ bằng `make thread-demo`; chuẩn bị chương trình chính và dọn file build |
+| [Makefile](Makefile) | Build thread-demo/buffer-test, chạy test-buffer/test tuần tự và dọn build |
 | [examples/thread_lifecycle.c](examples/thread_lifecycle.c) | Ví dụ Tuần 1 của Châu: tạo/join luồng, đối số và kết quả riêng |
-| [src/](src/README.md), [include/](include/README.md) | Nguồn C và header khi triển khai |
-| [tests/](tests/README.md) | Kiểm thử bộ đệm và chương trình khi triển khai |
+| [src/](src/README.md), [include/](include/README.md) | Bộ đệm tuần tự, kiểu item DATA/STOP; chưa có main |
+| [tests/](tests/README.md) | 12 ca kiểm thử bộ đệm tuần tự |
 | [scripts/](scripts/README.md) | Kiểm tra khung, script kiểm thử và demo |
 | [docs/plan.md](docs/plan.md) | Kế hoạch 4 tuần và phân công |
 | [docs/theory-week1-chau.md](docs/theory-week1-chau.md) | Lý thuyết luồng, vùng găng, semaphore, deadlock và nguồn đã đối chiếu |
-| [docs/design.md](docs/design.md) | Thiết kế Tuần 1 của Châu: giả mã, semaphore, STOP và API đề xuất cần phối hợp |
+| [docs/design.md](docs/design.md) | Thiết kế tích hợp Tuần 1: API thực tế, semaphore và STOP cho Tuần 2 |
+| [docs/buffer-week1-huy.md](docs/buffer-week1-huy.md) | Hợp đồng bộ đệm, lỗi và vòng đời |
+| [docs/config-log-week1-huy.md](docs/config-log-week1-huy.md) | Mặc định/giới hạn CLI và schema log đã chốt cho Tuần 2 |
 | [docs/test-plan.md](docs/test-plan.md) | Ca kiểm thử dự kiến và tiêu chí |
 | [docs/progress.md](docs/progress.md) | Nhiệm vụ, người phụ trách, trạng thái và minh chứng |
 | [docs/reports/](docs/reports/README.md) | Hướng dẫn và báo cáo chung tuần 1–4 |

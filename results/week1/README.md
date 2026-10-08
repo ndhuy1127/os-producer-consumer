@@ -1,14 +1,19 @@
 # Minh chứng Tuần 1
 
-Đã có minh chứng thực chạy cho **ví dụ tạo/join luồng của Châu** trên Ubuntu 24.04/WSL ngày 08/10/2026. Chưa có kiểm thử bộ đệm hoặc chương trình Producer–Consumer; không coi log ví dụ/khung là nghiệm thu thuật toán hay phần Huy.
+Đã ghép tài liệu, ví dụ luồng Châu và bộ đệm tuần tự Huy; kiểm tra bản tích hợp mới chạy trên **máy Châu**. Đánh giá hiện tại ở [group-validation.md](group-validation.md), trạng thái bàn giao xem [PR #2](https://github.com/ndhuy1127/os-producer-consumer/pull/2).
 
-| File | Nội dung |
+| File | Thời điểm/phạm vi |
 | --- | --- |
-| [chau-environment.log](chau-environment.log) | Git root/nhánh sau fetch và đồng bộ, working tree ban đầu, Ubuntu/WSL và phiên bản công cụ; thời điểm theo Asia/Saigon |
-| [chau-thread-demo.log](chau-thread-demo.log) | Lệnh, đầu ra, mã thoát build/run lặp/clean/build lại/help; make/test chưa triển khai; thử create lỗi; kiểm tra cuối và xử lý timestamp WSL |
-| [chau-validation.md](chau-validation.md) | Đánh giá phạm vi, kết quả, giới hạn và cách chạy lại ví dụ |
-| [scaffold-check.log](scaffold-check.log) | Minh chứng khởi tạo có sẵn, giữ nguyên; tách biệt với phần Châu |
+| [group-integration.log](group-integration.log) | Lệnh/đầu ra/exit/hash kiểm tra bản chung trên máy Châu, sau xử lý xung đột |
+| [group-validation.md](group-validation.md) | Kết quả tích hợp, quyết định giao diện, giới hạn và cách demo |
+| [chau-environment.log](chau-environment.log) | Môi trường và Git của Châu trước phần W1-C |
+| [chau-thread-demo.log](chau-thread-demo.log) | Log lịch sử W1-C: create/join, clean/build lại, tiêm lỗi create; khi đó make test còn trả 2 |
+| [chau-validation.md](chau-validation.md) | Snapshot đánh giá độc lập trước tích hợp, trạng thái chờ khi đó không phải trạng thái hiện tại |
+| [huy-environment.log](huy-environment.log) | Môi trường máy Huy và ví dụ Châu đúng SHA/hash chạy ngoài repo |
+| [huy-buffer-test.log](huy-buffer-test.log) | Log lịch sử W1-H: 12 ca tuần tự, sanitizer 11 ca thường, hash nguồn/Git |
+| [huy-validation.md](huy-validation.md) | Snapshot đánh giá độc lập của Huy trước tích hợp |
+| [scaffold-check.log](scaffold-check.log) | Log lịch sử khởi tạo, không dùng để suy ra trạng thái build/test hiện tại |
 
-Log Châu ghi commit nền và SHA256 của ví dụ/Makefile tại thời điểm kiểm tra trước commit. Commit bàn giao là commit chứa các file này, có thể xác nhận bằng `git log -1` trên dev/chau sau khi nhận bàn giao. Không lưu binary/object/cache hoặc wrapper tạm vào Git. Xem [báo cáo Tuần 1](../../docs/reports/week1.md).
+Giữ nguyên byte các log cũ. Makefile đã đổi sau tích hợp: make test hiện chạy bộ đệm tuần tự, make mặc định vẫn trả 2 do thiếu src/main.c. Hash ví dụ/bộ đệm dùng lại được đối chiếu; hash Makefile cũ không đại diện Makefile chung mới. Log nhóm ghi hai SHA nền và hash file đang kiểm tra trước commit; SHA tích hợp/merge thật chỉ xác nhận sau khi tồn tại.
 
-`scaffold-check.log` ghi kiểm tra khung ban đầu. Mẫu C kiểm tra công cụ ở lần khởi tạo nằm ngoài repo; khác với ví dụ W1-C hiện lưu trong [examples/thread_lifecycle.c](../../examples/thread_lifecycle.c).
+Không lưu binary/object/cache/secret/AGENTS.md/file tạm. T01 tuần tự và ví dụ luồng được đánh giá riêng; T02–T09 chưa chạy. Xem [báo cáo](../../docs/reports/week1.md).
