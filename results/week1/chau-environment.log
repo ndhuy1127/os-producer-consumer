@@ -1,0 +1,93 @@
+Minh chứng môi trường W1-C — Lê Hải Châu — 20233283
+Thời điểm: 2026-10-08T10:17:19+07:00 (Asia/Saigon, UTC+07:00)
+Git root: /mnt/d/HUST/os-producer-consumer
+Working tree ban đầu sạch; không có thay đổi người dùng cần tách.
+Không tìm thấy AGENTS.md ở các thư mục cha hoặc trong repository.
+git fetch origin đã thực hiện thành công (exit 0).
+git merge --ff-only origin/dev/chau: Already up to date. (exit 0).
+git merge --no-edit origin/main: fast-forward 2255719 -> a004c2d (exit 0).
+Đã giữ chỉnh sửa README của main; không phục hồi phần quy trình Git đã bị xóa.
+Các thao tác Git ghi metadata cần quyền ngoài sandbox vì .git chỉ đọc.
+Snapshot sau đồng bộ, trước khi viết phần tuần 1:
+
+$ git rev-parse --show-toplevel
+/mnt/d/HUST/os-producer-consumer
+exit_code=0
+
+$ git status --branch --short
+## dev/chau...origin/dev/chau [ahead 1]
+exit_code=0
+
+$ git remote -v
+origin	https://github.com/ndhuy1127/os-producer-consumer.git (fetch)
+origin	https://github.com/ndhuy1127/os-producer-consumer.git (push)
+exit_code=0
+
+$ git branch -vv
+* dev/chau a004c2d [origin/dev/chau: ahead 1] Update README.md
+  main     a004c2d [origin/main] Update README.md
+exit_code=0
+
+$ git log --all --oneline --decorate -6
+a004c2d (HEAD -> dev/chau, origin/main, origin/HEAD, main) Update README.md
+2255719 (origin/dev/huy, origin/dev/chau) chore: khoi tao du an producer consumer
+exit_code=0
+
+$ uname -a
+Linux ChouPro 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun 18 21:54:43 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+exit_code=0
+
+$ cat /etc/os-release
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+exit_code=0
+
+$ gcc --version
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+exit_code=0
+
+$ make --version
+GNU Make 4.3
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2020 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+exit_code=0
+
+$ git --version
+git version 2.43.0
+exit_code=0
+
+$ python3 --version
+Python 3.12.3
+exit_code=0
+
+$ timeout --version
+timeout (GNU coreutils) 9.4
+Copyright (C) 2023 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Pádraig Brady.
+exit_code=0
+
+$ gh --version
+gh version 2.45.0 (2025-07-18 Ubuntu 2.45.0-1ubuntu0.3)
+https://github.com/cli/cli/releases/tag/v2.45.0
+exit_code=0
