@@ -1,0 +1,228 @@
+W1-H sequential buffer validation; not Producer-Consumer/semaphore/CLI acceptance.
+User-facing validation date: 08/10/2026, Asia/Saigon.
+
+$ git rev-parse HEAD
+a004c2ddf90999486f87126260c70087026b8972
+exit_code=0
+Revision: base HEAD above plus uncommitted W1-H files identified by SHA256 below.
+SHA256 include/item.h: 6cf000a31c3a253920fefed754244b844cdbd8e129a20f57aab243defbdbddfd
+SHA256 include/buffer.h: adeb5c6117c4b34f7481ae15354def5b79beeaf613534d6f7f8b8f7bacd45277
+SHA256 src/buffer.c: 7348501077c0bb2b9c39d2e0578898efe7b70e84fa9bdd1fcac3c0076ba23641
+SHA256 tests/test_buffer.c: c48326f71ec7033c239239a6ce33096bba95b253f2a62a2c3f50b42342a126c3
+SHA256 Makefile: c832461c5156c0c9749d837773b24c7169b7f824c9647d0c3432c536cec152b2
+
+$ make help
+make: build Producer-Consumer khi co src/main.c; hien chua trien khai.
+make buffer-test: build bin/buffer-test.
+make test-buffer / make test: kiem thu bo dem tuan tu, khong kiem thu dong thoi.
+make clean: don build/ va bin/.
+exit_code=0
+
+Clean/build/run cycle 1
+
+$ make clean
+rm -rf -- build bin
+exit_code=0
+
+$ make buffer-test
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c src/buffer.c -o build/buffer.o
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -DBUFFER_TEST_WRAP_ALLOC -c tests/test_buffer.c -o build/test_buffer.o
+cc  build/buffer.o build/test_buffer.o -Wl,--wrap=malloc,--wrap=free -pthread -o bin/buffer-test
+exit_code=0
+WSL mtime normalization, content unchanged: build/buffer.d
+WSL mtime normalization, content unchanged: build/buffer.o
+WSL mtime normalization, content unchanged: build/test_buffer.d
+WSL mtime normalization, content unchanged: build/test_buffer.o
+WSL mtime normalization, content unchanged: bin/buffer-test
+
+$ make test-buffer
+Pham vi: bo dem FIFO TUAN TU; chua kiem thu Producer-Consumer/semaphore/CLI.
+./bin/buffer-test
+PASS: empty initialization
+PASS: one item and value copy
+PASS: FIFO and full rejection preserves data
+PASS: empty rejection preserves state/output
+PASS: 100 wrap-around rounds with independent FIFO oracle
+PASS: capacity 1, 50 cycles
+PASS: STOP is an ordinary FIFO item
+PASS: invalid arguments and lifecycle
+PASS: allocation size overflow
+PASS: live reinitialization preserves queue
+PASS: destroy/repeat/reuse
+PASS: injected malloc failure and recovery
+Sequential buffer tests: 12/12 PASS
+exit_code=0
+CHECK PASS: fresh warning-free build and all 12 sequential cases, including allocation failure.
+
+Clean/build/run cycle 2
+
+$ make clean
+rm -rf -- build bin
+exit_code=0
+
+$ make buffer-test
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c src/buffer.c -o build/buffer.o
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -DBUFFER_TEST_WRAP_ALLOC -c tests/test_buffer.c -o build/test_buffer.o
+cc  build/buffer.o build/test_buffer.o -Wl,--wrap=malloc,--wrap=free -pthread -o bin/buffer-test
+exit_code=0
+WSL mtime normalization, content unchanged: build/buffer.d
+WSL mtime normalization, content unchanged: build/buffer.o
+WSL mtime normalization, content unchanged: build/test_buffer.d
+WSL mtime normalization, content unchanged: build/test_buffer.o
+WSL mtime normalization, content unchanged: bin/buffer-test
+
+$ make test-buffer
+Pham vi: bo dem FIFO TUAN TU; chua kiem thu Producer-Consumer/semaphore/CLI.
+./bin/buffer-test
+PASS: empty initialization
+PASS: one item and value copy
+PASS: FIFO and full rejection preserves data
+PASS: empty rejection preserves state/output
+PASS: 100 wrap-around rounds with independent FIFO oracle
+PASS: capacity 1, 50 cycles
+PASS: STOP is an ordinary FIFO item
+PASS: invalid arguments and lifecycle
+PASS: allocation size overflow
+PASS: live reinitialization preserves queue
+PASS: destroy/repeat/reuse
+PASS: injected malloc failure and recovery
+Sequential buffer tests: 12/12 PASS
+exit_code=0
+CHECK PASS: fresh warning-free build and all 12 sequential cases, including allocation failure.
+
+$ make test
+Pham vi: bo dem FIFO TUAN TU; chua kiem thu Producer-Consumer/semaphore/CLI.
+./bin/buffer-test
+PASS: empty initialization
+PASS: one item and value copy
+PASS: FIFO and full rejection preserves data
+PASS: empty rejection preserves state/output
+PASS: 100 wrap-around rounds with independent FIFO oracle
+PASS: capacity 1, 50 cycles
+PASS: STOP is an ordinary FIFO item
+PASS: invalid arguments and lifecycle
+PASS: allocation size overflow
+PASS: live reinitialization preserves queue
+PASS: destroy/repeat/reuse
+PASS: injected malloc failure and recovery
+Sequential buffer tests: 12/12 PASS
+exit_code=0
+
+$ make
+Chua co src/main.c; chuong trinh Producer-Consumer chua duoc trien khai.
+make: *** [Makefile:18: all] Error 2
+exit_code=2
+CHECK PASS: default make still explicitly refuses absent src/main.c (expected exit 2).
+
+$ gcc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -g -O1 -fsanitize=address,undefined -fno-omit-frame-pointer src/buffer.c tests/test_buffer.c -o /tmp/huy-w1-sanitize-3qnnx7bo/buffer-test-sanitize
+
+exit_code=0
+
+$ timeout 10s /tmp/huy-w1-sanitize-3qnnx7bo/buffer-test-sanitize
+PASS: empty initialization
+PASS: one item and value copy
+PASS: FIFO and full rejection preserves data
+PASS: empty rejection preserves state/output
+PASS: 100 wrap-around rounds with independent FIFO oracle
+PASS: capacity 1, 50 cycles
+PASS: STOP is an ordinary FIFO item
+PASS: invalid arguments and lifecycle
+PASS: allocation size overflow
+PASS: live reinitialization preserves queue
+PASS: destroy/repeat/reuse
+Sequential buffer tests: 11/11 PASS
+exit_code=0
+CHECK PASS: 11 normal cases under AddressSanitizer/UndefinedBehaviorSanitizer; allocation-failure wrapper not enabled here.
+SHA256 include/item.h: 6cf000a31c3a253920fefed754244b844cdbd8e129a20f57aab243defbdbddfd
+SHA256 include/buffer.h: adeb5c6117c4b34f7481ae15354def5b79beeaf613534d6f7f8b8f7bacd45277
+SHA256 src/buffer.c: 7348501077c0bb2b9c39d2e0578898efe7b70e84fa9bdd1fcac3c0076ba23641
+SHA256 tests/test_buffer.c: c48326f71ec7033c239239a6ce33096bba95b253f2a62a2c3f50b42342a126c3
+SHA256 Makefile: c832461c5156c0c9749d837773b24c7169b7f824c9647d0c3432c536cec152b2
+
+Final scaffold/link/Git validation:
+CHECK PASS: Chau report section and W1-C row unchanged; six report sections; no duplicate thread demo.
+CHECK PASS: all 5 tested source/Makefile hashes still match.
+
+$ python3 scripts/check_scaffold.py
+Scaffold verified: 23 required files; 105 relative links; ignore rules; no tracked/staged AGENTS.md.
+No C algorithm, thread behavior or academic task has been validated.
+exit_code=0
+
+$ git diff --check
+
+exit_code=0
+
+$ git diff --cached --check
+
+exit_code=0
+
+$ git ls-files
+.gitattributes
+.github/PULL_REQUEST_TEMPLATE.md
+.gitignore
+Makefile
+README.md
+docs/buffer-week1-huy.md
+docs/config-log-week1-huy.md
+docs/design.md
+docs/final-report/README.md
+docs/plan.md
+docs/progress.md
+docs/reports/README.md
+docs/reports/week1.md
+docs/reports/week2.md
+docs/reports/week3.md
+docs/reports/week4.md
+docs/slides/README.md
+docs/test-plan.md
+include/README.md
+include/buffer.h
+include/item.h
+results/week1/README.md
+results/week1/huy-buffer-test.log
+results/week1/huy-environment.log
+results/week1/huy-validation.md
+results/week1/scaffold-check.log
+results/week2/README.md
+results/week3/README.md
+results/week4/README.md
+scripts/README.md
+scripts/check_scaffold.py
+src/README.md
+src/buffer.c
+tests/README.md
+tests/test_buffer.c
+exit_code=0
+
+$ git diff --cached --name-only
+Makefile
+README.md
+docs/buffer-week1-huy.md
+docs/config-log-week1-huy.md
+docs/design.md
+docs/progress.md
+docs/reports/week1.md
+docs/test-plan.md
+include/README.md
+include/buffer.h
+include/item.h
+results/week1/README.md
+results/week1/huy-buffer-test.log
+results/week1/huy-environment.log
+results/week1/huy-validation.md
+src/README.md
+src/buffer.c
+tests/README.md
+tests/test_buffer.c
+exit_code=0
+
+$ git check-ignore AGENTS.md src/AGENTS.md bin/buffer-test build/buffer.o scripts/huy_validate.tmp
+AGENTS.md
+src/AGENTS.md
+bin/buffer-test
+build/buffer.o
+scripts/huy_validate.tmp
+exit_code=0
+CHECK PASS: scaffold/local links, whitespace, tracked/staged hygiene. Staged diff reviewed separately before commit.
+rm -rf -- build bin
+[Cleanup output above: command=make clean, exit_code=0; generated build/bin removed.]

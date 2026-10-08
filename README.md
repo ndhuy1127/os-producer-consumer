@@ -13,7 +13,7 @@ Giảng viên: **Nguyễn Quang Minh**.
 
 Sản phẩm dự kiến là chương trình dòng lệnh bằng C, dùng POSIX Threads và POSIX semaphore: bộ đệm vòng FIFO, một hoặc nhiều producer/consumer, cấu hình sức chứa/số luồng/số phần tử/độ trễ, log hoạt động, tổng kết kiểm tra dữ liệu và kết thúc hữu hạn.
 
-Hiện có khung quản lý dự án, Makefile và mẫu tài liệu. **Chưa có chương trình C, bộ kiểm thử thuật toán hoặc kết quả demo.** Các nhiệm vụ học thuật chưa được xác nhận hoàn thành. Kế hoạch kéo dài 4 tuần; chưa có ngày bắt đầu hoặc hạn nộp. Xem [kế hoạch](docs/plan.md), [tiến độ](docs/progress.md) và [báo cáo tuần](docs/reports/README.md).
+Tuần 1 độc lập của Huy đã có [bộ đệm vòng tuần tự](docs/buffer-week1-huy.md), 12 ca kiểm thử thực chạy và [đề xuất cấu hình/log](docs/config-log-week1-huy.md). Môi trường Ubuntu/WSL và ví dụ tạo/join luồng của Châu đã được kiểm tra trên máy Huy; [minh chứng](results/week1/huy-validation.md) ghi rõ nguồn và phạm vi. **Chưa triển khai chương trình Producer–Consumer, semaphore hoặc CLI.** [PR #1 của Châu](https://github.com/ndhuy1127/os-producer-consumer/pull/1) còn mở lúc kiểm tra; nhánh này chưa chứa lý thuyết/giả mã/ví dụ của PR đó. API chi tiết và mốc chung Tuần 1 còn cần đọc chéo, xác nhận của hai thành viên. Kế hoạch kéo dài 4 tuần; chưa có ngày bắt đầu hoặc hạn nộp. Xem [kế hoạch](docs/plan.md), [tiến độ](docs/progress.md) và [báo cáo tuần](docs/reports/README.md).
 
 ## Môi trường và build
 
@@ -21,7 +21,7 @@ Môi trường phát triển/demo: Ubuntu trong WSL; có thể dùng VS Code. Tr
 
 ```sh
 sudo apt update
-sudo apt install build-essential git
+sudo apt install build-essential git python3
 cc --version
 make --version
 ```
@@ -30,12 +30,22 @@ Từ Git root trong Ubuntu:
 
 ```sh
 make help
-make
+make buffer-test
+make test-buffer
 make test
-make clean
 ```
 
-Ở khung hiện tại, `make` và `make test` trả mã lỗi và thông báo chưa triển khai. Khi có nguồn trong `src/*.c`, Makefile biên dịch với `-pthread` và tạo `bin/producer-consumer`. Khi đó có thể chạy `./bin/producer-consumer`; cú pháp tham số sẽ được cập nhật sau khi triển khai. Chưa có lệnh chạy thí nghiệm hoặc kiểm thử chương trình chính thức.
+`make buffer-test` tạo `bin/buffer-test`; `make test-buffer` và `make test` chạy **kiểm thử bộ đệm tuần tự**, kỳ vọng `Sequential buffer tests: 12/12 PASS`, exit 0. Cờ build: `-std=c11 -Wall -Wextra -Wpedantic`, chuẩn bị `-pthread` ở compile/link. Test dùng GNU ld wrapper malloc/free để tiêm lỗi cấp phát và kiểm tra thu hồi mảng; không thêm wrapper vào chương trình chính.
+
+Kiểm tra lại từ bản build sạch:
+
+```sh
+make clean
+make buffer-test
+make test-buffer
+```
+
+`make` mặc định vẫn báo chương trình chưa triển khai và exit 2 khi chưa có `src/main.c`, kể cả khi đã có `src/buffer.c`. Khi có entry point thật, target chính sẽ build `src/*.c` vào `bin/producer-consumer`. Chưa có lệnh chạy thí nghiệm chương trình chính. Khi tích hợp PR #1 phải giữ cả `thread-demo` của Châu và `buffer-test`/`test-buffer` của Huy; nhánh này chưa có target thread-demo. Cách chạy ví dụ đúng nguồn từ thư mục tạm ở [minh chứng môi trường](results/week1/huy-environment.log).
 
 Kiểm tra khung quản lý với Python 3 nếu có:
 
@@ -53,9 +63,9 @@ Kiểm tra này chỉ xác nhận cấu trúc, liên kết và quy tắc Git, kh
 | `AGENTS.md` (chỉ local) | Hướng dẫn Codex; không commit, push hoặc đưa vào gói nộp |
 | [.gitignore](.gitignore) | Bỏ file build, cache, file tạm, secret và mọi `AGENTS.md` |
 | [.gitattributes](.gitattributes) | Giữ dòng LF để Makefile và script dùng được khi clone từ Windows sang WSL |
-| [Makefile](Makefile) | Chuẩn bị build C với `-pthread` và dọn file build |
-| [src/](src/README.md), [include/](include/README.md) | Nguồn C và header khi triển khai |
-| [tests/](tests/README.md) | Kiểm thử bộ đệm và chương trình khi triển khai |
+| [Makefile](Makefile) | Build/test bộ đệm tuần tự, chuẩn bị `-pthread` và dọn build |
+| [src/](src/README.md), [include/](include/README.md) | API bộ đệm tuần tự và item DATA/STOP |
+| [tests/](tests/README.md) | Kiểm thử FIFO, biên, vòng đời và lỗi cấp phát |
 | [scripts/](scripts/README.md) | Kiểm tra khung, script kiểm thử và demo |
 | [docs/plan.md](docs/plan.md) | Kế hoạch 4 tuần và phân công |
 | [docs/design.md](docs/design.md) | Mẫu thiết kế bộ đệm, đồng bộ và cách dừng |

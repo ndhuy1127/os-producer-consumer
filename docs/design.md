@@ -1,12 +1,14 @@
 # Mẫu thiết kế
 
-Trạng thái: **Chưa có thiết kế được nhóm xác nhận**. Điền nội dung cùng bằng chứng sau khi thực hiện Tuần 1; đây là mẫu, không phải mã đã triển khai.
+Trạng thái: **Chưa có thiết kế được nhóm xác nhận**. Phần bộ đệm tuần tự của Huy đã triển khai và kiểm thử. Thiết kế/giả mã Châu ở [PR #1](https://github.com/ndhuy1127/os-producer-consumer/pull/1), còn mở lúc kiểm tra; chưa tích hợp vào file chung này. Giữ các phần mẫu để khi tích hợp bảo toàn nội dung Châu. Không xem tài liệu đề xuất là nghiệm thu Producer–Consumer.
 
 ## 1. Bài toán và cấu hình
 
 - Mô tả producer, consumer và mục tiêu kết thúc hữu hạn: chưa điền.
 - Sức chứa N, số producer/consumer, tổng số phần tử hay số phần tử mỗi producer, đơn vị độ trễ: chưa chốt.
 - Cú pháp CLI, mặc định, giới hạn số và xử lý đầu vào lỗi: chưa chốt.
+
+Huy đề xuất [CLI và log Tuần 2](config-log-week1-huy.md), dùng K item mỗi producer, tổng P*K đúng hướng thiết kế PR #1. Mặc định/giới hạn và cách từ chối lỗi cần Châu xác nhận, chưa có parser.
 
 ## 2. Bộ đệm vòng FIFO
 
@@ -17,7 +19,7 @@ Trạng thái: **Chưa có thiết kế được nhóm xác nhận**. Điền n�
 | API | Khởi tạo, thêm/lấy, kiểm tra đầy/trống và hủy |
 | Bộ nhớ/lỗi | Quyền sở hữu, cấp phát, dọn tài nguyên và lỗi khởi tạo |
 
-Chưa có triển khai hoặc kiểm thử tuần tự.
+Đã có [item.h](../include/item.h), [buffer.h](../include/buffer.h), [buffer.c](../src/buffer.c), [kiểm thử](../tests/test_buffer.c). Hợp đồng đầy đủ ở [buffer-week1-huy.md](buffer-week1-huy.md): đối tượng zero-init, mảng do buffer sở hữu, push/pop sao chép theo giá trị, lỗi trực tiếp, bảo toàn khi thất bại, destroy reset zero. Giữ chữ ký API Châu đề xuất; không tự wait/post. Kiểm thử tuần tự đạt 12/12 tại [minh chứng](../results/week1/huy-validation.md); chưa xác nhận an toàn đồng thời.
 
 ## 3. Dữ liệu và thứ tự
 
@@ -38,6 +40,8 @@ Chưa chốt phương án. Cần giải thích khi nào không còn producer, co
 ## 7. Log và xác minh
 
 Chốt schema log, cấu hình chạy, thông tin tổng kết, kiểm tra không mất/lặp, FIFO, biên occupancy và timeout của bài kiểm thử. Xem [test-plan.md](test-plan.md).
+
+Đề xuất Huy ở [config-log-week1-huy.md](config-log-week1-huy.md): số thứ tự thao tác và snapshot trong guard, xác minh theo thứ tự enqueue/dequeue; log chờ dựa trên semaphore, không suy đoán an toàn từ count/sem_getvalue. Chưa triển khai runtime log.
 
 ## 8. Tài liệu lý thuyết đã đối chiếu
 

@@ -7,7 +7,7 @@ Trạng thái hợp lệ: **Chưa bắt đầu**, **Đang thực hiện**, **Đ�
 | ID | Nhiệm vụ dự kiến | Người phụ trách | Tuần | Trạng thái | Minh chứng |
 | --- | --- | --- | --- | --- | --- |
 | W1-C | Lý thuyết; giả mã đồng bộ; kết thúc; ví dụ tạo/chờ luồng | Châu | 1 | Chưa bắt đầu | Chưa có |
-| W1-H | Môi trường C; Makefile; bộ đệm tuần tự; tham số; kế hoạch kiểm thử | Huy | 1 | Chưa bắt đầu | Chưa có; khung Makefile chưa chứng minh hoàn thành phần việc |
+| W1-H | Môi trường C; Makefile; bộ đệm tuần tự; tham số; kế hoạch kiểm thử | Huy | 1 | Đã hoàn thành | Phần độc lập: [API](buffer-week1-huy.md), [cấu hình/log](config-log-week1-huy.md), [test-plan](test-plan.md), [minh chứng thực chạy](../results/week1/huy-validation.md); chờ Châu xác nhận hợp đồng và đọc chéo |
 | W2-C | Producer/consumer; semaphore; tích hợp; kết thúc hữu hạn | Châu | 2 | Chưa bắt đầu | Chưa có |
 | W2-H | Bộ đệm; tham số; log; kiểm thử đầy/trống/N=1 | Huy | 2 | Chưa bắt đầu | Chưa có |
 | W3-C | Nhiều luồng; ID riêng; rà soát đồng bộ; lý thuyết/thuật toán báo cáo | Châu | 3 | Chưa bắt đầu | Chưa có |
@@ -17,6 +17,8 @@ Trạng thái hợp lệ: **Chưa bắt đầu**, **Đang thực hiện**, **Đ�
 | W4-G | Đọc chéo code; luyện demo; chuẩn bị trả lời câu hỏi | Cả hai | 4 | Chưa bắt đầu | Chưa có |
 
 ## Thiết lập dự án
+
+W1-C trong bảng giữ nguyên nội dung nhánh nền; phần Châu đã bàn giao tại [PR #1](https://github.com/ndhuy1127/os-producer-consumer/pull/1), còn mở lúc kiểm tra, chưa tích hợp. W1-H hoàn thành độc lập không đồng nghĩa mốc chung Tuần 1 đã nghiệm thu. Chưa có xác nhận hai thành viên thống nhất API hoặc đọc chéo kết quả; W2–W4 vẫn chưa triển khai.
 
 Các việc dưới đây do Codex thực hiện theo yêu cầu khởi tạo, không tự gán cho Châu/Huy.
 
