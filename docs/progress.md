@@ -6,7 +6,7 @@ Trạng thái hợp lệ: **Chưa bắt đầu**, **Đang thực hiện**, **Đ�
 
 | ID | Nhiệm vụ dự kiến | Người phụ trách | Tuần | Trạng thái | Minh chứng |
 | --- | --- | --- | --- | --- | --- |
-| W1-C | Lý thuyết; giả mã đồng bộ; kết thúc; ví dụ tạo/chờ luồng | Châu | 1 | Chưa bắt đầu | Chưa có |
+| W1-C | Lý thuyết; giả mã đồng bộ; kết thúc; ví dụ tạo/chờ luồng | Châu | 1 | Đã hoàn thành | [Lý thuyết](theory-week1-chau.md), [thiết kế/giả mã](design.md), [ví dụ](../examples/thread_lifecycle.c), [kiểm tra thực chạy](../results/week1/chau-validation.md); thiết kế chưa được Huy xác nhận |
 | W1-H | Môi trường C; Makefile; bộ đệm tuần tự; tham số; kế hoạch kiểm thử | Huy | 1 | Chưa bắt đầu | Chưa có; khung Makefile chưa chứng minh hoàn thành phần việc |
 | W2-C | Producer/consumer; semaphore; tích hợp; kết thúc hữu hạn | Châu | 2 | Chưa bắt đầu | Chưa có |
 | W2-H | Bộ đệm; tham số; log; kiểm thử đầy/trống/N=1 | Huy | 2 | Chưa bắt đầu | Chưa có |
@@ -15,6 +15,8 @@ Trạng thái hợp lệ: **Chưa bắt đầu**, **Đang thực hiện**, **Đ�
 | W4-C | Bài toán; lý thuyết; thiết kế; thuật toán; nguyên lý/demo | Châu | 4 | Chưa bắt đầu | Chưa có |
 | W4-H | Kết quả test; minh chứng; hướng dẫn; gói nộp | Huy | 4 | Chưa bắt đầu | Chưa có |
 | W4-G | Đọc chéo code; luyện demo; chuẩn bị trả lời câu hỏi | Cả hai | 4 | Chưa bắt đầu | Chưa có |
+
+W1-C hoàn thành trong phạm vi độc lập: tài liệu, thiết kế và ví dụ tạo/join 3 worker đã chạy 5 lần, rồi clean/build/chạy lại; kết quả 55, 210, 465 đúng, thoát 0. Thử lỗi create ở lần 1 và lần 3 bằng wrapper tạm: chỉ join các worker đã tạo, không báo hoàn tất và thoát 1. W1-H giữ nguyên vì chưa có bằng chứng mới; môi trường máy Huy, bộ đệm tuần tự và việc ghép code chưa kiểm chứng. **Mốc chung Tuần 1 chưa được xác nhận đầy đủ.** Không có ca T01–T09 của Producer–Consumer đã thực hiện. Báo cáo ở [week1](reports/week1.md).
 
 ## Thiết lập dự án
 

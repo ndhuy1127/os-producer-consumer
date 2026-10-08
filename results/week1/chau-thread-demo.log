@@ -1,0 +1,262 @@
+W1-C: real build/run transcript; only thread lifecycle, not Producer-Consumer.
+Timezone: Asia/Saigon (UTC+07:00).
+Revision tested: base HEAD a004c2ddf90999486f87126260c70087026b8972 plus uncommitted W1-C files; commit is created after validation.
+SHA256 examples/thread_lifecycle.c: fdd1703d18ae1491352c5cbb8c03ab3fff71d74bf4a0b67ef9191c31529d5df0
+SHA256 Makefile: 9951da38867af62e078cd4477342d8372e41e3114aa0fbbfea7d1c1a8a07afc8
+
+[2026-10-08T10:16:34+07:00] $ make thread-demo
+make: Warning: File 'Makefile' has modification time 46 s in the future
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c examples/thread_lifecycle.c -o build/thread_lifecycle.o
+cc  build/thread_lifecycle.o -pthread -o bin/thread-demo
+make: warning:  Clock skew detected.  Your build may be incomplete.
+exit_code=0
+
+Initial validation stopped before execution checks: make emitted clock-skew warnings (compiler emitted no diagnostics).
+Correction: normalize mtimes of the edited Makefile and example to the WSL clock, without changing file contents.
+WSL time: 2026-10-08T10:17:20+07:00
+Makefile: old_mtime=1791429441.273, corrected_mtime=1791429439.000
+examples/thread_lifecycle.c: old_mtime=1791429443.458, corrected_mtime=1791429439.000
+$ make clean
+make: Warning: File 'build/thread_lifecycle.d' has modification time 252 s in the future
+rm -rf -- build bin
+make: warning:  Clock skew detected.  Your build may be incomplete.
+exit_code=0
+
+Validation after clock correction; Asia/Saigon (UTC+07:00).
+SHA256 examples/thread_lifecycle.c: fdd1703d18ae1491352c5cbb8c03ab3fff71d74bf4a0b67ef9191c31529d5df0
+SHA256 Makefile: 9951da38867af62e078cd4477342d8372e41e3114aa0fbbfea7d1c1a8a07afc8
+
+[2026-10-08T10:18:05+07:00] $ make thread-demo
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c examples/thread_lifecycle.c -o build/thread_lifecycle.o
+cc  build/thread_lifecycle.o -pthread -o bin/thread-demo
+exit_code=0
+CHECK PASS: compilation and linking both use -pthread; requested warnings enabled; no compiler or make warnings on fresh build.
+
+Normal run 1/5; timeout 5s for a tiny finite computation.
+
+[2026-10-08T10:18:06+07:00] $ timeout 5s bin/thread-demo
+worker 1: sum(1..10) = 55
+worker 2: sum(1..20) = 210
+joined worker 1: result = 55, expected = 55, OK
+joined worker 2: result = 210, expected = 210, OK
+worker 3: sum(1..30) = 465
+joined worker 3: result = 465, expected = 465, OK
+completed: all 3 workers joined and verified
+exit_code=0
+CHECK PASS: each worker appears once; each result is joined and correct; completion is last. Worker execution order is unrestricted.
+
+Normal run 2/5; timeout 5s for a tiny finite computation.
+
+[2026-10-08T10:18:06+07:00] $ timeout 5s bin/thread-demo
+worker 1: sum(1..10) = 55
+worker 2: sum(1..20) = 210
+worker 3: sum(1..30) = 465
+joined worker 1: result = 55, expected = 55, OK
+joined worker 2: result = 210, expected = 210, OK
+joined worker 3: result = 465, expected = 465, OK
+completed: all 3 workers joined and verified
+exit_code=0
+CHECK PASS: each worker appears once; each result is joined and correct; completion is last. Worker execution order is unrestricted.
+
+Normal run 3/5; timeout 5s for a tiny finite computation.
+
+[2026-10-08T10:18:06+07:00] $ timeout 5s bin/thread-demo
+worker 1: sum(1..10) = 55
+worker 2: sum(1..20) = 210
+joined worker 1: result = 55, expected = 55, OK
+joined worker 2: result = 210, expected = 210, OK
+worker 3: sum(1..30) = 465
+joined worker 3: result = 465, expected = 465, OK
+completed: all 3 workers joined and verified
+exit_code=0
+CHECK PASS: each worker appears once; each result is joined and correct; completion is last. Worker execution order is unrestricted.
+
+Normal run 4/5; timeout 5s for a tiny finite computation.
+
+[2026-10-08T10:18:06+07:00] $ timeout 5s bin/thread-demo
+worker 1: sum(1..10) = 55
+worker 2: sum(1..20) = 210
+joined worker 1: result = 55, expected = 55, OK
+joined worker 2: result = 210, expected = 210, OK
+worker 3: sum(1..30) = 465
+joined worker 3: result = 465, expected = 465, OK
+completed: all 3 workers joined and verified
+exit_code=0
+CHECK PASS: each worker appears once; each result is joined and correct; completion is last. Worker execution order is unrestricted.
+
+Normal run 5/5; timeout 5s for a tiny finite computation.
+
+[2026-10-08T10:18:06+07:00] $ timeout 5s bin/thread-demo
+worker 1: sum(1..10) = 55
+worker 2: sum(1..20) = 210
+joined worker 1: result = 55, expected = 55, OK
+joined worker 2: result = 210, expected = 210, OK
+worker 3: sum(1..30) = 465
+joined worker 3: result = 465, expected = 465, OK
+completed: all 3 workers joined and verified
+exit_code=0
+CHECK PASS: each worker appears once; each result is joined and correct; completion is last. Worker execution order is unrestricted.
+WSL clock correction, content unchanged: build/thread_lifecycle.d
+WSL clock correction, content unchanged: build/thread_lifecycle.o
+WSL clock correction, content unchanged: bin/thread-demo
+
+[2026-10-08T10:18:06+07:00] $ make help
+make: build src/*.c voi -pthread khi co ma nguon.
+make thread-demo: build vi du tao/join luong vao bin/thread-demo.
+make clean: don build/ va bin/.
+make test: bao chua trien khai cho den khi co bo kiem thu.
+exit_code=0
+CHECK PASS: help lists thread-demo.
+
+[2026-10-08T10:18:06+07:00] $ make
+Chua co ma nguon C; chuong trinh chua duoc trien khai.
+make: *** [Makefile:18: all] Error 2
+exit_code=2
+
+[2026-10-08T10:18:06+07:00] $ make test
+Chua co bo kiem thu chuong trinh; xem docs/test-plan.md.
+make: *** [Makefile:47: test] Error 2
+exit_code=2
+CHECK PASS: main program and algorithm tests still report not implemented (expected exit 2); these are not algorithm PASS results.
+
+[2026-10-08T10:18:06+07:00] $ make clean
+rm -rf -- build bin
+exit_code=0
+CHECK PASS: clean removed build/ and bin/.
+
+[2026-10-08T10:18:06+07:00] $ make thread-demo
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c examples/thread_lifecycle.c -o build/thread_lifecycle.o
+cc  build/thread_lifecycle.o -pthread -o bin/thread-demo
+exit_code=0
+
+[2026-10-08T10:23:05+07:00] $ timeout 5s bin/thread-demo
+worker 1: sum(1..10) = 55
+worker 2: sum(1..20) = 210
+joined worker 1: result = 55, expected = 55, OK
+joined worker 2: result = 210, expected = 210, OK
+worker 3: sum(1..30) = 465
+joined worker 3: result = 465, expected = 465, OK
+completed: all 3 workers joined and verified
+exit_code=0
+CHECK PASS: each worker appears once; each result is joined and correct; completion is last. Worker execution order is unrestricted.
+CHECK PASS: clean build and successful run reproduced.
+
+Temporary failure injection only; wrapper is outside the repository and is not part of the demo:
+#include <errno.h>
+#include <pthread.h>
+#include <stdlib.h>
+
+int __real_pthread_create(pthread_t *, const pthread_attr_t *,
+                          void *(*)(void *), void *);
+int __wrap_pthread_create(pthread_t *thread, const pthread_attr_t *attr,
+                          void *(*routine)(void *), void *argument)
+{
+    static int calls;
+    const char *value = getenv("FAIL_CREATE_AT");
+    int fail_at = value == NULL ? 3 : atoi(value);
+    if (++calls == fail_at) {
+        return EAGAIN;
+    }
+    return __real_pthread_create(thread, attr, routine, argument);
+}
+
+
+[2026-10-08T10:23:05+07:00] $ gcc -std=c11 -Wall -Wextra -Wpedantic -pthread examples/thread_lifecycle.c /tmp/chau-w1-create-failure-052_3ogi/fail_create.c -Wl,--wrap=pthread_create -o /tmp/chau-w1-create-failure-052_3ogi/thread-demo-fail
+
+exit_code=0
+
+[2026-10-08T10:23:06+07:00] $ env FAIL_CREATE_AT=1 timeout 5s /tmp/chau-w1-create-failure-052_3ogi/thread-demo-fail
+pthread_create worker 1: Resource temporarily unavailable
+incomplete: created 0/3, verified 0/3
+exit_code=1
+CHECK PASS: injected create failure at call 1; all previously created workers joined and verified; exit 1; no success announcement.
+
+[2026-10-08T10:23:06+07:00] $ env FAIL_CREATE_AT=3 timeout 5s /tmp/chau-w1-create-failure-052_3ogi/thread-demo-fail
+pthread_create worker 3: Resource temporarily unavailable
+incomplete: created 2/3, verified 2/3
+worker 1: sum(1..10) = 55
+joined worker 1: result = 55, expected = 55, OK
+worker 2: sum(1..20) = 210
+joined worker 2: result = 210, expected = 210, OK
+exit_code=1
+CHECK PASS: injected create failure at call 3; all previously created workers joined and verified; exit 1; no success announcement.
+
+Thread checks finished; no buffer, semaphore or Producer-Consumer test was run.
+
+[2026-10-08T10:20:55+07:00] $ python3 scripts/check_scaffold.py
+Scaffold verified: 23 required files; 92 relative links; ignore rules; no tracked/staged AGENTS.md.
+No C algorithm, thread behavior or academic task has been validated.
+exit_code=0
+
+[2026-10-08T10:20:59+07:00] $ git diff --check
+exit_code=0
+
+Final review of staged W1-C files before commit:
+[2026-10-08T10:24:33+07:00] $ python3 scripts/check_scaffold.py
+Scaffold verified: 23 required files; 92 relative links; ignore rules; no tracked/staged AGENTS.md.
+No C algorithm, thread behavior or academic task has been validated.
+exit_code=0
+
+[2026-10-08T10:29:30+07:00] $ git diff --check
+exit_code=0
+
+[2026-10-08T10:24:33+07:00] $ git diff --cached --check
+exit_code=0
+
+[2026-10-08T10:24:33+07:00] $ git diff --cached --name-only
+Makefile
+README.md
+docs/design.md
+docs/progress.md
+docs/reports/week1.md
+docs/theory-week1-chau.md
+examples/thread_lifecycle.c
+results/week1/README.md
+results/week1/chau-environment.log
+results/week1/chau-thread-demo.log
+results/week1/chau-validation.md
+exit_code=0
+
+[2026-10-08T10:24:33+07:00] $ git ls-files
+.gitattributes
+.github/PULL_REQUEST_TEMPLATE.md
+.gitignore
+Makefile
+README.md
+docs/design.md
+docs/final-report/README.md
+docs/plan.md
+docs/progress.md
+docs/reports/README.md
+docs/reports/week1.md
+docs/reports/week2.md
+docs/reports/week3.md
+docs/reports/week4.md
+docs/slides/README.md
+docs/test-plan.md
+docs/theory-week1-chau.md
+examples/thread_lifecycle.c
+include/README.md
+results/week1/README.md
+results/week1/chau-environment.log
+results/week1/chau-thread-demo.log
+results/week1/chau-validation.md
+results/week1/scaffold-check.log
+results/week2/README.md
+results/week3/README.md
+results/week4/README.md
+scripts/README.md
+scripts/check_scaffold.py
+src/README.md
+tests/README.md
+exit_code=0
+
+[2026-10-08T10:24:33+07:00] $ git check-ignore AGENTS.md examples/AGENTS.md docs/reports/AGENTS.md build/thread_lifecycle.o bin/thread-demo
+AGENTS.md
+examples/AGENTS.md
+docs/reports/AGENTS.md
+build/thread_lifecycle.o
+bin/thread-demo
+exit_code=0
+
+REVIEW PASS: exactly 11 staged W1-C paths; no build/binary/cache/PDF/AGENTS.md; no trailing whitespace; six report sections; Huy section unchanged; main README deletion preserved; tested code/Makefile SHA256 unchanged.
