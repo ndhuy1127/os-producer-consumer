@@ -1,24 +1,27 @@
 # Báo cáo chung Tuần 1 — Chuẩn bị và thiết kế
 
-**Đã có dữ liệu phần Tuần 1 độc lập của Huy.** Chưa có ngày bắt đầu/hạn nộp. Nội dung mục tiêu dưới đây là kế hoạch. Phần Châu trên nhánh nền được giữ nguyên; [PR #1 của Châu](https://github.com/ndhuy1127/os-producer-consumer/pull/1) còn mở lúc kiểm tra và chưa tích hợp vào báo cáo này.
+**Phần việc và tiêu chí kỹ thuật Tuần 1 của Châu và Huy đã đạt; bản chung đã kiểm tra.** Ngày kiểm tra 08/10/2026 theo Asia/Saigon, không tự đặt ngày bắt đầu/hạn nộp. Tích hợp/rà soát do Codex thực hiện theo yêu cầu Châu trên máy Châu; trạng thái bàn giao Git xem PR #2 ở phần 4.
 
 ## 1. Mục tiêu tuần
 
-- Châu (dự kiến): Lý thuyết luồng/semaphore, giả mã đồng bộ, thiết kế kết thúc, ví dụ tạo và chờ luồng.
-- Huy (dự kiến): Môi trường C, Makefile, bộ đệm vòng thử tuần tự, tham số và kế hoạch kiểm thử.
-- Mốc dự kiến: Có thiết kế, bộ đệm thử tuần tự và môi trường biên dịch hoạt động.
+- Châu: lý thuyết luồng/semaphore, giả mã đồng bộ, thiết kế kết thúc hữu hạn, ví dụ tạo/join.
+- Huy: môi trường C, Makefile, bộ đệm vòng tuần tự, đặc tả tham số/log và kế hoạch kiểm thử.
+- Mốc chung: chốt giao diện theo mã thực tế, tích hợp và kiểm tra, cập nhật báo cáo/minh chứng, bàn giao hai nhánh qua main.
 
 ## 2. Công việc Châu đã hoàn thành
 
-Chưa có dữ liệu tiến độ.
+Hoàn thành W1-C theo phạm vi tài liệu, thiết kế và ví dụ vòng đời luồng. Thiết kế đã ghép với API thực tế qua Codex theo yêu cầu Châu; chưa triển khai Producer–Consumer.
 
 | Nhiệm vụ | Việc thực tế đã làm | Trạng thái | Minh chứng |
 | --- | --- | --- | --- |
-| Chưa ghi nhận | Chưa có dữ liệu tiến độ | Chưa bắt đầu | Chưa có |
+| Lý thuyết luồng/semaphore | Viết tiếng Việt về tiến trình/luồng, hàng đợi N chỗ và FIFO, vùng găng/data race, deadlock, empty/full/guard, sleep và create/join; đối chiếu Linux man-pages, ghi rõ chưa đọc giáo trình | Đã hoàn thành | [Lý thuyết](../theory-week1-chau.md) |
+| Thiết kế và giả mã | Chọn ba semaphore pshared = 0; viết main/producer/consumer/enqueue STOP; nêu bất biến, FIFO, quyền sở hữu và lỗi; đề xuất API bộ đệm tuần tự để ghép với Huy | Đã hoàn thành; đã rà soát kỹ thuật khi tích hợp | [Thiết kế](../design.md) |
+| Ví dụ C và build | Tạo 3 worker có struct đối số và ô kết quả riêng, tính tổng hữu hạn, join rồi kiểm tra; xử lý mã lỗi pthread và create lỗi giữa chừng; thêm target thread-demo, ở bản độc lập giữ target mặc định/test chưa triển khai; bản chung hiện chạy test tuần tự | Đã hoàn thành | [Mã C](../../examples/thread_lifecycle.c), [Makefile](../../Makefile) |
+| Chạy kiểm tra và lưu minh chứng | Biên dịch với cảnh báo và -pthread; chạy 5 lần, clean/build/chạy lại, kiểm tra kết quả; thử create lỗi ở lần 1/3 bằng wrapper tạm ngoài repo; cập nhật tài liệu và log thực tế | Đã hoàn thành | [Môi trường](../../results/week1/chau-environment.log), [log](../../results/week1/chau-thread-demo.log), [đánh giá](../../results/week1/chau-validation.md) |
 
 ## 3. Công việc Huy đã hoàn thành
 
-Nguyễn Đức Huy — 20233448; thực hiện trên `dev/huy`, Codex hỗ trợ theo yêu cầu. Phần độc lập W1-H đã hoàn thành; chưa có xác nhận đọc chéo của Châu.
+Nguyễn Đức Huy — 20233448; thực hiện trên `dev/huy`, Codex hỗ trợ theo yêu cầu. Phần độc lập W1-H đã hoàn thành; API/cấu hình đã được Codex rà soát và chốt theo yêu cầu Châu trong lần tích hợp này, không ghi Huy phê duyệt hoặc hai người đã đọc chéo trực tiếp.
 
 | Nhiệm vụ | Việc thực tế đã làm | Trạng thái | Minh chứng |
 | --- | --- | --- | --- |
@@ -29,14 +32,29 @@ Nguyễn Đức Huy — 20233448; thực hiện trên `dev/huy`, Codex hỗ tr�
 
 ## 4. Kết quả tích hợp và kiểm thử của nhóm
 
-Chưa tích hợp PR #1 và PR Huy, chưa nghiệm thu chung. Kết quả do Huy kiểm tra trên máy Huy ngày 08/10/2026 theo Asia/Saigon: `make clean`, `make buffer-test`, `make test-buffer` hai chu kỳ đều exit 0, 12/12 PASS tuần tự; `make test` exit 0 với cùng phạm vi. Bản sanitizer 11/11 ca thường exit 0. `make` mặc định exit 2 đúng dự kiến vì thiếu src/main.c.
+PR #1 đã merge ở `ac5ff4de4f765f70dfd56ed843db936b3020d909`. Đã ghép origin/main vào dev/huy có nền `b12b825a53119e44d7bf063ef957eff1d280f660`, xử lý 6 file xung đột: Makefile, README, design, progress, báo cáo này và README minh chứng. Bảo toàn mã/commit và log độc lập của hai người; không chọn toàn bộ ours/theirs. Trạng thái merge GitHub xem [PR #2](https://github.com/ndhuy1127/os-producer-consumer/pull/2), không ghi sự kiện merge trước khi xảy ra.
 
-Ví dụ Châu từ `2c8d7f61415c1dc730c8e4dbde4c991a37bfdfa6` được gcc build với -pthread rồi `timeout 5s ./thread-demo` trong /tmp, exit 0; đủ 3 worker và 3 join đúng. Kiểm tra này chỉ chứng minh vòng đời luồng và môi trường, chưa chứng minh semaphore/Producer–Consumer. Nguồn bộ đệm được kiểm tra là commit nền `a004c2d` cộng các file W1-H trước commit, SHA256 trong [log](../../results/week1/huy-buffer-test.log). Kiểm tra khung/liên kết/Git ghi tại [minh chứng](../../results/week1/huy-validation.md); không tính là PASS thuật toán. T02–T09 chưa chạy.
+Giao diện đã chốt theo code: zero-init buffer; lỗi trực tiếp; push/pop sao chép item; out riêng không alias; buffer sở hữu mảng, destroy reset; không sao chép buffer đang sở hữu để dùng như đối tượng thứ hai; lớp Châu khóa ngoài API. Thiết kế ba semaphore, STOP, CLI/log và test-plan đã thống nhất về mặt kỹ thuật. Chốt này do Codex theo yêu cầu Châu, không đồng nghĩa Huy phê duyệt hoặc cả hai đã đọc chéo trực tiếp.
 
-## 5. Việc chưa hoàn thành hoặc đang vướng
+**Bản chung đã kiểm tra đạt** trên Ubuntu 24.04.5/WSL2 máy Châu, GCC 13.3.0; nguồn là hai SHA nền ở trên cộng nội dung giải quyết xung đột trước commit. Log ghi SHA256 Makefile và năm file C/header/test, không gán SHA nền cho nội dung mới.
 
-Chờ Châu xác nhận hợp đồng API chi tiết, K mỗi producer, giới hạn CLI và schema log; chờ đọc chéo kết quả và tích hợp hai PR. Mốc chung Tuần 1 chưa nghiệm thu. Chưa viết producer/consumer, semaphore, CLI hoặc runtime log; không dùng PASS T01 để suy ra các phần đó hoạt động.
+| Lệnh kiểm tra bản chung | Kết quả thực tế | Mã thoát |
+| --- | --- | --- |
+| make clean | Dọn build/bin | 0 |
+| make thread-demo buffer-test | Build sạch, không cảnh báo compiler; -pthread ở compile/link, wrapper chỉ trong test | 0 |
+| timeout 5s ./bin/thread-demo | 3 worker, 3 join, 55/210/465 đúng; completed cuối, thứ tự worker tự do | 0 |
+| make test | Đủ 12/12 ca T01: FIFO, wrap, N=1, đầy/rỗng, STOP, lỗi/vòng đời/malloc | 0 |
+| make help | Đủ target thread-demo/buffer-test/test-buffer/test/clean | 0 |
+| make | Chưa có src/main.c, không link chương trình giả | 2 đúng dự kiến |
+| python3 scripts/check_scaffold.py; git diff --check | Khung, liên kết, ignore và whitespace đạt | 0 |
+| git ls-files -u; rà conflict marker/tracked/staged | Không unmerged hoặc marker; không AGENTS/build/cache/secret/file tạm | 0; rg trả 1 do không có marker |
+
+Kết quả mới lưu tại [group-integration.log](../../results/week1/group-integration.log), đánh giá ở [group-validation.md](../../results/week1/group-validation.md). Phạm vi là create/join và bộ đệm tuần tự T01. Năm file C/header/test không sửa và khớp hash minh chứng Huy, gồm sanitizer 11/11 ca thường đã chạy trên máy Huy; không ghi sanitizer mới trên máy Châu. Các log độc lập ở mục 2/3 giữ nguyên byte, không thay chúng bằng kết quả máy Châu. T02–T09 chưa chạy.
+
+## 5. Việc còn thiếu hoặc đang vướng
+
+Không còn vướng kỹ thuật trong tiêu chí Tuần 1 đã kiểm tra; trạng thái merge/bàn giao Git theo PR #2, không suy ra từ bản tài liệu trước merge. Producer/consumer, semaphore runtime, CLI parser và log runtime chưa triển khai; T02–T09 chưa chạy, thuộc tuần 2 trở đi và không phải tiêu chí thiếu Tuần 1. Không có bằng chứng Huy phê duyệt trực tiếp; báo cáo chỉ xác nhận rà soát kỹ thuật theo yêu cầu Châu.
 
 ## 6. Công việc tiếp theo
 
-Đọc chéo và thống nhất đề xuất, reviewer xử lý hai PR vào main; khi tích hợp giữ cả target thread-demo và test-buffer, giữ nội dung của hai người trong tài liệu chung. Sau merge cập nhật từng nhánh từ origin/main trước việc mới. Tuần 2 triển khai đồng bộ ngoài API, CLI/log rồi chạy T02–T05/T09 theo [kế hoạch](../plan.md) và [test-plan](../test-plan.md). Quy tắc cập nhật ở [README báo cáo](README.md).
+Sau bàn giao, dùng đặc tả chung để Châu triển khai producer/consumer, semaphore và STOP; Huy triển khai CLI/log theo API đã có. Kiểm tra T02–T05/T09 trước, sau đó nhiều luồng T06–T08 theo [kế hoạch](../plan.md) và [test-plan](../test-plan.md). Giữ dev/chau/dev/huy sau merge, cập nhật main trước việc mới. Quy tắc báo cáo ở [README báo cáo](README.md).

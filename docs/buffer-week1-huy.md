@@ -1,6 +1,6 @@
 # Bộ đệm vòng tuần tự — Tuần 1 của Huy
 
-Nguyễn Đức Huy — 20233448 — `dev/huy`. Đã triển khai và kiểm thử tuần tự; hợp đồng chi tiết cần Châu xác nhận trước tích hợp Tuần 2. Tham khảo thiết kế tại [PR #1](https://github.com/ndhuy1127/os-producer-consumer/pull/1), nguồn `origin/dev/chau` ở SHA `2c8d7f61415c1dc730c8e4dbde4c991a37bfdfa6`. Giữ nguyên chữ ký API và kiểu item Châu đề xuất. PR #1 còn mở lúc kiểm tra, không merge hoặc sao chép ví dụ vào nhánh Huy.
+Nguyễn Đức Huy — 20233448 — `dev/huy` đã triển khai/kiểm thử bộ đệm tuần tự. Giao diện dưới đây được **Codex rà soát và chốt theo yêu cầu Châu** trong lần tích hợp Tuần 1, tương thích với thiết kế Châu và giữ nguyên C/header. Không ghi Huy phê duyệt hoặc hai người đọc chéo trực tiếp. [PR #1](https://github.com/ndhuy1127/os-producer-consumer/pull/1) đã merge; [thiết kế chung](design.md) và [minh chứng nhóm](../results/week1/group-validation.md) mô tả bản hiện tại.
 
 ## Cấu trúc và FIFO
 
@@ -45,7 +45,7 @@ Main sở hữu struct buffer; init sở hữu mảng mới và destroy giải p
 
 API không gọi semaphore, không chờ và không tự khóa. Châu sẽ lấy quyền empty/full trước guard, gọi push/pop trong guard, ghi thứ tự và occupancy cùng vùng bảo vệ, rồi post theo thiết kế PR #1. Mọi đọc count hoặc mảng khi dùng đồng thời cũng phải có guard. Init/destroy do main thực hiện khi không còn worker sử dụng. Không xem mã FULL/EMPTY tuần tự là thay thế cho semaphore.
 
-Cần Châu xác nhận: zero-init và vòng đời, enum lỗi trực tiếp, out không alias, trách nhiệm khóa ngoài API, K item mỗi producer và schema log tại [config-log-week1-huy.md](config-log-week1-huy.md). Chưa có bằng chứng Châu đã đọc chéo hoặc nhóm nghiệm thu chung.
+Đã chốt zero-init/vòng đời, enum lỗi trực tiếp, out không alias, khóa ngoài API, K DATA mỗi producer và đặc tả CLI/log tại [config-log-week1-huy.md](config-log-week1-huy.md). Codex kiểm tra kỹ thuật theo yêu cầu Châu; không quy việc phê duyệt cho Huy. Bản chung được kiểm tra riêng trên máy Châu.
 
 ## Kiểm thử và phạm vi
 

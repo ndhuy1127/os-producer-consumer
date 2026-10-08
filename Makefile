@@ -6,11 +6,13 @@ LDLIBS += -pthread
 SOURCES := $(wildcard src/*.c)
 OBJECTS := $(patsubst src/%.c,build/%.o,$(SOURCES))
 TARGET := bin/producer-consumer
+THREAD_TARGET := bin/thread-demo
+THREAD_OBJECT := build/thread_lifecycle.o
 BUFFER_TARGET := bin/buffer-test
 BUFFER_OBJECTS := build/buffer.o build/test_buffer.o
 
 .DEFAULT_GOAL := all
-.PHONY: all clean test help buffer-test test-buffer
+.PHONY: all clean test help thread-demo buffer-test test-buffer
 
 ifeq ($(wildcard src/main.c),)
 all:
@@ -22,12 +24,21 @@ all: $(TARGET)
 $(TARGET): $(OBJECTS)
 	@mkdir -p $(@D)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
-
 endif
 
 build/%.o: src/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+$(THREAD_OBJECT): examples/thread_lifecycle.c
+	@mkdir -p $(@D)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+thread-demo: $(THREAD_TARGET)
+
+$(THREAD_TARGET): $(THREAD_OBJECT)
+	@mkdir -p $(@D)
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
 build/test_buffer.o: tests/test_buffer.c
 	@mkdir -p $(@D)
@@ -45,10 +56,10 @@ test-buffer: buffer-test
 
 test: test-buffer
 
--include $(sort $(OBJECTS:.o=.d) $(BUFFER_OBJECTS:.o=.d))
+-include $(sort $(OBJECTS:.o=.d) $(BUFFER_OBJECTS:.o=.d) $(THREAD_OBJECT:.o=.d))
 
 clean:
 	rm -rf -- build bin
 
 help:
-	@printf '%s\n' 'make: build Producer-Consumer khi co src/main.c; hien chua trien khai.' 'make buffer-test: build bin/buffer-test.' 'make test-buffer / make test: kiem thu bo dem tuan tu, khong kiem thu dong thoi.' 'make clean: don build/ va bin/.'
+	@printf '%s\n' 'make: build Producer-Consumer khi co src/main.c; hien chua trien khai.' 'make thread-demo: build vi du tao/join luong vao bin/thread-demo.' 'make buffer-test: build bin/buffer-test.' 'make test-buffer / make test: kiem thu bo dem tuan tu, khong kiem thu dong thoi.' 'make clean: don build/ va bin/.'

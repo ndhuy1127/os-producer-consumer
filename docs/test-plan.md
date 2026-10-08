@@ -1,10 +1,10 @@
 # Kế hoạch kiểm thử
 
-Trạng thái: **T01 đã chạy cho bộ đệm tuần tự; T02–T09 dự kiến/chưa chạy**. Chưa có chương trình Producer–Consumer, semaphore hoặc parser CLI. Cấu hình dưới đây theo [đề xuất Huy](config-log-week1-huy.md), K là số DATA mỗi producer, còn cần Châu xác nhận. T03 nhiều luồng N=1 chưa được kiểm chứng bởi ca T01 N=1 tuần tự.
+Trạng thái: **T01 đã chạy cho bộ đệm tuần tự; T02–T09 dự kiến/chưa chạy**. Chưa có chương trình Producer–Consumer, semaphore hoặc parser CLI. Cấu hình dưới đây theo [đặc tả đã chốt qua Codex theo yêu cầu Châu](config-log-week1-huy.md), K là số DATA mỗi producer; chưa viết parser/runtime. T03 nhiều luồng N=1 chưa được kiểm chứng bởi ca T01 N=1 tuần tự.
 
 | ID | Tình huống dự kiến | Tiêu chí cần quan sát | Trạng thái |
 | --- | --- | --- | --- |
-| T01 | Bộ đệm chạy tuần tự: enqueue/dequeue, wrap-around | Dữ liệu đúng, FIFO, occupancy không vượt N | Đã hoàn thành — 12/12 PASS; [log](../results/week1/huy-buffer-test.log) |
+| T01 | Bộ đệm chạy tuần tự: enqueue/dequeue, wrap-around | Dữ liệu đúng, FIFO, occupancy không vượt N | Đã hoàn thành — 12/12 PASS; [log máy Huy](../results/week1/huy-buffer-test.log), [bản chung máy Châu](../results/week1/group-integration.log) |
 | T02 | 1 producer / 1 consumer | Mọi ID được tiêu thụ đúng một lần; tự kết thúc | Chưa bắt đầu |
 | T03 | N = 1 | Không mất/lặp; occupancy chỉ 0/1; không deadlock | Chưa bắt đầu |
 | T04 | Producer nhanh, consumer chậm để bộ đệm đầy | Producer chờ khi đầy, không ghi vượt N; tiếp tục sau dequeue | Chưa bắt đầu |
@@ -14,9 +14,9 @@ Trạng thái: **T01 đã chạy cho bộ đệm tuần tự; T02–T09 dự ki�
 | T08 | CLI thiếu/sai, số âm, 0, quá lớn hoặc tràn số | Từ chối theo quy tắc đã chốt; báo lỗi và mã thoát phù hợp | Chưa bắt đầu |
 | T09 | Kết thúc khi consumer đang chờ; còn dữ liệu cần tiêu thụ | Tiêu thụ hết dữ liệu; mọi luồng join; tín hiệu dừng không làm sai thống kê | Chưa bắt đầu |
 
-## T01 — kết quả thực chạy trên Ubuntu/WSL
+## T01 — minh chứng độc lập máy Huy và kiểm tra bản chung
 
-Ngày kiểm tra 08/10/2026 theo Asia/Saigon. Lệnh `make clean`, `make buffer-test`, `make test-buffer` chạy hai chu kỳ build sạch; `make test` cũng chạy lại, exit 0. GCC 13.3.0, C11, -Wall -Wextra -Wpedantic, không cảnh báo. [Nguồn kiểm thử](../tests/test_buffer.c) và [minh chứng](../results/week1/huy-validation.md) ghi SHA256 của bản thực chạy; không dùng commit nền để tuyên bố code mới đã nằm trong đó.
+Minh chứng độc lập trên máy Huy ngày 08/10/2026 theo Asia/Saigon; log lịch sử giữ nguyên. Kiểm tra bản tích hợp trên máy Châu được ghi riêng ở [group-validation](../results/week1/group-validation.md). Lệnh `make clean`, `make buffer-test`, `make test-buffer` chạy hai chu kỳ build sạch; `make test` cũng chạy lại, exit 0. GCC 13.3.0, C11, -Wall -Wextra -Wpedantic, không cảnh báo. [Nguồn kiểm thử](../tests/test_buffer.c) và [minh chứng](../results/week1/huy-validation.md) ghi SHA256 của bản thực chạy; không dùng commit nền để tuyên bố code mới đã nằm trong đó.
 
 | Ca trong T01 | Cấu hình/đầu vào thực chạy | Kết quả quan sát |
 | --- | --- | --- |
@@ -37,7 +37,7 @@ Wrapper malloc/free kiểm tra không còn cấp phát mảng sau **mỗi** ca. 
 
 ## Cấu hình và quan sát dự kiến cho T02–T09
 
-Các ca dưới đây **chưa chạy**, tên cờ còn là đề xuất. Mỗi cấu hình là `(N,P,C,K,Dp_ms,Dc_ms)`; mặc định tắt quiet để có bằng chứng thao tác, cần chạy thêm quiet khi parser/log đã có. Độ trễ không tự chứng minh trạng thái đầy/trống hoặc loại trừ deadlock.
+Các ca dưới đây **chưa chạy**, tên cờ/mặc định/giới hạn đã chốt trong đặc tả Tuần 1, parser chưa triển khai. Mỗi cấu hình là `(N,P,C,K,Dp_ms,Dc_ms)`; mặc định tắt quiet để có bằng chứng thao tác, cần chạy thêm quiet khi parser/log đã có. Độ trễ không tự chứng minh trạng thái đầy/trống hoặc loại trừ deadlock.
 
 | ID | Cấu hình/đầu vào dự kiến | Mục tiêu và kết quả cần kiểm tra |
 | --- | --- | --- |
@@ -50,14 +50,14 @@ Các ca dưới đây **chưa chạy**, tên cờ còn là đề xuất. Mỗi c
 | T08 | Cờ lạ/lặp/thiếu; N/P/C=0; K=0 hợp lệ; -1,+1,1x,1.5; chuỗi số vượt uint64_t; N=65537/P=65/D=60001; P=64,K=1000000 vượt tổng | Parser từ chối sai/tràn/out-of-range trước tạo worker, stderr cụ thể, exit 2; mặc định/help/K=0 được xử lý theo hợp đồng; runtime lỗi exit 1 |
 | T09 | (1,1,4,0,0,0) và (2,2,3,30,0,10) | K=0 đánh thức C consumer qua STOP; trường hợp 60 DATA phải dequeue hết trước STOP, join xác nhận xử lý xong, STOP không tính DATA, count cuối 0 |
 
-Timeout dự kiến cho test script: `5s + 2*(P*K*(Dp+Dc)/1000)` làm ngân sách bảo thủ cho chạy hữu hạn trên máy thử; kiểm tra phép tính không tràn. Chưa chốt/đo thời gian và không coi timeout này là chứng minh toán học về scheduler. Với quiet phải vẫn giữ dữ liệu oracle/tổng kết; nếu không quan sát đủ thì ghi Chưa kiểm chứng, không PASS.
+Timeout đã chốt cho test script tương lai: `5 + ceil(2*P*K*(Dp_ms+Dc_ms)/1000)` giây, với kiểm tra tràn. Đây là ngân sách bảo thủ chưa đo trên Producer–Consumer, không bảo đảm toán học về scheduler. Mặc định `(8,1,1,20,0,0)`; N<=65536, P/C<=64, tổng P*K<=1000000, độ trễ ms<=60000 theo [đặc tả](config-log-week1-huy.md). Với quiet vẫn giữ oracle/tổng kết; thiếu quan sát thì ghi Chưa kiểm chứng, không PASS.
 
 ## Cách đánh giá khi đã triển khai
 
 - Dữ liệu: đối chiếu tập ID sản xuất/tiêu thụ và tần suất; chỉ tổng số bằng nhau chưa đủ chứng minh không mất/lặp.
 - FIFO: đối chiếu thứ tự enqueue/dequeue trong vùng bảo vệ; không dùng thứ tự in log hoặc thứ tự sinh ID như thứ tự FIFO toàn cục.
 - Giới hạn: quan sát occupancy sau mỗi thao tác; luôn 0 ≤ count ≤ N.
-- Kết thúc: đặt timeout có lý do theo cấu hình và kiểm tra mọi luồng kết thúc; timeout chưa chốt.
+- Kết thúc: đặt timeout có lý do theo cấu hình và kiểm tra mọi luồng kết thúc; ngân sách theo công thức đã chốt, sẽ đối chiếu thực nghiệm khi có chương trình.
 - Full/empty: có bằng chứng thực sự đạt trạng thái cần kiểm tra, không chỉ thay đổi độ trễ rồi suy đoán.
 - Lưu lệnh/cấu hình, môi trường, commit được kiểm tra, đầu vào, kết quả quan sát và mã thoát vào results/weekN/. Không bịa log hoặc đánh dấu PASS khi chưa chạy.
 
