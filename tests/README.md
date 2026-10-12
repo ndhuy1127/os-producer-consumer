@@ -8,4 +8,10 @@ Bản sanitizer không bật wrapper chạy 11 ca thường. [Minh chứng Tuầ
 
 [test_pc_faults.c](test_pc_faults.c) dùng GNU ld wrapper tách khỏi production; [check_pc_errors.py](../scripts/check_pc_errors.py) chạy 26 ca riêng với timeout 5s mỗi ca. EINTR cho guard/quyền/trywait phải phục hồi; producer create lỗi được đồng bộ bằng semaphore test để consumer đã vào đường sem_wait(full) sau EAGAIN, không dùng sleep đoán readiness. Kiểm tra join đủ, destroy đúng tài nguyên, cấp phát được free. Ca fatal phải exit 1 cùng thông báo lời gọi lỗi; không giả định đã cleanup sau fatal. Bộ kiểm tra cấu hình gọi API, **không** nghiệm thu parser CLI/T08.
 
-`make test` chạy cả ba nhóm. [Minh chứng Tuần 2](../results/week2/chau-validation.md) gồm sanitizer tám ca lõi, production mặc định và 11 ca buffer; T06–T08 và T09 nhiều luồng còn chờ.
+Các test Châu giữ nguyên; [minh chứng Châu](../results/week2/chau-validation.md) là snapshot bàn giao. `make test` hiện chạy ba nhóm đó và test-cli.
+
+[test_cli.c](test_cli.c) là driver parser riêng để thử biên lớn (N=65536/K=1000000/delay=60000) không chạy worker. [test_runtime_log.c](test_runtime_log.c) có 7 ca formatter: số uint64_t lớn, STOP data_id=-, quiet, status=1/verified=1 vẫn FAIL, verified=0 vẫn FAIL và output error. Fixture formatter không phải bằng chứng dữ liệu/FIFO runtime.
+
+[test_main_hooks.c](test_main_hooks.c) chỉ link vào main-hook-test với cùng main production; trap pc_run/pthread_create (exit 99) ở parse sai/help, có positive control. Init/cleanup/verified được tiêm để kiểm tra main trả 1, không PASS và vẫn destroy records ở thường/quiet.
+
+[check_cli_log.py](../scripts/check_cli_log.py) chạy production 16 ca (8 thường/8 quiet) và 116 đầu vào sai + wrapper; parse stdout thành queue tuyến tính độc lập để kiểm tra từng ID/kind/value/FIFO/count/STOP/schema/summary. Quiet giữ records/oracle và được kiểm tra summary cùng các ca lỗi, không có record để làm oracle stdout. [Minh chứng Huy](../results/week2/huy-validation.md) phân biệt hai phạm vi này. T06/T07, runtime nhiều luồng và toàn T09 còn chờ Tuần 3; T08 chỉ CLI 1P/1C đã kiểm tra.

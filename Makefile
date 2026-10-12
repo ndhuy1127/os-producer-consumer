@@ -15,10 +15,17 @@ PC_OBJECTS := build/buffer.o build/pc.o build/test_pc.o
 ERROR_TARGET := bin/pc-error-test
 ERROR_OBJECTS := build/buffer.o build/pc.o build/test_pc_faults.o
 ERROR_WRAPS := sem_init sem_wait sem_trywait sem_post sem_destroy pthread_create pthread_join malloc calloc free buffer_push buffer_pop
+CLI_PARSE_TARGET := bin/cli-parse-test
+CLI_PARSE_OBJECTS := build/buffer.o build/pc.o build/cli.o build/test_cli.o
+LOG_TARGET := bin/log-test
+LOG_OBJECTS := build/runtime_log.o build/test_runtime_log.o
+MAIN_HOOK_TARGET := bin/main-hook-test
+MAIN_HOOK_OBJECTS := $(OBJECTS) build/test_main_hooks.o
+MAIN_HOOK_WRAPS := pc_run pc_result_destroy pthread_create sem_init sem_destroy
 comma := ,
 
 .DEFAULT_GOAL := all
-.PHONY: all clean test help thread-demo buffer-test test-buffer pc-test pc-error-test test-pc test-errors
+.PHONY: all clean test help thread-demo buffer-test test-buffer pc-test pc-error-test test-pc test-errors cli-tests test-cli
 
 ifeq ($(wildcard src/main.c),)
 all:
@@ -86,12 +93,41 @@ test-pc: pc-test
 test-errors: pc-error-test
 	python3 scripts/check_pc_errors.py
 
-test: test-buffer test-pc test-errors
+build/test_cli.o: tests/test_cli.c
+	@mkdir -p $(@D)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
--include $(sort $(OBJECTS:.o=.d) $(BUFFER_OBJECTS:.o=.d) $(THREAD_OBJECT:.o=.d) $(PC_OBJECTS:.o=.d) $(ERROR_OBJECTS:.o=.d))
+build/test_runtime_log.o: tests/test_runtime_log.c
+	@mkdir -p $(@D)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+build/test_main_hooks.o: tests/test_main_hooks.c
+	@mkdir -p $(@D)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+cli-tests: $(CLI_PARSE_TARGET) $(LOG_TARGET) $(MAIN_HOOK_TARGET) $(TARGET)
+
+$(CLI_PARSE_TARGET): $(CLI_PARSE_OBJECTS)
+	@mkdir -p $(@D)
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(LOG_TARGET): $(LOG_OBJECTS)
+	@mkdir -p $(@D)
+	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(MAIN_HOOK_TARGET): $(MAIN_HOOK_OBJECTS)
+	@mkdir -p $(@D)
+	$(CC) $(LDFLAGS) $^ $(addprefix -Wl$(comma)--wrap=,$(MAIN_HOOK_WRAPS)) $(LDLIBS) -o $@
+
+test-cli: cli-tests
+	python3 scripts/check_cli_log.py
+
+test: test-buffer test-pc test-errors test-cli
+
+-include $(sort $(OBJECTS:.o=.d) $(BUFFER_OBJECTS:.o=.d) $(THREAD_OBJECT:.o=.d) $(PC_OBJECTS:.o=.d) $(ERROR_OBJECTS:.o=.d) $(CLI_PARSE_OBJECTS:.o=.d) $(LOG_OBJECTS:.o=.d) $(MAIN_HOOK_OBJECTS:.o=.d))
 
 clean:
 	rm -rf -- build bin
 
 help:
-	@printf '%s\n' 'make: build bin/producer-consumer (mac dinh N=8 P=C=1 K=20; CLI cho Huy).' 'make thread-demo: build bin/thread-demo.' 'make test-buffer: 12 ca bo dem tuan tu.' 'make test-pc: 8 ca loi dong bo 1P/1C, timeout 15s.' 'make test-errors: wrapper rieng, timeout tung ca.' 'make test: test-buffer + test-pc + test-errors.' 'make clean: don build/ va bin/.'
+	@printf '%s\n' 'make: build bin/producer-consumer, CLI --help/--quiet; mac dinh N=8 P=C=1 K=20.' 'make thread-demo: build bin/thread-demo.' 'make test-buffer: 12 ca bo dem tuan tu.' 'make test-pc: 8 ca loi dong bo 1P/1C, timeout 15s.' 'make test-errors: 26 ca loi API/semaphore, timeout tung ca.' 'make test-cli: CLI/log production, quiet, parser bounds and main error hooks.' 'make test: all regression + CLI/log tests.' 'python3 scripts/validate_week2_huy.py: ghi minh chung huy-*; khong chay script W2-C tren CLI moi.' 'make clean: don build/ va bin/.'

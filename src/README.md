@@ -1,3 +1,3 @@
 # src
 
-[buffer.c](buffer.c) giữ nguyên API tuần tự của Huy. [pc.c](pc.c) bao quanh bằng empty/full/guard, chạy 1P/1C hữu hạn và trả record/kiểm chứng sau join. [main.c](main.c) là entry point thật, chạy mặc định N=8,K=20; CLI parser chờ Huy. `make` tạo bin/producer-consumer; test/ví dụ được build riêng. Xem [hợp đồng buffer](../docs/buffer-week1-huy.md) và [API bàn giao](../docs/handoff-week2-chau.md).
+[buffer.c](buffer.c) giữ API tuần tự; [pc.c](pc.c) giữ lõi Châu với empty/full/guard và 1P/1C hữu hạn. [cli.c](cli.c) parse/kiểm tra trước lõi; [runtime_log.c](runtime_log.c) đọc/in snapshot sau join, quiet giữ tổng kết. [main.c](main.c) ghép parse → pc_run → log → destroy result. `make` tạo bin/producer-consumer, mặc định N=8/K=20; test/ví dụ và wrapper có binary riêng. [Hợp đồng buffer](../docs/buffer-week1-huy.md), [bàn giao Châu](../docs/handoff-week2-chau.md), [minh chứng bản ghép](../results/week2/huy-validation.md).
