@@ -1,6 +1,6 @@
 # Kế hoạch kiểm thử
 
-Trạng thái: **T01 đạt; T02–T05 đạt qua chương trình chính với CLI/log ở thường và quiet; T08 đã kiểm chứng phạm vi CLI Tuần 2; T06/T07 chưa chạy; T09 mới kết thúc cơ bản 1P/1C**. [Minh chứng Châu](../results/week2/chau-validation.md) giữ snapshot trước CLI; [minh chứng Huy](../results/week2/huy-validation.md) ghi bản ghép trên dev/huy, chưa merge main. K là DATA mỗi producer; Tuần 2 chỉ P=C=1, nhiều luồng thuộc Tuần 3.
+Trạng thái: **T01 đạt; T02–T05 đạt qua chương trình chính với CLI/log ở thường và quiet; T08 đã kiểm chứng phạm vi CLI Tuần 2; T06/T07 chưa chạy; T09 mới kết thúc cơ bản 1P/1C**. [Minh chứng Châu](../results/week2/chau-validation.md) giữ snapshot trước CLI; [minh chứng Huy](../results/week2/huy-validation.md) ghi bản ghép, [review chung](../results/week2/group-validation.md) kiểm tra lại đạt. Trạng thái bàn giao main xem [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3). K là DATA mỗi producer; Tuần 2 chỉ P=C=1, nhiều luồng thuộc Tuần 3.
 
 | ID | Tình huống dự kiến | Tiêu chí cần quan sát | Trạng thái |
 | --- | --- | --- | --- |

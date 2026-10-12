@@ -24,7 +24,7 @@ W1-C và W1-H hoàn thành phần độc lập, minh chứng riêng được gi�
 
 **W2-H nghiệm thu cùng ngày:** dev/huy fast-forward nhận W2-C từ origin/dev/chau ở bd00780; parser/log ghép vào main, mặc định N=8 và giới hạn 1P/1C. 16 lần chạy CLI thường/quiet, 116 đầu vào sai với wrapper chặn lõi, help/biên/log/main errors, hồi quy và ASan/UBSan/leak detection đạt. Codex thực hiện theo yêu cầu trên máy ChouPro WSL, không ghi Huy trực tiếp chạy/phê duyệt. [Minh chứng Huy](../results/week2/huy-validation.md) ghi nguồn mới, không sửa Tuần 1/chau-* hoặc lõi/buffer.
 
-**Mốc kỹ thuật Tuần 2 đạt trên bản ghép dev/huy**, chưa merge/bàn giao main. T08 chỉ nghiệm thu CLI hiện hỗ trợ 1P/1C; T06/T07 và cấu hình nhiều luồng T09 thuộc Tuần 3, chưa chạy. Commit/push nhánh Huy được xác nhận sau thao tác trong phần trả kết quả.
+**Bản ghép Tuần 2 đã được Codex review và kiểm tra đạt theo yêu cầu:** build sạch, thread-demo, make test (buffer 12, lõi 8, lỗi/API 26, production thường/quiet 16, CLI sai 116), khung/liên kết/diff và hash nguồn đạt. Không phát hiện lỗi runtime cần sửa trong phạm vi 1P/1C; cập nhật tài liệu bàn giao, giữ nguyên minh chứng riêng Châu/Huy và Tuần 1. [Review chung](../results/week2/group-validation.md), [log thực chạy](../results/week2/group-review.log). Sanitizer dùng minh chứng cũ khớp nguồn, không ghi đã chạy mới. Trạng thái merge/bàn giao main và merge SHA xem [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3). T08 chỉ CLI hiện hỗ trợ 1P/1C; T06/T07 và cấu hình nhiều luồng T09 thuộc Tuần 3, chưa chạy. Không xác nhận Châu/Huy trực tiếp review/phê duyệt.
 
 ## Thiết lập dự án
 

@@ -1,6 +1,14 @@
 # Minh chứng Tuần 2
 
-**W2-C và W2-H đã nghiệm thu ngày 12/10/2026 (Asia/Saigon), phạm vi 1P/1C; bản ghép đạt mốc kỹ thuật Tuần 2 trên dev/huy, chưa merge main.** Codex thực hiện theo yêu cầu trên máy ChouPro WSL; không ghi Huy trực tiếp chạy/phê duyệt. [Đánh giá Châu](chau-validation.md), [đánh giá Huy](huy-validation.md), [báo cáo](../../docs/reports/week2.md), [API bàn giao Châu](../../docs/handoff-week2-chau.md).
+**W2-C và W2-H đã nghiệm thu ngày 12/10/2026 (Asia/Saigon), phạm vi 1P/1C; bản ghép đã được Codex review và kiểm tra đạt theo yêu cầu.** Trạng thái merge/bàn giao main xem [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3). Thực hiện trên checkout ChouPro WSL; không ghi Huy/Châu trực tiếp review/phê duyệt. [Đánh giá Châu](chau-validation.md), [đánh giá Huy](huy-validation.md), [báo cáo](../../docs/reports/week2.md), [API bàn giao Châu](../../docs/handoff-week2-chau.md).
+
+| Minh chứng review chung | Nội dung |
+| --- | --- |
+| [group-validation.md](group-validation.md) | Review/kiểm tra bản ghép, phạm vi, cấu hình/exit, đối chiếu sanitizer lịch sử và PR bàn giao |
+| [group-review.log](group-review.log) | Môi trường/nguồn thực, clean/build/thread-demo/make test/scaffold/diff/hash, bảo toàn minh chứng cũ |
+| [group-source.sha256](group-source.sha256) | 22 hash nguồn thực review tại commit 7c356e9, khớp manifest Huy |
+
+Review không chạy lại sanitizer vì nguồn không đổi/hash khớp; log Châu/Huy dưới đây là minh chứng đã bàn giao, giữ nguyên cả mô tả trạng thái tại snapshot cũ. Trạng thái hiện tại theo PR #3/báo cáo chung. T06/T07 và T09 nhiều luồng còn thuộc Tuần 3.
 
 Các chau-* dưới đây giữ nguyên byte, là snapshot bàn giao trước CLI.
 

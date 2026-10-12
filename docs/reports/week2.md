@@ -1,6 +1,6 @@
 # Báo cáo chung Tuần 2 — Bản cơ bản
 
-**W2-C và W2-H đạt 100% phạm vi cơ bản 1 producer/1 consumer; mốc kỹ thuật Tuần 2 đạt trên bản ghép dev/huy.** Kiểm chứng ngày 12/10/2026 (Asia/Saigon). Codex thực hiện theo yêu cầu trên máy ChouPro Ubuntu/WSL, không ghi Huy trực tiếp chạy/phê duyệt hoặc cả hai đã đọc chéo. Minh chứng Châu giữ nguyên; kết quả Huy ghi riêng huy-*. Chưa merge/bàn giao main, chưa có ngày bắt đầu/hạn nộp.
+**W2-C và W2-H đạt 100% phạm vi cơ bản 1 producer/1 consumer; bản ghép đã được Codex review và kiểm tra đạt theo yêu cầu.** Kiểm chứng ngày 12/10/2026 (Asia/Saigon) trên checkout ChouPro Ubuntu/WSL; không ghi Huy/Châu trực tiếp review/phê duyệt hoặc cả hai đã đọc chéo. Minh chứng Châu/Huy giữ nguyên; kết quả review ghi riêng [group-validation](../../results/week2/group-validation.md). Trạng thái bàn giao main và merge SHA được xác nhận trên GitHub tại [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3), không suy ra từ tài liệu trước merge. Chưa có ngày bắt đầu/hạn nộp.
 
 ## 1. Mục tiêu tuần
 
@@ -68,10 +68,12 @@ Mỗi ca runtime có timeout, đối chiếu từng ID/value/kind, FIFO theo tha
 
 116 đầu vào CLI sai được chạy trên cả production và binary có wrapper chặn pc_run/pthread_create: exit 2, stderr cụ thể, không gọi lõi/worker; positive control wrapper exit 99 đúng dự kiến. Help dùng riêng trên hai binary exit 0; 5 biên parser không chạy worker; formatter 7/7; 6 ca lỗi main ở thường/quiet exit 1, không PASS, destroy result đúng. Hồi quy thread-demo/buffer 12/lõi 8/lỗi Châu 26 đạt. ASan/UBSan/leak detection ngoài sandbox đạt ở production, parser biên, logger và cleanup main. [CLI](../../results/week2/huy-cli-tests.log), [log/errors](../../results/week2/huy-log-tests.log), [build](../../results/week2/huy-build.log), [sanitizer](../../results/week2/huy-sanitizers.log), [đánh giá](../../results/week2/huy-validation.md).
 
+**Review bản ghép theo yêu cầu bàn giao:** Codex đọc diff origin/main→dev/huy, kế hoạch/báo cáo/thiết kế/hợp đồng, nguồn chính, Makefile/tests/checker và manifest/log lịch sử. Không phát hiện lỗi runtime cần sửa trong phạm vi 1P/1C. Đã thực chạy build sạch đủ production/thread-demo/test, thread-demo và một lần make test: buffer 12/12, lõi 8/8, lỗi/API 26/26, production thường/quiet 16/16, 116 CLI sai × production/hook, help/5 biên parser/7 formatter/6 lỗi main đều đạt; mọi target exit 0, child lỗi trả mã đúng dự kiến. Kiểm tra khung/liên kết/diff/hash đạt. [Log mới](../../results/week2/group-review.log), [manifest 22 file](../../results/week2/group-source.sha256) khớp nguồn commit 7c356e9. Chỉ sửa tài liệu/minh chứng; không chạy sanitizer mới, sử dụng log đã bàn giao khớp nguồn với leak detection bật. 31 file minh chứng lịch sử/báo cáo Tuần 1 được đối chiếu nguyên byte.
+
 ## 5. Việc chưa hoàn thành hoặc đang vướng
 
-Không còn vướng kỹ thuật trong W2-C/W2-H phạm vi Tuần 2 cơ bản. Bản ghép đạt trên dev/huy, chưa merge/bàn giao main. P/C>1 chưa hỗ trợ; T06/T07 chưa chạy, T08 chỉ CLI hiện hỗ trợ 1P/1C, K0/queued-stop không đánh dấu toàn T09 nhiều luồng PASS. Chưa xác nhận Huy trực tiếp chạy/phê duyệt hay hai người đọc chéo. Giáo trình/kế hoạch Word liên quan chưa được truy cập để xác minh, không tuyên bố đã đọc.
+Không còn vướng kỹ thuật trong W2-C/W2-H phạm vi Tuần 2 cơ bản; review và kiểm tra bản ghép đạt. Trạng thái merge/bàn giao main theo PR #3. P/C>1 chưa hỗ trợ; T06/T07 chưa chạy, T08 chỉ CLI hiện hỗ trợ 1P/1C, K0/queued-stop không đánh dấu toàn T09 nhiều luồng PASS. Chưa xác nhận Huy/Châu trực tiếp review/phê duyệt hay hai người đọc chéo. Giáo trình/kế hoạch Word liên quan chưa được truy cập để xác minh, không tuyên bố đã đọc.
 
 ## 6. Công việc tiếp theo
 
-Bàn giao commit/push W2-H trên dev/huy; reviewer kiểm tra diff/minh chứng trước quyết định merge main trong công việc tiếp theo. Lần này không merge/push main hay đổi dev/chau. Tuần 3 triển khai nhiều producer/consumer rồi T06/T07/phần nhiều luồng T09 và cập nhật giới hạn CLI tương ứng. [Tiến độ](../progress.md), [quy tắc báo cáo](README.md).
+Bàn giao qua PR #3 bằng merge commit, giữ commit gốc và hai nhánh thành viên; trạng thái thao tác thực xem GitHub/PR và kết quả bàn giao. Sau merge, đồng bộ main/dev/chau/dev/huy local/remote, đối chiếu tree/hash với bản review, checkout dev/chau rồi smoke test ngắn. Tuần 3 mới triển khai nhiều producer/consumer, T06/T07/phần nhiều luồng T09 và cập nhật giới hạn CLI; không triển khai công việc đó trong lượt chốt Tuần 2. [Tiến độ](../progress.md), [quy tắc báo cáo](README.md).
