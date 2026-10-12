@@ -1,0 +1,18 @@
+{
+  "HEAD_base": "9cf345c12ca59fb1a6bf476147551cb89f7e043b",
+  "branch": "dev/chau",
+  "source_manifest_sha256": "b4dde74335815fdc922975efe8c293576c3169d26b1bc85d0d4b352a9445730a",
+  "core_presets_passed": [
+    "default",
+    "source-N5",
+    "T02",
+    "T03",
+    "T04",
+    "T05",
+    "K0",
+    "queued-stop"
+  ],
+  "fault_cases_passed": 26,
+  "sanitizers": "PASS",
+  "exit_code": 0
+}

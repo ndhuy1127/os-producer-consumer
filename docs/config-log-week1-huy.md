@@ -1,25 +1,25 @@
 # Đặc tả cấu hình và log — tích hợp Tuần 1
 
-Đặc tả ban đầu do Huy chuẩn bị, nay **Codex rà soát và chốt theo yêu cầu Châu**; không ghi Huy phê duyệt hoặc hai người đọc chéo trực tiếp; chưa có CLI parser hoặc log runtime. Dựa trên PR #1/thiết kế Châu ở SHA `2c8d7f61415c1dc730c8e4dbde4c991a37bfdfa6`: P producer, C consumer, **K item mỗi producer**, tổng DATA = P*K, ID = p*K+j (p,j từ 0). STOP không tính vào tổng DATA. API đã có ở [buffer-week1-huy.md](buffer-week1-huy.md); kế hoạch kiểm thử ở [test-plan.md](test-plan.md).
+Đặc tả Tuần 1 do Huy chuẩn bị, được Codex rà soát/chốt theo yêu cầu Châu; không ghi phê duyệt hoặc đọc chéo trực tiếp. Cơ sở PR #1/thiết kế Châu ở `2c8d7f6`: P producer, C consumer, K DATA mỗi producer, tổng P*K, ID=p*K+j; STOP không tính DATA. **Tuần 2 đã triển khai CLI/log production trên dev/huy qua Codex theo yêu cầu**, dùng nguyên lõi W2-C; [minh chứng mới](../results/week2/huy-validation.md) tách khỏi [minh chứng Châu](../results/week2/chau-validation.md). API buffer giữ nguyên, không khóa thêm bên trong.
 
-## CLI dự kiến cho Tuần 2
+## CLI thực hiện Tuần 2
 
-Tên chương trình dự kiến `bin/producer-consumer`; hiện chưa tồn tại. Các giới hạn dưới đây đã chốt để giới hạn tài nguyên demo cho Tuần 2; không mô tả parser đã chạy.
+`bin/producer-consumer` dùng [cli.c](../src/cli.c) qua [main.c](../src/main.c). Mặc định và giới hạn dữ liệu/độ trễ giữ theo Tuần 1. P/C=1..64 là đặc tả dài hạn; **bản Tuần 2 chỉ P=C=1**, >1 từ chối trước pc_run với thông báo chưa hỗ trợ. Không quảng cáo runtime nhiều luồng.
 
 | Cờ | Mặc định | Phạm vi đã chốt | Ý nghĩa |
 | --- | --- | --- | --- |
 | `--capacity N` | 8 | 1..65536, đồng thời <= SEM_VALUE_MAX và SIZE_MAX/sizeof(struct item) | Sức chứa gồm DATA và STOP |
-| `--producers P` | 1 | 1..64 | Số producer |
-| `--consumers C` | 1 | 1..64 | Số consumer |
+| `--producers P` | 1 | Tuần 2: chỉ 1; kế hoạch nhiều luồng: 1..64 | Số producer |
+| `--consumers C` | 1 | Tuần 2: chỉ 1; kế hoạch nhiều luồng: 1..64 | Số consumer |
 | `--items-per-producer K` | 20 | 0..1000000, tổng P*K <=1000000 | DATA của mỗi producer; K=0 chỉ kiểm tra dừng |
 | `--producer-delay-ms Dp` | 0 | 0..60000 | Độ trễ sau enqueue DATA, ngoài guard |
 | `--consumer-delay-ms Dc` | 0 | 0..60000 | Độ trễ sau xử lý DATA, ngoài guard |
 | `--quiet` | tắt | Cờ không có giá trị | Giảm dòng chi tiết; vẫn xác minh và in tổng kết/lỗi |
 | `--help` | — | Dùng riêng | In trợ giúp, exit 0 |
 
-Đầu vào số chỉ gồm chữ số thập phân không dấu, không chấp nhận số âm, dấu +, khoảng trắng, chuỗi rỗng, số thực hoặc hậu tố. Tuần 2 dùng chuyển đổi có end pointer và kiểm tra ERANGE, giới hạn kiểu đích; không dùng atoi. Kiểm tra trước phép nhân `P*K` bằng phép chia giới hạn (xử lý K=0), kiểm tra ID uint64_t, kích thước mảng và các bộ đếm gồm `P*K+C` STOP và tổng số thao tác `2*(P*K+C)` để không tràn. Kiểm tra giới hạn semaphore của môi trường đích và mọi cấp phát trước tạo luồng. Chuyển ms sang thời gian ngủ bằng chia/lấy dư, kiểm tra kiểu thời gian, xử lý EINTR khi cần.
+Chỉ nhận `--cờ giá_trị`; dạng `--cờ=giá_trị` bị từ chối và help ghi rõ. Số chỉ gồm chữ số ASCII thập phân không dấu, không chấp nhận âm, dấu +, whitespace, rỗng, số thực hoặc hậu tố. Parser dùng strtoumax với end pointer/errno/ERANGE và giới hạn kiểu đích, không dùng atoi. Sau kiểm tra từng giá trị, kiểm tra trước phép nhân P*K (K=0 riêng), cộng C STOP, nhân hai thao tác và kích thước record; kiểm tra ID/tần suất/buffer/metadata và semaphore giống điều kiện lõi. pc_run vẫn kiểm tra cuối trước cấp phát/create, không đổi quy tắc lõi. Delay ms và EINTR khi nanosleep do pc.c thực hiện ngoài guard.
 
-Chốt từ chối cờ lạ, cờ lặp, thiếu giá trị, đối số vị trí hoặc giá trị ngoài giới hạn: thông báo lỗi cụ thể ra stderr, exit 2 và chưa tạo worker. Lỗi tài nguyên/runtime: exit 1; chỉ exit 0 khi mọi xác minh và join thành công. Không bổ sung chế độ chạy vô hạn. Chưa thử các quy tắc này vì parser chưa triển khai.
+Cờ lạ/lặp/thiếu, đối số vị trí, giá trị ngoài giới hạn và --help kết hợp cờ khác: stderr cụ thể, exit 2 trước pc_run/create. --help dùng riêng exit 0, không worker. Lỗi tài nguyên/runtime/kiểm chứng/output exit 1; thành công exit 0 chỉ khi status==PC_OK và summary.verified. Không có chạy vô hạn. 116 đầu vào sai đã thử trên production và binary dùng cùng main với wrapper chặn pc_run/pthread_create; 5 ca parser riêng thử biên lớn không chạy worker. [Log CLI](../results/week2/huy-cli-tests.log).
 
 ## Schema log đã chốt cho Tuần 2
 
@@ -32,14 +32,14 @@ op_seq=1 op=ENQUEUE actor=P0 kind=DATA data_id=0 value=7 enqueue_seq=1 count_aft
 op_seq=2 op=DEQUEUE actor=C0 kind=DATA data_id=0 value=7 enqueue_seq=1 count_after=0 capacity=8 wait_reason=NONE
 ```
 
-Tăng số thứ tự và lưu record ngay sau push/pop thành công **trong guard**, gồm cả STOP. Chốt cấp phát trước tối đa `2*(P*K+C)` record thao tác sau kiểm tra tràn/kích thước; main in theo op_seq sau join. FIFO đối chiếu theo op_seq/enqueue_seq đã chụp; thứ tự dòng in ngoài khóa không chứng minh FIFO. Nếu không cấp phát/lưu đủ bằng chứng thì trả lỗi, không bỏ kiểm chứng. Quiet chỉ bỏ việc in chi tiết, không bỏ dữ liệu xác minh hoặc biến lỗi thành thành công.
+Lõi Châu tăng số thứ tự/lưu record sau push/pop trong guard, gồm STOP; cấp phát trước tối đa 2*(K+1) cho 1P/1C sau kiểm tra tràn. [runtime_log.c](../src/runtime_log.c) đọc result sau pc_run/join và in theo op_seq, dùng PRIu64/%zu đúng kiểu. Không đưa I/O vào guard hoặc thêm semaphore. FIFO theo record trong guard, không dùng timestamp/thứ tự xử lý. Quiet bỏ record chi tiết nhưng giữ oracle/record nội bộ, kiểm chứng và tổng kết; main luôn pc_result_destroy sau kết quả có phục hồi, không sao chép result sở hữu.
 
-Tổng kết đã chốt: cấu hình thực chạy, DATA enqueue/dequeue, tần suất ID thiếu/lặp/ngoài phạm vi, FIFO theo hai dãy thao tác trong guard, min/max count (kể cả trạng thái đầu 0), STOP enqueue/dequeue, số worker create/join và count cuối 0. Không chỉ so tổng số item.
+Tổng kết thực: cấu hình; DATA enqueue/dequeue/processed; thiếu/lặp/ngoài phạm vi, value_errors/FIFO_errors/count_errors; min/max/final count gồm ban đầu 0; STOP enqueue/dequeue; WAIT_SLOT/WAIT_ITEM; record_count; DATA còn đợi sau producer join; số worker create/join; verification và run_status. PASS chỉ khi status=0 và verified đúng. Ca tiêm sem_destroy lỗi có verified=1 nhưng status=1 vẫn FAIL, kể cả quiet; [log kiểm tra](../results/week2/huy-log-tests.log).
 
 ## Bằng chứng chờ đầy/trống
 
 Chốt helper chờ empty/full dùng `sem_trywait(empty|full)` trước `sem_wait`: thành công thì đã lấy một quyền và không wait thêm; EINTR thử lại; EAGAIN đặt cờ `WAIT_SLOT`/`WAIT_ITEM` cục bộ rồi gọi sem_wait thử lại EINTR; gắn cờ vào record thao tác khi đã lấy guard, không tăng số thứ tự chung ngoài khóa. Lỗi khác chuyển xử lý lỗi. EAGAIN chứng minh tại thời điểm thử chưa có quyền, không chứng minh sem_wait sau đó chắc chắn bị block hoặc count luôn bằng N/0 (có quyền đang đặt trước). Không đếm thời gian block chính xác từ sự kiện này.
 
-Không lấy quyết định an toàn từ đọc count không khóa hoặc `sem_getvalue` riêng lẻ. Muốn ghi sự kiện `BUFFER_FULL`/`BUFFER_EMPTY`, ghi snapshot count=N/0 **trong guard** gắn với thao tác thành công gây trạng thái ấy; dùng EAGAIN để chứng minh thiếu quyền. Không giữ guard trong lúc chờ empty/full hoặc sleep. Phương án và hướng xử lý lỗi đã chốt trong [thiết kế](design.md), nhưng helper/semaphore runtime chưa triển khai/kiểm thử. Guard dùng sem_wait trực tiếp; helper probe không giữ guard khi chờ quyền.
+Không lấy quyết định an toàn từ count không khóa hoặc sem_getvalue. Record count_after=N/0 trong guard chứng minh đầy/trống riêng; EAGAIN chứng minh thiếu quyền. Không giữ guard khi chờ quyền/sleep. Helper Châu đã triển khai/kiểm chứng; guard dùng sem_wait trực tiếp. T04 qua CLI có 40 snapshot đầy, 39 WAIT_SLOT (38 P0); T05 có 41 snapshot rỗng/40 WAIT_ITEM trong [lần chạy thường đã lưu](../results/week2/huy-runtime-tests.log). Không suy ra thời gian block kernel.
 
-Ngân sách timeout test tương lai đã chốt: `5 + ceil(2*P*K*(Dp_ms+Dc_ms)/1000)` giây, kiểm tra tràn khi tính; ngân sách bảo thủ này chưa đo trên chương trình Producer–Consumer và không bảo đảm lịch chạy hệ điều hành. [Test-plan](test-plan.md) dùng cùng mặc định/giới hạn/schema.
+Timeout W2-H dùng 5+ceil(2*K*(Dp_ms+Dc_ms)/1000) giây cho 1P/1C (Python integer không tràn): 5s ca không delay, 7s T04/T05, 6s queued-stop. Đây là ngân sách kiểm thử bảo thủ, không bảo đảm scheduler. [Test-plan](test-plan.md) ghi phạm vi CLI thực; T06/T07 và T09 nhiều luồng chưa nghiệm thu.

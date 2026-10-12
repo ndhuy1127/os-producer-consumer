@@ -1,0 +1,184 @@
+W2-H actual execution (Asia/Saigon): 2026-10-12T22:35:03.895711+07:00
+root=/mnt/d/hust/os-producer-consumer
+branch=dev/huy
+HEAD_base=bd00780f115aaf752043735dac417f01054cc11d
+source=working tree before commit; new CLI/log are not assigned to HEAD_base
+source_manifest_sha256=8f9d91afab4d444a5eea871511c16edfd9395bc06550b1264be5427ae3b6d4b9
+source_manifest=results/week2/huy-source.sha256
+operator=Codex per user request, on ChouPro WSL; no claim Huy personally ran/approved
+
+$ python3 scripts/check_scaffold.py
+timeout=30s expected_exit=0
+stdout:
+Scaffold verified: 23 required files; 224 relative links; ignore rules; no tracked/staged AGENTS.md.
+No C algorithm, thread behavior or academic task has been validated.
+stderr:
+exit_code=0
+
+$ git diff --check
+timeout=30s expected_exit=0
+stdout:
+stderr:
+exit_code=0
+
+$ git diff --cached --check
+timeout=30s expected_exit=0
+stdout:
+stderr:
+exit_code=0
+
+$ git diff --exit-code bd00780f115aaf752043735dac417f01054cc11d -- include/item.h include/buffer.h include/pc.h src/buffer.c src/pc.c tests/test_buffer.c tests/test_pc.c tests/test_pc_faults.c examples/thread_lifecycle.c scripts/check_pc_errors.py scripts/validate_week2.py results/week1 'results/week2/chau-*' docs/reports/week1.md docs/handoff-week2-chau.md
+timeout=30s expected_exit=0
+stdout:
+stderr:
+exit_code=0
+
+$ git status --short
+timeout=30s expected_exit=0
+stdout:
+ M Makefile
+ M src/main.c
+?? include/cli.h
+?? include/runtime_log.h
+?? results/week2/huy-build.log
+?? results/week2/huy-cli-tests.log
+?? results/week2/huy-log-tests.log
+?? results/week2/huy-regression-tests.log
+?? results/week2/huy-review.log
+?? results/week2/huy-runtime-tests.log
+?? results/week2/huy-sanitizers.log
+?? results/week2/huy-source.sha256
+?? scripts/check_cli_log.py
+?? scripts/validate_week2_huy.py
+?? src/cli.c
+?? src/runtime_log.c
+?? tests/test_cli.c
+?? tests/test_main_hooks.c
+?? tests/test_runtime_log.c
+stderr:
+exit_code=0
+PASS source manifest unchanged; Week 1, Chau evidence/core/tests/writer/handoff preserved byte-for-byte.
+
+FINAL REVIEW after completing W2-H reports (same tested source manifest)
+
+$ python3 scripts/check_scaffold.py
+Scaffold verified: 23 required files; 289 relative links; ignore rules; no tracked/staged AGENTS.md.
+No C algorithm, thread behavior or academic task has been validated.
+exit_code=0
+
+$ git diff --check
+exit_code=0
+
+$ sha256sum -c results/week2/huy-source.sha256
+Makefile: OK
+include/item.h: OK
+include/buffer.h: OK
+include/pc.h: OK
+include/cli.h: OK
+include/runtime_log.h: OK
+src/buffer.c: OK
+src/pc.c: OK
+src/cli.c: OK
+src/runtime_log.c: OK
+src/main.c: OK
+examples/thread_lifecycle.c: OK
+tests/test_buffer.c: OK
+tests/test_pc.c: OK
+tests/test_pc_faults.c: OK
+tests/test_cli.c: OK
+tests/test_main_hooks.c: OK
+tests/test_runtime_log.c: OK
+scripts/check_pc_errors.py: OK
+scripts/check_cli_log.py: OK
+scripts/check_scaffold.py: OK
+scripts/validate_week2_huy.py: OK
+exit_code=0
+
+$ git diff --exit-code bd00780f115aaf752043735dac417f01054cc11d -- results/week1 'results/week2/chau-*' include/item.h include/buffer.h include/pc.h src/buffer.c src/pc.c tests/test_buffer.c tests/test_pc.c tests/test_pc_faults.c examples/thread_lifecycle.c scripts/check_pc_errors.py scripts/validate_week2.py docs/reports/week1.md docs/handoff-week2-chau.md
+exit_code=0
+
+$ git status --short
+ M Makefile
+ M README.md
+ M docs/config-log-week1-huy.md
+ M docs/design.md
+ M docs/progress.md
+ M docs/reports/week2.md
+ M docs/test-plan.md
+ M include/README.md
+ M results/week2/README.md
+ M scripts/README.md
+ M src/README.md
+ M src/main.c
+ M tests/README.md
+?? include/cli.h
+?? include/runtime_log.h
+?? results/week2/huy-build.log
+?? results/week2/huy-cli-tests.log
+?? results/week2/huy-log-tests.log
+?? results/week2/huy-regression-tests.log
+?? results/week2/huy-review.log
+?? results/week2/huy-runtime-tests.log
+?? results/week2/huy-sanitizers.log
+?? results/week2/huy-source.sha256
+?? results/week2/huy-test-summary.json
+?? results/week2/huy-validation.md
+?? scripts/check_cli_log.py
+?? scripts/validate_week2_huy.py
+?? src/cli.c
+?? src/runtime_log.c
+?? tests/test_cli.c
+?? tests/test_main_hooks.c
+?? tests/test_runtime_log.c
+exit_code=0
+
+$ git branch -vv
+  dev/chau bd00780 [origin/dev/chau] Hoàn thành W2-C: lõi semaphore 1P/1C, STOP và minh chứng kiểm thử
+* dev/huy  bd00780 [origin/dev/huy: ahead 1] Hoàn thành W2-C: lõi semaphore 1P/1C, STOP và minh chứng kiểm thử
+  main     9cf345c [origin/main] Merge pull request #2 from ndhuy1127/dev/huy
+exit_code=0
+PASS: manifest matches actual tested source; six report sections; Chau contribution and all other task rows unchanged; no compiler/make warnings; dev/huy only.
+
+STAGED REVIEW before W2-H commit
+
+$ git diff --cached --check
+exit_code=0
+
+$ git diff --cached --name-only
+Makefile
+README.md
+docs/config-log-week1-huy.md
+docs/design.md
+docs/progress.md
+docs/reports/week2.md
+docs/test-plan.md
+include/README.md
+include/cli.h
+include/runtime_log.h
+results/week2/README.md
+results/week2/huy-build.log
+results/week2/huy-cli-tests.log
+results/week2/huy-log-tests.log
+results/week2/huy-regression-tests.log
+results/week2/huy-review.log
+results/week2/huy-runtime-tests.log
+results/week2/huy-sanitizers.log
+results/week2/huy-source.sha256
+results/week2/huy-test-summary.json
+results/week2/huy-validation.md
+scripts/README.md
+scripts/check_cli_log.py
+scripts/validate_week2_huy.py
+src/README.md
+src/cli.c
+src/main.c
+src/runtime_log.c
+tests/README.md
+tests/test_cli.c
+tests/test_main_hooks.c
+tests/test_runtime_log.c
+exit_code=0
+
+$ git ls-files -u
+exit_code=0
+PASS: 32 intended W2-H files; no unmerged paths; no AGENTS/PDF/Word/binary/object/cache/secret/temp/meeting; preserved Chau/core/buffer; dev/huy only.
