@@ -1,18 +1,18 @@
 # Kế hoạch kiểm thử
 
-Trạng thái: **T01 đã chạy cho bộ đệm tuần tự; T02–T09 dự kiến/chưa chạy**. Chưa có chương trình Producer–Consumer, semaphore hoặc parser CLI. Cấu hình dưới đây theo [đặc tả đã chốt qua Codex theo yêu cầu Châu](config-log-week1-huy.md), K là số DATA mỗi producer; chưa viết parser/runtime. T03 nhiều luồng N=1 chưa được kiểm chứng bởi ca T01 N=1 tuần tự.
+Trạng thái: **T01 đạt; T02–T05 đạt trên lõi 1P/1C Tuần 2; T06–T08 chưa chạy; T09 mới nghiệm thu kết thúc cơ bản 1P/1C**. Đã có chương trình mặc định và semaphore; parser/log production chờ Huy. Cấu hình theo [đặc tả Tuần 1](config-log-week1-huy.md), K là số DATA mỗi producer. [Minh chứng W2-C](../results/week2/chau-validation.md) phân biệt test runner gọi API với đường CLI chưa có; các ca API sai không thay T08.
 
 | ID | Tình huống dự kiến | Tiêu chí cần quan sát | Trạng thái |
 | --- | --- | --- | --- |
 | T01 | Bộ đệm chạy tuần tự: enqueue/dequeue, wrap-around | Dữ liệu đúng, FIFO, occupancy không vượt N | Đã hoàn thành — 12/12 PASS; [log máy Huy](../results/week1/huy-buffer-test.log), [bản chung máy Châu](../results/week1/group-integration.log) |
-| T02 | 1 producer / 1 consumer | Mọi ID được tiêu thụ đúng một lần; tự kết thúc | Chưa bắt đầu |
-| T03 | N = 1 | Không mất/lặp; occupancy chỉ 0/1; không deadlock | Chưa bắt đầu |
-| T04 | Producer nhanh, consumer chậm để bộ đệm đầy | Producer chờ khi đầy, không ghi vượt N; tiếp tục sau dequeue | Chưa bắt đầu |
-| T05 | Consumer nhanh, producer chậm để bộ đệm trống | Consumer chờ khi trống, không đọc rỗng; tiếp tục sau enqueue | Chưa bắt đầu |
+| T02 | 1 producer / 1 consumer | Mọi ID được tiêu thụ đúng một lần; tự kết thúc | Đã hoàn thành trên lõi — K=100, PASS, exit 0 |
+| T03 | N = 1 | Không mất/lặp; occupancy chỉ 0/1; không deadlock | Đã hoàn thành trên lõi — 1P/1C/K=100, PASS, exit 0 |
+| T04 | Producer nhanh, consumer chậm để bộ đệm đầy | Producer thiếu quyền, không ghi vượt N; tiếp tục sau dequeue | Đã hoàn thành trên lõi — snapshot đầy và WAIT_SLOT, exit 0 |
+| T05 | Consumer nhanh, producer chậm để bộ đệm trống | Consumer thiếu quyền, không đọc rỗng; tiếp tục sau enqueue | Đã hoàn thành trên lõi — snapshot rỗng và WAIT_ITEM, exit 0 |
 | T06 | Nhiều producer/consumer, số lượng khác nhau | ID duy nhất; tập dữ liệu khớp; FIFO theo enqueue thực tế; mọi luồng kết thúc | Chưa bắt đầu |
 | T07 | Nhiều dữ liệu và chạy lặp lại | Không mất/lặp, không treo; lưu cấu hình và số lần lặp thực tế | Chưa bắt đầu |
 | T08 | CLI thiếu/sai, số âm, 0, quá lớn hoặc tràn số | Từ chối theo quy tắc đã chốt; báo lỗi và mã thoát phù hợp | Chưa bắt đầu |
-| T09 | Kết thúc khi consumer đang chờ; còn dữ liệu cần tiêu thụ | Tiêu thụ hết dữ liệu; mọi luồng join; tín hiệu dừng không làm sai thống kê | Chưa bắt đầu |
+| T09 | Kết thúc khi consumer đang chờ; còn dữ liệu cần tiêu thụ | Tiêu thụ hết dữ liệu; mọi luồng join; tín hiệu dừng không làm sai thống kê | Đang thực hiện — phần cơ bản 1P/1C đạt; cấu hình nhiều luồng chưa chạy, chưa PASS toàn T09 |
 
 ## T01 — minh chứng độc lập máy Huy và kiểm tra bản chung
 
@@ -37,7 +37,7 @@ Wrapper malloc/free kiểm tra không còn cấp phát mảng sau **mỗi** ca. 
 
 ## Cấu hình và quan sát dự kiến cho T02–T09
 
-Các ca dưới đây **chưa chạy**, tên cờ/mặc định/giới hạn đã chốt trong đặc tả Tuần 1, parser chưa triển khai. Mỗi cấu hình là `(N,P,C,K,Dp_ms,Dc_ms)`; mặc định tắt quiet để có bằng chứng thao tác, cần chạy thêm quiet khi parser/log đã có. Độ trễ không tự chứng minh trạng thái đầy/trống hoặc loại trừ deadlock.
+T02–T05 trong bảng dưới đã chạy qua test runner cùng lõi, [log W2-C](../results/week2/chau-runtime-tests.log). Các cấu hình T06–T09 nhiều luồng và đường CLI chưa chạy; parser chưa triển khai. Mỗi cấu hình là `(N,P,C,K,Dp_ms,Dc_ms)`; quiet cần kiểm tra sau ghép parser/log. Độ trễ không tự chứng minh trạng thái đầy/trống hoặc loại trừ deadlock. Ca K0=(1,1,1,0,0,0) và queued-stop=(8,1,1,20,0,20) hiện chỉ kiểm tra kết thúc cơ bản, không thay cấu hình T09 dưới đây.
 
 | ID | Cấu hình/đầu vào dự kiến | Mục tiêu và kết quả cần kiểm tra |
 | --- | --- | --- |

@@ -1,0 +1,89 @@
+W2-C actual execution (Asia/Saigon): 2026-10-12T14:17:57.107900+07:00
+root=/mnt/d/HUST/os-producer-consumer
+branch=dev/chau
+HEAD_base=9cf345c12ca59fb1a6bf476147551cb89f7e043b
+source=working tree before commit; HEAD_base does not contain new code
+source_manifest_sha256=b4dde74335815fdc922975efe8c293576c3169d26b1bc85d0d4b352a9445730a
+source_manifest=results/week2/chau-source.sha256
+ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+
+$ gcc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -pthread -g -O1 -fsanitize=address,undefined -fno-omit-frame-pointer src/buffer.c src/pc.c tests/test_pc.c -o /tmp/os-pc-w2-i_k7gstd/pc-test
+subprocess_timeout=30s expected_exit=0
+exit_code=0
+
+$ timeout 15s /tmp/os-pc-w2-i_k7gstd/pc-test all
+subprocess_timeout=17s expected_exit=0
+case=default N=8 P=1 C=1 K=20 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=42
+oracle: DATA=20/20 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,8] final=0 workers=create2/join2
+observed: full_snapshots=2 empty_snapshots=5 WAIT_SLOT=2 WAIT_ITEM=4 data_pending_after_producer_join=0
+PASS case=default
+case=source-N5 N=5 P=1 C=1 K=20 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=42
+oracle: DATA=20/20 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,5] final=0 workers=create2/join2
+observed: full_snapshots=3 empty_snapshots=10 WAIT_SLOT=3 WAIT_ITEM=9 data_pending_after_producer_join=0
+PASS case=source-N5
+case=T02 N=8 P=1 C=1 K=100 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=202
+oracle: DATA=100/100 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,8] final=0 workers=create2/join2
+observed: full_snapshots=11 empty_snapshots=15 WAIT_SLOT=11 WAIT_ITEM=14 data_pending_after_producer_join=0
+PASS case=T02
+case=T03 N=1 P=1 C=1 K=100 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=202
+oracle: DATA=100/100 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,1] final=0 workers=create2/join2
+observed: full_snapshots=101 empty_snapshots=101 WAIT_SLOT=99 WAIT_ITEM=100 data_pending_after_producer_join=0
+PASS case=T03
+case=T04 N=2 P=1 C=1 K=40 Dp_ms=0 Dc_ms=20
+pc_run_status=0 records=82
+oracle: DATA=40/40 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,2] final=0 workers=create2/join2
+observed: full_snapshots=40 empty_snapshots=1 WAIT_SLOT=39 WAIT_ITEM=0 data_pending_after_producer_join=2
+PASS case=T04
+case=T05 N=2 P=1 C=1 K=40 Dp_ms=20 Dc_ms=0
+pc_run_status=0 records=82
+oracle: DATA=40/40 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,1] final=0 workers=create2/join2
+observed: full_snapshots=0 empty_snapshots=41 WAIT_SLOT=0 WAIT_ITEM=40 data_pending_after_producer_join=0
+PASS case=T05
+case=K0 N=1 P=1 C=1 K=0 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=2
+oracle: DATA=0/0 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,1] final=0 workers=create2/join2
+observed: full_snapshots=1 empty_snapshots=1 WAIT_SLOT=0 WAIT_ITEM=1 data_pending_after_producer_join=0
+PASS case=K0
+case=queued-stop N=8 P=1 C=1 K=20 Dp_ms=0 Dc_ms=20
+pc_run_status=0 records=42
+oracle: DATA=20/20 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,8] final=0 workers=create2/join2
+observed: full_snapshots=14 empty_snapshots=1 WAIT_SLOT=13 WAIT_ITEM=0 data_pending_after_producer_join=8
+PASS case=queued-stop
+exit_code=0
+
+$ gcc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -pthread -g -O1 -fsanitize=address,undefined -fno-omit-frame-pointer src/buffer.c src/pc.c src/main.c -o /tmp/os-pc-w2-i_k7gstd/producer-consumer
+subprocess_timeout=30s expected_exit=0
+exit_code=0
+
+$ timeout 15s /tmp/os-pc-w2-i_k7gstd/producer-consumer
+subprocess_timeout=17s expected_exit=0
+config: N=8 P=1 C=1 K=20 Dp_ms=0 Dc_ms=0
+DATA: enqueued=20 dequeued=20 processed=20 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0
+buffer: min=0 max=8 final=0 count_errors=0; STOP: enqueued=1 dequeued=1
+workers: created=1P/1C joined=1P/1C; verification=PASS run_status=0
+exit_code=0
+
+$ gcc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -pthread -g -O1 -fsanitize=address,undefined -fno-omit-frame-pointer src/buffer.c tests/test_buffer.c -o /tmp/os-pc-w2-i_k7gstd/buffer-test
+subprocess_timeout=30s expected_exit=0
+exit_code=0
+
+$ timeout 15s /tmp/os-pc-w2-i_k7gstd/buffer-test
+subprocess_timeout=17s expected_exit=0
+PASS: empty initialization
+PASS: one item and value copy
+PASS: FIFO and full rejection preserves data
+PASS: empty rejection preserves state/output
+PASS: 100 wrap-around rounds with independent FIFO oracle
+PASS: capacity 1, 50 cycles
+PASS: STOP is an ordinary FIFO item
+PASS: invalid arguments and lifecycle
+PASS: allocation size overflow
+PASS: live reinitialization preserves queue
+PASS: destroy/repeat/reuse
+Sequential buffer tests: 11/11 PASS
+exit_code=0

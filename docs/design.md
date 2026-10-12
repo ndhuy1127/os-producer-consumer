@@ -1,6 +1,8 @@
-# Thiết kế tích hợp Tuần 1 — Châu và Huy
+# Thiết kế Producer–Consumer — nền Tuần 1 và triển khai Tuần 2
 
-Trạng thái: **Đã ghép thiết kế Châu với API thực tế của Huy, chốt đặc tả cho Tuần 2 và kiểm tra bản chung đạt**. Codex rà soát/tích hợp theo yêu cầu Châu trên máy Châu, không thay cho sự phê duyệt của Huy hoặc đọc chéo trực tiếp của hai thành viên. [PR #1](https://github.com/ndhuy1127/os-producer-consumer/pull/1) đã merge; trạng thái bàn giao qua [PR #2](https://github.com/ndhuy1127/os-producer-consumer/pull/2). Đã có bộ đệm **tuần tự** và ví dụ luồng; producer/consumer, semaphore, CLI và log runtime chưa triển khai. Lý thuyết ở [theory-week1-chau.md](theory-week1-chau.md), kết quả bản chung ở [group-validation.md](../results/week1/group-validation.md).
+Tuần 1 đã ghép thiết kế Châu với API thực tế của Huy, chốt đặc tả và kiểm tra bản chung; PR #1/#2 đã merge ở nền `9cf345c`. Lý thuyết ở [theory-week1-chau.md](theory-week1-chau.md), minh chứng lịch sử ở [group-validation.md](../results/week1/group-validation.md). Codex thực hiện theo yêu cầu Châu, không thay sự phê duyệt của Huy hoặc đọc chéo trực tiếp.
+
+**Tuần 2 đã triển khai và kiểm chứng lõi 1P/1C, main và STOP; W2-C hoàn thành.** CLI/parser và trình bày log của Huy còn chờ ghép. Phần 1–8 giữ cơ sở thiết kế; phần 9 mô tả mã thực tế, giới hạn và đường lỗi. [Minh chứng W2-C](../results/week2/chau-validation.md) và [bàn giao API](handoff-week2-chau.md).
 
 ## 1. Bài toán và cấu hình
 
@@ -8,7 +10,7 @@ Producer tạo dữ liệu hữu hạn, consumer lấy dữ liệu qua hàng đ�
 
 Chốt K là số DATA mỗi producer, tổng DATA = P*K; P,C > 0, K >= 0. Mặc định `(N,P,C,K,Dp_ms,Dc_ms) = (8,1,1,20,0,0)`. Giới hạn: N=1..65536 (đồng thời <= SEM_VALUE_MAX và SIZE_MAX/sizeof(item)); P,C=1..64; K=0..1000000 và P*K<=1000000; mỗi độ trễ 0..60000 **millisecond**. K=0 hợp lệ, chỉ cần dừng consumer bằng STOP. Trước tạo worker phải kiểm tra tràn phép nhân, ID, kích thước cấp phát và bộ đếm gồm STOP.
 
-Tên cờ và quy tắc từ chối lỗi, quiet/help, mã thoát 0/1/2 chốt ở [config-log-week1-huy.md](config-log-week1-huy.md); cấu hình ca kiểm thử thống nhất ở [test-plan.md](test-plan.md). Đây là đặc tả, tuần này không viết parser CLI.
+Tên cờ và quy tắc từ chối lỗi, quiet/help, mã thoát 0/1/2 chốt ở [config-log-week1-huy.md](config-log-week1-huy.md); cấu hình ca kiểm thử thống nhất ở [test-plan.md](test-plan.md). CLI là đặc tả để Huy ghép; API Tuần 2 hiện chỉ nhận P=C=1, chưa mở rộng nhiều luồng.
 
 ## 2. Bộ đệm vòng FIFO
 
@@ -139,7 +141,7 @@ Phương án Châu chọn: **main join producer rồi đưa một STOP cho mỗi
 
 Consumer dequeue STOP, nhả guard, `post(empty)` rồi mới kết thúc. Mỗi consumer dừng ở STOP đầu tiên nên không lấy nhiều STOP; C STOP đủ cho C consumer. C có thể lớn hơn N: main đưa STOP dần qua enqueue thông thường, không cần buffer chứa tất cả cùng lúc.
 
-FIFO bảo đảm mọi DATA đã enqueue trước STOP được **lấy ra** trước khi STOP được lấy. Một consumer có thể đang xử lý DATA ngoài guard trong lúc consumer khác lấy STOP; vì main join mọi consumer, tổng kết chỉ diễn ra khi xử lý DATA đó cũng đã xong. Giả định phép tạo/xử lý dữ liệu là hữu hạn và bộ lập lịch cho các luồng cơ hội chạy. Khi count cuối bằng 0 và mọi luồng đã join mới hủy semaphore/bộ nhớ. STOP không tính vào số DATA hoặc tập ID. Thiết kế chưa được nghiệm thu bằng chương trình thực tế.
+FIFO bảo đảm mọi DATA đã enqueue trước STOP được **lấy ra** trước khi STOP được lấy. Một consumer có thể đang xử lý DATA ngoài guard trong lúc consumer khác lấy STOP; vì main join mọi consumer, tổng kết chỉ diễn ra khi xử lý DATA đó cũng đã xong. Giả định phép tạo/xử lý dữ liệu là hữu hạn và bộ lập lịch cho các luồng cơ hội chạy. Khi count cuối bằng 0 và mọi luồng đã join mới hủy semaphore/bộ nhớ. STOP không tính vào số DATA hoặc tập ID. Tuần 2 đã nghiệm thu trường hợp 1P/1C; nhiều consumer vẫn là thiết kế cho Tuần 3.
 
 ## 7. Log và xác minh
 
@@ -147,7 +149,7 @@ Schema chốt gồm `op_seq`, `op=ENQUEUE|DEQUEUE`, `actor=P0|C0|MAIN`, `kind=DA
 
 Chốt quan sát thiếu quyền: helper chờ empty/full thử sem_trywait trước; thành công thì không wait thêm; EINTR thử lại; EAGAIN gán cờ chờ local rồi sem_wait (thử lại EINTR). Cờ local được gắn vào record thao tác sau khi lấy guard; guard dùng sem_wait trực tiếp. EAGAIN chỉ chứng minh thiếu quyền tại lần thử, không chứng minh sem_wait đã block hoặc count=N/0. Snapshot count=N/0 trong guard chứng minh trạng thái đầy/rỗng riêng. Không dùng timestamp, thứ tự dòng in ngoài guard hoặc sem_getvalue để suy ra FIFO/an toàn. Cách probe không đổi thứ tự lấy quyền trước guard trong giả mã.
 
-Tổng kết chốt: cấu hình; DATA enqueue/dequeue và tần suất ID; FIFO theo hai dãy thao tác; min/max count gồm ban đầu 0; STOP enqueue/dequeue; số worker create/join; count cuối 0. Chi tiết ở [config-log-week1-huy.md](config-log-week1-huy.md). **Log runtime và helper probe chưa triển khai.** T01 kiểm thử tuần tự đã chạy; T02–T09 chưa chạy và thuộc tuần 2 trở đi. Ngân sách timeout kiểm thử tương lai chốt `5 + ceil(2*P*K*(Dp_ms+Dc_ms)/1000)` giây, tính có kiểm tra tràn; đây là ngân sách bảo thủ, không phải bảo đảm scheduler. Timeout 5 giây hiện tại chỉ dành cho ví dụ luồng nhỏ.
+Tổng kết chốt: cấu hình; DATA enqueue/dequeue và tần suất ID; FIFO theo hai dãy thao tác; min/max count gồm ban đầu 0; STOP enqueue/dequeue; số worker create/join; count cuối 0. Chi tiết ở [config-log-week1-huy.md](config-log-week1-huy.md). **Tuần 2 đã có record trong guard và helper probe; trình bày CLI/log production còn chờ Huy.** T02–T05 đạt trên lõi 1P/1C; T09 mới kiểm tra kết thúc cơ bản, T06–T08 chưa chạy. Script minh chứng dùng timeout `5 + ceil(2*K*(Dp_ms+Dc_ms)/1000)` giây cho từng preset 1P/1C; đây là ngân sách bảo thủ, không phải bảo đảm scheduler.
 
 ## 8. Tài liệu lý thuyết đã đối chiếu
 
@@ -160,3 +162,21 @@ Tổng kết chốt: cấu hình; DATA enqueue/dequeue và tần suất ID; FIFO
 - [sem_destroy(3)](https://man7.org/linux/man-pages/man3/sem_destroy.3.html): chỉ hủy semaphore đã init khi không còn luồng đang chờ/sử dụng.
 
 Giáo trình *Modern Operating Systems*, ấn bản 4, Tanenbaum và Bos là nguồn đọc thêm được gợi ý; chưa truy cập để đối chiếu trang/mục. Không lưu PDF vào GitHub. Xem giải thích và ví dụ nguyên lý ở [theory-week1-chau.md](theory-week1-chau.md).
+
+## 9. Triển khai Tuần 2 — W2-C
+
+[pc.h](../include/pc.h) công bố `pc_default_config`, `pc_run`, `pc_result_destroy`, cấu hình, record và tổng kết. [pc.c](../src/pc.c) giữ context nội bộ gọn: buffer zero-init sở hữu duy nhất, empty/full/guard, cờ init, metadata enqueue_seq theo N ô, hai mảng tần suất K ID, record tối đa `2*(K+1)`. Cấu hình bất biến trong khi chạy; kiểm tra giới hạn/kích thước/uint64_t trước cấp phát và trước create. DATA P0 có id=0..K-1, value=`id%1000+1`; STOP có kind riêng, không tính vào oracle DATA.
+
+`pc_run` sống đồng bộ đến hết join: init/cấp phát → create consumer → create producer → join producer → lấy guard chụp số DATA còn đợi → enqueue một STOP qua cùng helper → join consumer → xác minh → cleanup. Đối số/kết quả worker ở stack của pc_run tồn tại đến sau join; không trả địa chỉ local. Consumer lấy item bằng bản sao riêng, tăng kết quả xử lý riêng ngoài guard; main đọc sau join. Tất cả buffer, metadata, record và tần suất dùng chung được đọc/ghi trong guard khi worker còn chạy. Trường create/join chỉ main ghi; từng bộ đếm thao tác chỉ được cập nhật trong guard. Sau tất cả join, main đối chiếu tần suất và hai dãy item/sequence của record, count/STOP và vòng đời.
+
+Helper `take_permission` dùng trywait/EINTR/EAGAIN theo phần 7, chỉ lấy một quyền; `wait_retry` thử lại sem_wait khi EINTR cho cả guard lẫn empty/full. `nanosleep` theo ms, thử lại EINTR và luôn ngoài guard. Không có sem_getvalue, busy-wait, pthread_cancel hoặc dùng sleep để đồng bộ.
+
+Đường lỗi đã triển khai:
+
+- Init/cấp phát lỗi: dọn những tài nguyên đã init thành công, chưa tạo worker; result vẫn phải destroy nếu đã có record.
+- Consumer create lỗi: không tạo producer, dọn tài nguyên. Producer create lỗi: consumer đã tạo được dừng bằng STOP rồi join, phiên chạy trả 1, không báo xác minh hoàn chỉnh.
+- Guard wait lỗi sau khi giữ quyền: post hoàn trả empty/full trước khi kết thúc tiến trình. Push/pop lỗi (hợp đồng giữ nguyên buffer): nhả guard và hoàn trả quyền. Sau push/pop thành công chỉ post semaphore đối ứng; không rollback quyền như chưa sửa buffer.
+- Lỗi semaphore khi chạy hoặc join lỗi: in tên lời gọi/mã lỗi, flush stderr rồi `_Exit(1)` toàn tiến trình. Không hủy bộ nhớ/semaphore khi chưa xác nhận worker dừng, không để main join vô hạn. Đây là lựa chọn kết thúc nghiêm trọng đã nêu ở phần 4, chưa phải cơ chế shutdown có phối hợp nhiều luồng.
+- Destroy sau join lỗi: kiểm tra và báo mọi sem_destroy, trả 1. Bộ đệm giữ nguyên API lỗi enum trực tiếp; pthread dùng mã trả về, semaphore dùng errno.
+
+[main.c](../src/main.c) chạy mặc định N=8,1P/1C,K=20; đối số hiện trả 2 vì chưa có parser. Test runner gọi cùng pc_run để chạy N=5 và T02–T05/K0/queued-stop; wrapper lỗi chỉ vào binary test. 26 ca lỗi/API, tám ca runtime và sanitizer có [log thực tế](../results/week2/README.md). T04 có snapshot đầy và WAIT_SLOT; T05 có snapshot rỗng và WAIT_ITEM. EAGAIN và snapshot là hai bằng chứng riêng, không chứng minh thời gian sem_wait block. Ca queued-stop chụp 8 DATA còn trong buffer sau producer join, sau đó lấy đủ 20 DATA trước STOP.

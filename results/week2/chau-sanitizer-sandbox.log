@@ -1,0 +1,20 @@
+W2-C actual execution (Asia/Saigon): 2026-10-12T13:50:39.158825+07:00
+root=/mnt/d/HUST/os-producer-consumer
+branch=dev/chau
+HEAD_base=9cf345c12ca59fb1a6bf476147551cb89f7e043b
+source=working tree before commit; HEAD_base does not contain new code
+source_manifest_sha256=3de70010f29d21d9845f423e702393df01d0ded08571ea1c3493e10fe3bd0af2
+source_manifest=results/week2/chau-source.sha256
+ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+
+$ gcc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -pthread -g -O1 -fsanitize=address,undefined -fno-omit-frame-pointer src/buffer.c src/pc.c tests/test_pc.c -o /tmp/os-pc-w2-rckh3tdf/pc-test
+subprocess_timeout=30s expected_exit=0
+exit_code=0
+
+$ timeout 15s /tmp/os-pc-w2-rckh3tdf/pc-test all
+subprocess_timeout=17s expected_exit=0
+==171==LeakSanitizer has encountered a fatal error.
+==171==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==171==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+exit_code=1
