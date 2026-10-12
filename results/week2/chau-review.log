@@ -1,0 +1,162 @@
+W2-C actual execution (Asia/Saigon): 2026-10-12T14:17:57.107900+07:00
+root=/mnt/d/HUST/os-producer-consumer
+branch=dev/chau
+HEAD_base=9cf345c12ca59fb1a6bf476147551cb89f7e043b
+source=working tree before commit; HEAD_base does not contain new code
+source_manifest_sha256=b4dde74335815fdc922975efe8c293576c3169d26b1bc85d0d4b352a9445730a
+source_manifest=results/week2/chau-source.sha256
+
+$ python3 scripts/check_scaffold.py
+subprocess_timeout=30s expected_exit=0
+Scaffold verified: 23 required files; 222 relative links; ignore rules; no tracked/staged AGENTS.md.
+No C algorithm, thread behavior or academic task has been validated.
+exit_code=0
+
+$ git diff --check
+subprocess_timeout=30s expected_exit=0
+exit_code=0
+
+$ git diff --cached --check
+subprocess_timeout=30s expected_exit=0
+exit_code=0
+
+$ git diff --exit-code HEAD -- include/item.h include/buffer.h src/buffer.c tests/test_buffer.c examples/thread_lifecycle.c results/week1 docs/reports/week1.md
+subprocess_timeout=30s expected_exit=0
+exit_code=0
+
+$ git status --short
+subprocess_timeout=30s expected_exit=0
+ M Makefile
+ M README.md
+ M docs/design.md
+ M docs/progress.md
+ M docs/reports/week2.md
+ M docs/test-plan.md
+ M include/README.md
+ M results/week2/README.md
+ M scripts/README.md
+ M src/README.md
+ M tests/README.md
+?? docs/handoff-week2-chau.md
+?? include/pc.h
+?? results/week2/chau-build.log
+?? results/week2/chau-error-tests.log
+?? results/week2/chau-review.log
+?? results/week2/chau-runtime-tests.log
+?? results/week2/chau-sandbox-source.sha256
+?? results/week2/chau-sanitizer-sandbox.log
+?? results/week2/chau-sanitizers.log
+?? results/week2/chau-source.sha256
+?? results/week2/chau-test-summary.json
+?? results/week2/chau-validation.md
+?? scripts/check_pc_errors.py
+?? scripts/validate_week2.py
+?? src/main.c
+?? src/pc.c
+?? tests/test_pc.c
+?? tests/test_pc_faults.c
+exit_code=0
+source_manifest_after_tests=identical
+
+FINAL REVIEW after completing Week 2 documents (same tested C/header/build sources)
+
+$ python3 scripts/check_scaffold.py
+Scaffold verified: 23 required files; 224 relative links; ignore rules; no tracked/staged AGENTS.md.
+No C algorithm, thread behavior or academic task has been validated.
+exit_code=0
+
+$ git diff --check
+exit_code=0
+
+$ sha256sum -c results/week2/chau-source.sha256
+Makefile: OK
+include/item.h: OK
+include/buffer.h: OK
+include/pc.h: OK
+src/buffer.c: OK
+src/main.c: OK
+src/pc.c: OK
+examples/thread_lifecycle.c: OK
+tests/test_buffer.c: OK
+tests/test_pc.c: OK
+tests/test_pc_faults.c: OK
+scripts/check_pc_errors.py: OK
+scripts/validate_week2.py: OK
+exit_code=0
+
+$ git diff --exit-code HEAD -- include/item.h include/buffer.h src/buffer.c tests/test_buffer.c examples/thread_lifecycle.c results/week1 docs/reports/week1.md
+exit_code=0
+
+$ git status --short
+ M Makefile
+ M README.md
+ M docs/design.md
+ M docs/progress.md
+ M docs/reports/week2.md
+ M docs/test-plan.md
+ M include/README.md
+ M results/week2/README.md
+ M scripts/README.md
+ M src/README.md
+ M tests/README.md
+?? docs/handoff-week2-chau.md
+?? include/pc.h
+?? results/week2/chau-build.log
+?? results/week2/chau-error-tests.log
+?? results/week2/chau-review.log
+?? results/week2/chau-runtime-tests.log
+?? results/week2/chau-sandbox-source.sha256
+?? results/week2/chau-sanitizer-sandbox.log
+?? results/week2/chau-sanitizers.log
+?? results/week2/chau-source.sha256
+?? results/week2/chau-test-summary.json
+?? results/week2/chau-validation.md
+?? scripts/check_pc_errors.py
+?? scripts/validate_week2.py
+?? src/main.c
+?? src/pc.c
+?? tests/test_pc.c
+?? tests/test_pc_faults.c
+exit_code=0
+PASS: six report sections; Huy section and W2-H row unchanged; final build log has no warnings; tested manifest matches.
+
+STAGED REVIEW before commit
+
+$ git diff --cached --check
+exit_code=0
+
+$ git diff --cached --name-only
+Makefile
+README.md
+docs/design.md
+docs/handoff-week2-chau.md
+docs/progress.md
+docs/reports/week2.md
+docs/test-plan.md
+include/README.md
+include/pc.h
+results/week2/README.md
+results/week2/chau-build.log
+results/week2/chau-error-tests.log
+results/week2/chau-review.log
+results/week2/chau-runtime-tests.log
+results/week2/chau-sandbox-source.sha256
+results/week2/chau-sanitizer-sandbox.log
+results/week2/chau-sanitizers.log
+results/week2/chau-source.sha256
+results/week2/chau-test-summary.json
+results/week2/chau-validation.md
+scripts/README.md
+scripts/check_pc_errors.py
+scripts/validate_week2.py
+src/README.md
+src/main.c
+src/pc.c
+tests/README.md
+tests/test_pc.c
+tests/test_pc_faults.c
+exit_code=0
+
+$ git ls-files -u
+exit_code=0
+PASS: 29 intended W2-C files; no unmerged paths; no AGENTS/textbook/Word/build/object/cache/secret/temp; dev/chau only.

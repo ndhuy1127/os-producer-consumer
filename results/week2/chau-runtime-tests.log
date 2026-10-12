@@ -1,0 +1,342 @@
+W2-C actual execution (Asia/Saigon): 2026-10-12T14:17:57.107900+07:00
+root=/mnt/d/HUST/os-producer-consumer
+branch=dev/chau
+HEAD_base=9cf345c12ca59fb1a6bf476147551cb89f7e043b
+source=working tree before commit; HEAD_base does not contain new code
+source_manifest_sha256=b4dde74335815fdc922975efe8c293576c3169d26b1bc85d0d4b352a9445730a
+source_manifest=results/week2/chau-source.sha256
+
+$ timeout 5s ./bin/producer-consumer
+subprocess_timeout=30s expected_exit=0
+config: N=8 P=1 C=1 K=20 Dp_ms=0 Dc_ms=0
+DATA: enqueued=20 dequeued=20 processed=20 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0
+buffer: min=0 max=8 final=0 count_errors=0; STOP: enqueued=1 dequeued=1
+workers: created=1P/1C joined=1P/1C; verification=PASS run_status=0
+exit_code=0
+
+$ timeout 5s ./bin/producer-consumer --capacity 5
+subprocess_timeout=30s expected_exit=2
+Week 2: CLI parser pending; run without arguments (N=8 P=1 C=1 K=20 Dp_ms=0 Dc_ms=0).
+exit_code=2
+
+$ timeout 5s ./bin/pc-test default
+subprocess_timeout=7s expected_exit=0
+case=default N=8 P=1 C=1 K=20 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=42
+oracle: DATA=20/20 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,8] final=0 workers=create2/join2
+observed: full_snapshots=2 empty_snapshots=4 WAIT_SLOT=2 WAIT_ITEM=4 data_pending_after_producer_join=0
+PASS case=default
+exit_code=0
+
+$ timeout 5s ./bin/pc-test source-N5 --records
+subprocess_timeout=7s expected_exit=0
+case=source-N5 N=5 P=1 C=1 K=20 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=42
+op_seq=1 op=ENQUEUE actor=P0 kind=DATA data_id=0 value=1 enqueue_seq=1 count_after=1 capacity=5 wait_reason=NONE
+op_seq=2 op=ENQUEUE actor=P0 kind=DATA data_id=1 value=2 enqueue_seq=2 count_after=2 capacity=5 wait_reason=NONE
+op_seq=3 op=ENQUEUE actor=P0 kind=DATA data_id=2 value=3 enqueue_seq=3 count_after=3 capacity=5 wait_reason=NONE
+op_seq=4 op=ENQUEUE actor=P0 kind=DATA data_id=3 value=4 enqueue_seq=4 count_after=4 capacity=5 wait_reason=NONE
+op_seq=5 op=ENQUEUE actor=P0 kind=DATA data_id=4 value=5 enqueue_seq=5 count_after=5 capacity=5 wait_reason=NONE
+op_seq=6 op=DEQUEUE actor=C0 kind=DATA data_id=0 value=1 enqueue_seq=1 count_after=4 capacity=5 wait_reason=WAIT_ITEM
+op_seq=7 op=DEQUEUE actor=C0 kind=DATA data_id=1 value=2 enqueue_seq=2 count_after=3 capacity=5 wait_reason=NONE
+op_seq=8 op=DEQUEUE actor=C0 kind=DATA data_id=2 value=3 enqueue_seq=3 count_after=2 capacity=5 wait_reason=NONE
+op_seq=9 op=DEQUEUE actor=C0 kind=DATA data_id=3 value=4 enqueue_seq=4 count_after=1 capacity=5 wait_reason=NONE
+op_seq=10 op=DEQUEUE actor=C0 kind=DATA data_id=4 value=5 enqueue_seq=5 count_after=0 capacity=5 wait_reason=NONE
+op_seq=11 op=ENQUEUE actor=P0 kind=DATA data_id=5 value=6 enqueue_seq=6 count_after=1 capacity=5 wait_reason=WAIT_SLOT
+op_seq=12 op=ENQUEUE actor=P0 kind=DATA data_id=6 value=7 enqueue_seq=7 count_after=2 capacity=5 wait_reason=NONE
+op_seq=13 op=ENQUEUE actor=P0 kind=DATA data_id=7 value=8 enqueue_seq=8 count_after=3 capacity=5 wait_reason=NONE
+op_seq=14 op=ENQUEUE actor=P0 kind=DATA data_id=8 value=9 enqueue_seq=9 count_after=4 capacity=5 wait_reason=NONE
+op_seq=15 op=ENQUEUE actor=P0 kind=DATA data_id=9 value=10 enqueue_seq=10 count_after=5 capacity=5 wait_reason=NONE
+op_seq=16 op=DEQUEUE actor=C0 kind=DATA data_id=5 value=6 enqueue_seq=6 count_after=4 capacity=5 wait_reason=WAIT_ITEM
+op_seq=17 op=DEQUEUE actor=C0 kind=DATA data_id=6 value=7 enqueue_seq=7 count_after=3 capacity=5 wait_reason=NONE
+op_seq=18 op=DEQUEUE actor=C0 kind=DATA data_id=7 value=8 enqueue_seq=8 count_after=2 capacity=5 wait_reason=NONE
+op_seq=19 op=DEQUEUE actor=C0 kind=DATA data_id=8 value=9 enqueue_seq=9 count_after=1 capacity=5 wait_reason=NONE
+op_seq=20 op=DEQUEUE actor=C0 kind=DATA data_id=9 value=10 enqueue_seq=10 count_after=0 capacity=5 wait_reason=NONE
+op_seq=21 op=ENQUEUE actor=P0 kind=DATA data_id=10 value=11 enqueue_seq=11 count_after=1 capacity=5 wait_reason=WAIT_SLOT
+op_seq=22 op=ENQUEUE actor=P0 kind=DATA data_id=11 value=12 enqueue_seq=12 count_after=2 capacity=5 wait_reason=NONE
+op_seq=23 op=ENQUEUE actor=P0 kind=DATA data_id=12 value=13 enqueue_seq=13 count_after=3 capacity=5 wait_reason=NONE
+op_seq=24 op=ENQUEUE actor=P0 kind=DATA data_id=13 value=14 enqueue_seq=14 count_after=4 capacity=5 wait_reason=NONE
+op_seq=25 op=ENQUEUE actor=P0 kind=DATA data_id=14 value=15 enqueue_seq=15 count_after=5 capacity=5 wait_reason=NONE
+op_seq=26 op=DEQUEUE actor=C0 kind=DATA data_id=10 value=11 enqueue_seq=11 count_after=4 capacity=5 wait_reason=WAIT_ITEM
+op_seq=27 op=DEQUEUE actor=C0 kind=DATA data_id=11 value=12 enqueue_seq=12 count_after=3 capacity=5 wait_reason=NONE
+op_seq=28 op=DEQUEUE actor=C0 kind=DATA data_id=12 value=13 enqueue_seq=13 count_after=2 capacity=5 wait_reason=NONE
+op_seq=29 op=DEQUEUE actor=C0 kind=DATA data_id=13 value=14 enqueue_seq=14 count_after=1 capacity=5 wait_reason=NONE
+op_seq=30 op=DEQUEUE actor=C0 kind=DATA data_id=14 value=15 enqueue_seq=15 count_after=0 capacity=5 wait_reason=NONE
+op_seq=31 op=ENQUEUE actor=P0 kind=DATA data_id=15 value=16 enqueue_seq=16 count_after=1 capacity=5 wait_reason=WAIT_SLOT
+op_seq=32 op=ENQUEUE actor=P0 kind=DATA data_id=16 value=17 enqueue_seq=17 count_after=2 capacity=5 wait_reason=NONE
+op_seq=33 op=ENQUEUE actor=P0 kind=DATA data_id=17 value=18 enqueue_seq=18 count_after=3 capacity=5 wait_reason=NONE
+op_seq=34 op=ENQUEUE actor=P0 kind=DATA data_id=18 value=19 enqueue_seq=19 count_after=4 capacity=5 wait_reason=NONE
+op_seq=35 op=ENQUEUE actor=P0 kind=DATA data_id=19 value=20 enqueue_seq=20 count_after=5 capacity=5 wait_reason=NONE
+op_seq=36 op=DEQUEUE actor=C0 kind=DATA data_id=15 value=16 enqueue_seq=16 count_after=4 capacity=5 wait_reason=WAIT_ITEM
+op_seq=37 op=DEQUEUE actor=C0 kind=DATA data_id=16 value=17 enqueue_seq=17 count_after=3 capacity=5 wait_reason=NONE
+op_seq=38 op=DEQUEUE actor=C0 kind=DATA data_id=17 value=18 enqueue_seq=18 count_after=2 capacity=5 wait_reason=NONE
+op_seq=39 op=DEQUEUE actor=C0 kind=DATA data_id=18 value=19 enqueue_seq=19 count_after=1 capacity=5 wait_reason=NONE
+op_seq=40 op=DEQUEUE actor=C0 kind=DATA data_id=19 value=20 enqueue_seq=20 count_after=0 capacity=5 wait_reason=NONE
+op_seq=41 op=ENQUEUE actor=MAIN kind=STOP data_id=- value=0 enqueue_seq=21 count_after=1 capacity=5 wait_reason=NONE
+op_seq=42 op=DEQUEUE actor=C0 kind=STOP data_id=- value=0 enqueue_seq=21 count_after=0 capacity=5 wait_reason=WAIT_ITEM
+oracle: DATA=20/20 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,5] final=0 workers=create2/join2
+observed: full_snapshots=4 empty_snapshots=5 WAIT_SLOT=3 WAIT_ITEM=5 data_pending_after_producer_join=0
+PASS case=source-N5
+exit_code=0
+
+$ timeout 5s ./bin/pc-test T02
+subprocess_timeout=7s expected_exit=0
+case=T02 N=8 P=1 C=1 K=100 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=202
+oracle: DATA=100/100 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,8] final=0 workers=create2/join2
+observed: full_snapshots=12 empty_snapshots=17 WAIT_SLOT=12 WAIT_ITEM=17 data_pending_after_producer_join=0
+PASS case=T02
+exit_code=0
+
+$ timeout 5s ./bin/pc-test T03
+subprocess_timeout=7s expected_exit=0
+case=T03 N=1 P=1 C=1 K=100 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=202
+oracle: DATA=100/100 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,1] final=0 workers=create2/join2
+observed: full_snapshots=101 empty_snapshots=101 WAIT_SLOT=96 WAIT_ITEM=87 data_pending_after_producer_join=0
+PASS case=T03
+exit_code=0
+
+$ timeout 7s ./bin/pc-test T04 --records
+subprocess_timeout=9s expected_exit=0
+case=T04 N=2 P=1 C=1 K=40 Dp_ms=0 Dc_ms=20
+pc_run_status=0 records=82
+op_seq=1 op=ENQUEUE actor=P0 kind=DATA data_id=0 value=1 enqueue_seq=1 count_after=1 capacity=2 wait_reason=NONE
+op_seq=2 op=ENQUEUE actor=P0 kind=DATA data_id=1 value=2 enqueue_seq=2 count_after=2 capacity=2 wait_reason=NONE
+op_seq=3 op=DEQUEUE actor=C0 kind=DATA data_id=0 value=1 enqueue_seq=1 count_after=1 capacity=2 wait_reason=WAIT_ITEM
+op_seq=4 op=ENQUEUE actor=P0 kind=DATA data_id=2 value=3 enqueue_seq=3 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=5 op=DEQUEUE actor=C0 kind=DATA data_id=1 value=2 enqueue_seq=2 count_after=1 capacity=2 wait_reason=NONE
+op_seq=6 op=ENQUEUE actor=P0 kind=DATA data_id=3 value=4 enqueue_seq=4 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=7 op=DEQUEUE actor=C0 kind=DATA data_id=2 value=3 enqueue_seq=3 count_after=1 capacity=2 wait_reason=NONE
+op_seq=8 op=ENQUEUE actor=P0 kind=DATA data_id=4 value=5 enqueue_seq=5 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=9 op=DEQUEUE actor=C0 kind=DATA data_id=3 value=4 enqueue_seq=4 count_after=1 capacity=2 wait_reason=NONE
+op_seq=10 op=ENQUEUE actor=P0 kind=DATA data_id=5 value=6 enqueue_seq=6 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=11 op=DEQUEUE actor=C0 kind=DATA data_id=4 value=5 enqueue_seq=5 count_after=1 capacity=2 wait_reason=NONE
+op_seq=12 op=ENQUEUE actor=P0 kind=DATA data_id=6 value=7 enqueue_seq=7 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=13 op=DEQUEUE actor=C0 kind=DATA data_id=5 value=6 enqueue_seq=6 count_after=1 capacity=2 wait_reason=NONE
+op_seq=14 op=ENQUEUE actor=P0 kind=DATA data_id=7 value=8 enqueue_seq=8 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=15 op=DEQUEUE actor=C0 kind=DATA data_id=6 value=7 enqueue_seq=7 count_after=1 capacity=2 wait_reason=NONE
+op_seq=16 op=ENQUEUE actor=P0 kind=DATA data_id=8 value=9 enqueue_seq=9 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=17 op=DEQUEUE actor=C0 kind=DATA data_id=7 value=8 enqueue_seq=8 count_after=1 capacity=2 wait_reason=NONE
+op_seq=18 op=ENQUEUE actor=P0 kind=DATA data_id=9 value=10 enqueue_seq=10 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=19 op=DEQUEUE actor=C0 kind=DATA data_id=8 value=9 enqueue_seq=9 count_after=1 capacity=2 wait_reason=NONE
+op_seq=20 op=ENQUEUE actor=P0 kind=DATA data_id=10 value=11 enqueue_seq=11 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=21 op=DEQUEUE actor=C0 kind=DATA data_id=9 value=10 enqueue_seq=10 count_after=1 capacity=2 wait_reason=NONE
+op_seq=22 op=ENQUEUE actor=P0 kind=DATA data_id=11 value=12 enqueue_seq=12 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=23 op=DEQUEUE actor=C0 kind=DATA data_id=10 value=11 enqueue_seq=11 count_after=1 capacity=2 wait_reason=NONE
+op_seq=24 op=ENQUEUE actor=P0 kind=DATA data_id=12 value=13 enqueue_seq=13 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=25 op=DEQUEUE actor=C0 kind=DATA data_id=11 value=12 enqueue_seq=12 count_after=1 capacity=2 wait_reason=NONE
+op_seq=26 op=ENQUEUE actor=P0 kind=DATA data_id=13 value=14 enqueue_seq=14 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=27 op=DEQUEUE actor=C0 kind=DATA data_id=12 value=13 enqueue_seq=13 count_after=1 capacity=2 wait_reason=NONE
+op_seq=28 op=ENQUEUE actor=P0 kind=DATA data_id=14 value=15 enqueue_seq=15 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=29 op=DEQUEUE actor=C0 kind=DATA data_id=13 value=14 enqueue_seq=14 count_after=1 capacity=2 wait_reason=NONE
+op_seq=30 op=ENQUEUE actor=P0 kind=DATA data_id=15 value=16 enqueue_seq=16 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=31 op=DEQUEUE actor=C0 kind=DATA data_id=14 value=15 enqueue_seq=15 count_after=1 capacity=2 wait_reason=NONE
+op_seq=32 op=ENQUEUE actor=P0 kind=DATA data_id=16 value=17 enqueue_seq=17 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=33 op=DEQUEUE actor=C0 kind=DATA data_id=15 value=16 enqueue_seq=16 count_after=1 capacity=2 wait_reason=NONE
+op_seq=34 op=ENQUEUE actor=P0 kind=DATA data_id=17 value=18 enqueue_seq=18 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=35 op=DEQUEUE actor=C0 kind=DATA data_id=16 value=17 enqueue_seq=17 count_after=1 capacity=2 wait_reason=NONE
+op_seq=36 op=ENQUEUE actor=P0 kind=DATA data_id=18 value=19 enqueue_seq=19 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=37 op=DEQUEUE actor=C0 kind=DATA data_id=17 value=18 enqueue_seq=18 count_after=1 capacity=2 wait_reason=NONE
+op_seq=38 op=ENQUEUE actor=P0 kind=DATA data_id=19 value=20 enqueue_seq=20 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=39 op=DEQUEUE actor=C0 kind=DATA data_id=18 value=19 enqueue_seq=19 count_after=1 capacity=2 wait_reason=NONE
+op_seq=40 op=ENQUEUE actor=P0 kind=DATA data_id=20 value=21 enqueue_seq=21 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=41 op=DEQUEUE actor=C0 kind=DATA data_id=19 value=20 enqueue_seq=20 count_after=1 capacity=2 wait_reason=NONE
+op_seq=42 op=ENQUEUE actor=P0 kind=DATA data_id=21 value=22 enqueue_seq=22 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=43 op=DEQUEUE actor=C0 kind=DATA data_id=20 value=21 enqueue_seq=21 count_after=1 capacity=2 wait_reason=NONE
+op_seq=44 op=ENQUEUE actor=P0 kind=DATA data_id=22 value=23 enqueue_seq=23 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=45 op=DEQUEUE actor=C0 kind=DATA data_id=21 value=22 enqueue_seq=22 count_after=1 capacity=2 wait_reason=NONE
+op_seq=46 op=ENQUEUE actor=P0 kind=DATA data_id=23 value=24 enqueue_seq=24 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=47 op=DEQUEUE actor=C0 kind=DATA data_id=22 value=23 enqueue_seq=23 count_after=1 capacity=2 wait_reason=NONE
+op_seq=48 op=ENQUEUE actor=P0 kind=DATA data_id=24 value=25 enqueue_seq=25 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=49 op=DEQUEUE actor=C0 kind=DATA data_id=23 value=24 enqueue_seq=24 count_after=1 capacity=2 wait_reason=NONE
+op_seq=50 op=ENQUEUE actor=P0 kind=DATA data_id=25 value=26 enqueue_seq=26 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=51 op=DEQUEUE actor=C0 kind=DATA data_id=24 value=25 enqueue_seq=25 count_after=1 capacity=2 wait_reason=NONE
+op_seq=52 op=ENQUEUE actor=P0 kind=DATA data_id=26 value=27 enqueue_seq=27 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=53 op=DEQUEUE actor=C0 kind=DATA data_id=25 value=26 enqueue_seq=26 count_after=1 capacity=2 wait_reason=NONE
+op_seq=54 op=ENQUEUE actor=P0 kind=DATA data_id=27 value=28 enqueue_seq=28 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=55 op=DEQUEUE actor=C0 kind=DATA data_id=26 value=27 enqueue_seq=27 count_after=1 capacity=2 wait_reason=NONE
+op_seq=56 op=ENQUEUE actor=P0 kind=DATA data_id=28 value=29 enqueue_seq=29 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=57 op=DEQUEUE actor=C0 kind=DATA data_id=27 value=28 enqueue_seq=28 count_after=1 capacity=2 wait_reason=NONE
+op_seq=58 op=ENQUEUE actor=P0 kind=DATA data_id=29 value=30 enqueue_seq=30 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=59 op=DEQUEUE actor=C0 kind=DATA data_id=28 value=29 enqueue_seq=29 count_after=1 capacity=2 wait_reason=NONE
+op_seq=60 op=ENQUEUE actor=P0 kind=DATA data_id=30 value=31 enqueue_seq=31 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=61 op=DEQUEUE actor=C0 kind=DATA data_id=29 value=30 enqueue_seq=30 count_after=1 capacity=2 wait_reason=NONE
+op_seq=62 op=ENQUEUE actor=P0 kind=DATA data_id=31 value=32 enqueue_seq=32 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=63 op=DEQUEUE actor=C0 kind=DATA data_id=30 value=31 enqueue_seq=31 count_after=1 capacity=2 wait_reason=NONE
+op_seq=64 op=ENQUEUE actor=P0 kind=DATA data_id=32 value=33 enqueue_seq=33 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=65 op=DEQUEUE actor=C0 kind=DATA data_id=31 value=32 enqueue_seq=32 count_after=1 capacity=2 wait_reason=NONE
+op_seq=66 op=ENQUEUE actor=P0 kind=DATA data_id=33 value=34 enqueue_seq=34 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=67 op=DEQUEUE actor=C0 kind=DATA data_id=32 value=33 enqueue_seq=33 count_after=1 capacity=2 wait_reason=NONE
+op_seq=68 op=ENQUEUE actor=P0 kind=DATA data_id=34 value=35 enqueue_seq=35 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=69 op=DEQUEUE actor=C0 kind=DATA data_id=33 value=34 enqueue_seq=34 count_after=1 capacity=2 wait_reason=NONE
+op_seq=70 op=ENQUEUE actor=P0 kind=DATA data_id=35 value=36 enqueue_seq=36 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=71 op=DEQUEUE actor=C0 kind=DATA data_id=34 value=35 enqueue_seq=35 count_after=1 capacity=2 wait_reason=NONE
+op_seq=72 op=ENQUEUE actor=P0 kind=DATA data_id=36 value=37 enqueue_seq=37 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=73 op=DEQUEUE actor=C0 kind=DATA data_id=35 value=36 enqueue_seq=36 count_after=1 capacity=2 wait_reason=NONE
+op_seq=74 op=ENQUEUE actor=P0 kind=DATA data_id=37 value=38 enqueue_seq=38 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=75 op=DEQUEUE actor=C0 kind=DATA data_id=36 value=37 enqueue_seq=37 count_after=1 capacity=2 wait_reason=NONE
+op_seq=76 op=ENQUEUE actor=P0 kind=DATA data_id=38 value=39 enqueue_seq=39 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=77 op=DEQUEUE actor=C0 kind=DATA data_id=37 value=38 enqueue_seq=38 count_after=1 capacity=2 wait_reason=NONE
+op_seq=78 op=ENQUEUE actor=P0 kind=DATA data_id=39 value=40 enqueue_seq=40 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=79 op=DEQUEUE actor=C0 kind=DATA data_id=38 value=39 enqueue_seq=39 count_after=1 capacity=2 wait_reason=NONE
+op_seq=80 op=ENQUEUE actor=MAIN kind=STOP data_id=- value=0 enqueue_seq=41 count_after=2 capacity=2 wait_reason=WAIT_SLOT
+op_seq=81 op=DEQUEUE actor=C0 kind=DATA data_id=39 value=40 enqueue_seq=40 count_after=1 capacity=2 wait_reason=NONE
+op_seq=82 op=DEQUEUE actor=C0 kind=STOP data_id=- value=0 enqueue_seq=41 count_after=0 capacity=2 wait_reason=NONE
+oracle: DATA=40/40 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,2] final=0 workers=create2/join2
+observed: full_snapshots=40 empty_snapshots=1 WAIT_SLOT=39 WAIT_ITEM=1 data_pending_after_producer_join=2
+PASS case=T04
+exit_code=0
+
+$ timeout 7s ./bin/pc-test T05 --records
+subprocess_timeout=9s expected_exit=0
+case=T05 N=2 P=1 C=1 K=40 Dp_ms=20 Dc_ms=0
+pc_run_status=0 records=82
+op_seq=1 op=ENQUEUE actor=P0 kind=DATA data_id=0 value=1 enqueue_seq=1 count_after=1 capacity=2 wait_reason=NONE
+op_seq=2 op=DEQUEUE actor=C0 kind=DATA data_id=0 value=1 enqueue_seq=1 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=3 op=ENQUEUE actor=P0 kind=DATA data_id=1 value=2 enqueue_seq=2 count_after=1 capacity=2 wait_reason=NONE
+op_seq=4 op=DEQUEUE actor=C0 kind=DATA data_id=1 value=2 enqueue_seq=2 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=5 op=ENQUEUE actor=P0 kind=DATA data_id=2 value=3 enqueue_seq=3 count_after=1 capacity=2 wait_reason=NONE
+op_seq=6 op=DEQUEUE actor=C0 kind=DATA data_id=2 value=3 enqueue_seq=3 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=7 op=ENQUEUE actor=P0 kind=DATA data_id=3 value=4 enqueue_seq=4 count_after=1 capacity=2 wait_reason=NONE
+op_seq=8 op=DEQUEUE actor=C0 kind=DATA data_id=3 value=4 enqueue_seq=4 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=9 op=ENQUEUE actor=P0 kind=DATA data_id=4 value=5 enqueue_seq=5 count_after=1 capacity=2 wait_reason=NONE
+op_seq=10 op=DEQUEUE actor=C0 kind=DATA data_id=4 value=5 enqueue_seq=5 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=11 op=ENQUEUE actor=P0 kind=DATA data_id=5 value=6 enqueue_seq=6 count_after=1 capacity=2 wait_reason=NONE
+op_seq=12 op=DEQUEUE actor=C0 kind=DATA data_id=5 value=6 enqueue_seq=6 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=13 op=ENQUEUE actor=P0 kind=DATA data_id=6 value=7 enqueue_seq=7 count_after=1 capacity=2 wait_reason=NONE
+op_seq=14 op=DEQUEUE actor=C0 kind=DATA data_id=6 value=7 enqueue_seq=7 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=15 op=ENQUEUE actor=P0 kind=DATA data_id=7 value=8 enqueue_seq=8 count_after=1 capacity=2 wait_reason=NONE
+op_seq=16 op=DEQUEUE actor=C0 kind=DATA data_id=7 value=8 enqueue_seq=8 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=17 op=ENQUEUE actor=P0 kind=DATA data_id=8 value=9 enqueue_seq=9 count_after=1 capacity=2 wait_reason=NONE
+op_seq=18 op=DEQUEUE actor=C0 kind=DATA data_id=8 value=9 enqueue_seq=9 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=19 op=ENQUEUE actor=P0 kind=DATA data_id=9 value=10 enqueue_seq=10 count_after=1 capacity=2 wait_reason=NONE
+op_seq=20 op=DEQUEUE actor=C0 kind=DATA data_id=9 value=10 enqueue_seq=10 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=21 op=ENQUEUE actor=P0 kind=DATA data_id=10 value=11 enqueue_seq=11 count_after=1 capacity=2 wait_reason=NONE
+op_seq=22 op=DEQUEUE actor=C0 kind=DATA data_id=10 value=11 enqueue_seq=11 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=23 op=ENQUEUE actor=P0 kind=DATA data_id=11 value=12 enqueue_seq=12 count_after=1 capacity=2 wait_reason=NONE
+op_seq=24 op=DEQUEUE actor=C0 kind=DATA data_id=11 value=12 enqueue_seq=12 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=25 op=ENQUEUE actor=P0 kind=DATA data_id=12 value=13 enqueue_seq=13 count_after=1 capacity=2 wait_reason=NONE
+op_seq=26 op=DEQUEUE actor=C0 kind=DATA data_id=12 value=13 enqueue_seq=13 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=27 op=ENQUEUE actor=P0 kind=DATA data_id=13 value=14 enqueue_seq=14 count_after=1 capacity=2 wait_reason=NONE
+op_seq=28 op=DEQUEUE actor=C0 kind=DATA data_id=13 value=14 enqueue_seq=14 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=29 op=ENQUEUE actor=P0 kind=DATA data_id=14 value=15 enqueue_seq=15 count_after=1 capacity=2 wait_reason=NONE
+op_seq=30 op=DEQUEUE actor=C0 kind=DATA data_id=14 value=15 enqueue_seq=15 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=31 op=ENQUEUE actor=P0 kind=DATA data_id=15 value=16 enqueue_seq=16 count_after=1 capacity=2 wait_reason=NONE
+op_seq=32 op=DEQUEUE actor=C0 kind=DATA data_id=15 value=16 enqueue_seq=16 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=33 op=ENQUEUE actor=P0 kind=DATA data_id=16 value=17 enqueue_seq=17 count_after=1 capacity=2 wait_reason=NONE
+op_seq=34 op=DEQUEUE actor=C0 kind=DATA data_id=16 value=17 enqueue_seq=17 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=35 op=ENQUEUE actor=P0 kind=DATA data_id=17 value=18 enqueue_seq=18 count_after=1 capacity=2 wait_reason=NONE
+op_seq=36 op=DEQUEUE actor=C0 kind=DATA data_id=17 value=18 enqueue_seq=18 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=37 op=ENQUEUE actor=P0 kind=DATA data_id=18 value=19 enqueue_seq=19 count_after=1 capacity=2 wait_reason=NONE
+op_seq=38 op=DEQUEUE actor=C0 kind=DATA data_id=18 value=19 enqueue_seq=19 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=39 op=ENQUEUE actor=P0 kind=DATA data_id=19 value=20 enqueue_seq=20 count_after=1 capacity=2 wait_reason=NONE
+op_seq=40 op=DEQUEUE actor=C0 kind=DATA data_id=19 value=20 enqueue_seq=20 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=41 op=ENQUEUE actor=P0 kind=DATA data_id=20 value=21 enqueue_seq=21 count_after=1 capacity=2 wait_reason=NONE
+op_seq=42 op=DEQUEUE actor=C0 kind=DATA data_id=20 value=21 enqueue_seq=21 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=43 op=ENQUEUE actor=P0 kind=DATA data_id=21 value=22 enqueue_seq=22 count_after=1 capacity=2 wait_reason=NONE
+op_seq=44 op=DEQUEUE actor=C0 kind=DATA data_id=21 value=22 enqueue_seq=22 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=45 op=ENQUEUE actor=P0 kind=DATA data_id=22 value=23 enqueue_seq=23 count_after=1 capacity=2 wait_reason=NONE
+op_seq=46 op=DEQUEUE actor=C0 kind=DATA data_id=22 value=23 enqueue_seq=23 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=47 op=ENQUEUE actor=P0 kind=DATA data_id=23 value=24 enqueue_seq=24 count_after=1 capacity=2 wait_reason=NONE
+op_seq=48 op=DEQUEUE actor=C0 kind=DATA data_id=23 value=24 enqueue_seq=24 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=49 op=ENQUEUE actor=P0 kind=DATA data_id=24 value=25 enqueue_seq=25 count_after=1 capacity=2 wait_reason=NONE
+op_seq=50 op=DEQUEUE actor=C0 kind=DATA data_id=24 value=25 enqueue_seq=25 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=51 op=ENQUEUE actor=P0 kind=DATA data_id=25 value=26 enqueue_seq=26 count_after=1 capacity=2 wait_reason=NONE
+op_seq=52 op=DEQUEUE actor=C0 kind=DATA data_id=25 value=26 enqueue_seq=26 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=53 op=ENQUEUE actor=P0 kind=DATA data_id=26 value=27 enqueue_seq=27 count_after=1 capacity=2 wait_reason=NONE
+op_seq=54 op=DEQUEUE actor=C0 kind=DATA data_id=26 value=27 enqueue_seq=27 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=55 op=ENQUEUE actor=P0 kind=DATA data_id=27 value=28 enqueue_seq=28 count_after=1 capacity=2 wait_reason=NONE
+op_seq=56 op=DEQUEUE actor=C0 kind=DATA data_id=27 value=28 enqueue_seq=28 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=57 op=ENQUEUE actor=P0 kind=DATA data_id=28 value=29 enqueue_seq=29 count_after=1 capacity=2 wait_reason=NONE
+op_seq=58 op=DEQUEUE actor=C0 kind=DATA data_id=28 value=29 enqueue_seq=29 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=59 op=ENQUEUE actor=P0 kind=DATA data_id=29 value=30 enqueue_seq=30 count_after=1 capacity=2 wait_reason=NONE
+op_seq=60 op=DEQUEUE actor=C0 kind=DATA data_id=29 value=30 enqueue_seq=30 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=61 op=ENQUEUE actor=P0 kind=DATA data_id=30 value=31 enqueue_seq=31 count_after=1 capacity=2 wait_reason=NONE
+op_seq=62 op=DEQUEUE actor=C0 kind=DATA data_id=30 value=31 enqueue_seq=31 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=63 op=ENQUEUE actor=P0 kind=DATA data_id=31 value=32 enqueue_seq=32 count_after=1 capacity=2 wait_reason=NONE
+op_seq=64 op=DEQUEUE actor=C0 kind=DATA data_id=31 value=32 enqueue_seq=32 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=65 op=ENQUEUE actor=P0 kind=DATA data_id=32 value=33 enqueue_seq=33 count_after=1 capacity=2 wait_reason=NONE
+op_seq=66 op=DEQUEUE actor=C0 kind=DATA data_id=32 value=33 enqueue_seq=33 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=67 op=ENQUEUE actor=P0 kind=DATA data_id=33 value=34 enqueue_seq=34 count_after=1 capacity=2 wait_reason=NONE
+op_seq=68 op=DEQUEUE actor=C0 kind=DATA data_id=33 value=34 enqueue_seq=34 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=69 op=ENQUEUE actor=P0 kind=DATA data_id=34 value=35 enqueue_seq=35 count_after=1 capacity=2 wait_reason=NONE
+op_seq=70 op=DEQUEUE actor=C0 kind=DATA data_id=34 value=35 enqueue_seq=35 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=71 op=ENQUEUE actor=P0 kind=DATA data_id=35 value=36 enqueue_seq=36 count_after=1 capacity=2 wait_reason=NONE
+op_seq=72 op=DEQUEUE actor=C0 kind=DATA data_id=35 value=36 enqueue_seq=36 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=73 op=ENQUEUE actor=P0 kind=DATA data_id=36 value=37 enqueue_seq=37 count_after=1 capacity=2 wait_reason=NONE
+op_seq=74 op=DEQUEUE actor=C0 kind=DATA data_id=36 value=37 enqueue_seq=37 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=75 op=ENQUEUE actor=P0 kind=DATA data_id=37 value=38 enqueue_seq=38 count_after=1 capacity=2 wait_reason=NONE
+op_seq=76 op=DEQUEUE actor=C0 kind=DATA data_id=37 value=38 enqueue_seq=38 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=77 op=ENQUEUE actor=P0 kind=DATA data_id=38 value=39 enqueue_seq=39 count_after=1 capacity=2 wait_reason=NONE
+op_seq=78 op=DEQUEUE actor=C0 kind=DATA data_id=38 value=39 enqueue_seq=39 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=79 op=ENQUEUE actor=P0 kind=DATA data_id=39 value=40 enqueue_seq=40 count_after=1 capacity=2 wait_reason=NONE
+op_seq=80 op=DEQUEUE actor=C0 kind=DATA data_id=39 value=40 enqueue_seq=40 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+op_seq=81 op=ENQUEUE actor=MAIN kind=STOP data_id=- value=0 enqueue_seq=41 count_after=1 capacity=2 wait_reason=NONE
+op_seq=82 op=DEQUEUE actor=C0 kind=STOP data_id=- value=0 enqueue_seq=41 count_after=0 capacity=2 wait_reason=WAIT_ITEM
+oracle: DATA=40/40 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,1] final=0 workers=create2/join2
+observed: full_snapshots=0 empty_snapshots=41 WAIT_SLOT=0 WAIT_ITEM=41 data_pending_after_producer_join=0
+PASS case=T05
+exit_code=0
+
+$ timeout 5s ./bin/pc-test K0 --records
+subprocess_timeout=7s expected_exit=0
+case=K0 N=1 P=1 C=1 K=0 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=2
+op_seq=1 op=ENQUEUE actor=MAIN kind=STOP data_id=- value=0 enqueue_seq=1 count_after=1 capacity=1 wait_reason=NONE
+op_seq=2 op=DEQUEUE actor=C0 kind=STOP data_id=- value=0 enqueue_seq=1 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+oracle: DATA=0/0 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,1] final=0 workers=create2/join2
+observed: full_snapshots=1 empty_snapshots=1 WAIT_SLOT=0 WAIT_ITEM=1 data_pending_after_producer_join=0
+PASS case=K0
+exit_code=0
+
+$ timeout 6s ./bin/pc-test queued-stop --records
+subprocess_timeout=8s expected_exit=0
+case=queued-stop N=8 P=1 C=1 K=20 Dp_ms=0 Dc_ms=20
+pc_run_status=0 records=42
+op_seq=1 op=ENQUEUE actor=P0 kind=DATA data_id=0 value=1 enqueue_seq=1 count_after=1 capacity=8 wait_reason=NONE
+op_seq=2 op=ENQUEUE actor=P0 kind=DATA data_id=1 value=2 enqueue_seq=2 count_after=2 capacity=8 wait_reason=NONE
+op_seq=3 op=ENQUEUE actor=P0 kind=DATA data_id=2 value=3 enqueue_seq=3 count_after=3 capacity=8 wait_reason=NONE
+op_seq=4 op=ENQUEUE actor=P0 kind=DATA data_id=3 value=4 enqueue_seq=4 count_after=4 capacity=8 wait_reason=NONE
+op_seq=5 op=ENQUEUE actor=P0 kind=DATA data_id=4 value=5 enqueue_seq=5 count_after=5 capacity=8 wait_reason=NONE
+op_seq=6 op=ENQUEUE actor=P0 kind=DATA data_id=5 value=6 enqueue_seq=6 count_after=6 capacity=8 wait_reason=NONE
+op_seq=7 op=ENQUEUE actor=P0 kind=DATA data_id=6 value=7 enqueue_seq=7 count_after=7 capacity=8 wait_reason=NONE
+op_seq=8 op=ENQUEUE actor=P0 kind=DATA data_id=7 value=8 enqueue_seq=8 count_after=8 capacity=8 wait_reason=NONE
+op_seq=9 op=DEQUEUE actor=C0 kind=DATA data_id=0 value=1 enqueue_seq=1 count_after=7 capacity=8 wait_reason=WAIT_ITEM
+op_seq=10 op=ENQUEUE actor=P0 kind=DATA data_id=8 value=9 enqueue_seq=9 count_after=8 capacity=8 wait_reason=WAIT_SLOT
+op_seq=11 op=DEQUEUE actor=C0 kind=DATA data_id=1 value=2 enqueue_seq=2 count_after=7 capacity=8 wait_reason=NONE
+op_seq=12 op=ENQUEUE actor=P0 kind=DATA data_id=9 value=10 enqueue_seq=10 count_after=8 capacity=8 wait_reason=WAIT_SLOT
+op_seq=13 op=DEQUEUE actor=C0 kind=DATA data_id=2 value=3 enqueue_seq=3 count_after=7 capacity=8 wait_reason=NONE
+op_seq=14 op=ENQUEUE actor=P0 kind=DATA data_id=10 value=11 enqueue_seq=11 count_after=8 capacity=8 wait_reason=WAIT_SLOT
+op_seq=15 op=DEQUEUE actor=C0 kind=DATA data_id=3 value=4 enqueue_seq=4 count_after=7 capacity=8 wait_reason=NONE
+op_seq=16 op=ENQUEUE actor=P0 kind=DATA data_id=11 value=12 enqueue_seq=12 count_after=8 capacity=8 wait_reason=WAIT_SLOT
+op_seq=17 op=DEQUEUE actor=C0 kind=DATA data_id=4 value=5 enqueue_seq=5 count_after=7 capacity=8 wait_reason=NONE
+op_seq=18 op=ENQUEUE actor=P0 kind=DATA data_id=12 value=13 enqueue_seq=13 count_after=8 capacity=8 wait_reason=WAIT_SLOT
+op_seq=19 op=DEQUEUE actor=C0 kind=DATA data_id=5 value=6 enqueue_seq=6 count_after=7 capacity=8 wait_reason=NONE
+op_seq=20 op=ENQUEUE actor=P0 kind=DATA data_id=13 value=14 enqueue_seq=14 count_after=8 capacity=8 wait_reason=WAIT_SLOT
+op_seq=21 op=DEQUEUE actor=C0 kind=DATA data_id=6 value=7 enqueue_seq=7 count_after=7 capacity=8 wait_reason=NONE
+op_seq=22 op=ENQUEUE actor=P0 kind=DATA data_id=14 value=15 enqueue_seq=15 count_after=8 capacity=8 wait_reason=WAIT_SLOT
+op_seq=23 op=DEQUEUE actor=C0 kind=DATA data_id=7 value=8 enqueue_seq=8 count_after=7 capacity=8 wait_reason=NONE
+op_seq=24 op=ENQUEUE actor=P0 kind=DATA data_id=15 value=16 enqueue_seq=16 count_after=8 capacity=8 wait_reason=WAIT_SLOT
+op_seq=25 op=DEQUEUE actor=C0 kind=DATA data_id=8 value=9 enqueue_seq=9 count_after=7 capacity=8 wait_reason=NONE
+op_seq=26 op=ENQUEUE actor=P0 kind=DATA data_id=16 value=17 enqueue_seq=17 count_after=8 capacity=8 wait_reason=WAIT_SLOT
+op_seq=27 op=DEQUEUE actor=C0 kind=DATA data_id=9 value=10 enqueue_seq=10 count_after=7 capacity=8 wait_reason=NONE
+op_seq=28 op=ENQUEUE actor=P0 kind=DATA data_id=17 value=18 enqueue_seq=18 count_after=8 capacity=8 wait_reason=WAIT_SLOT
+op_seq=29 op=DEQUEUE actor=C0 kind=DATA data_id=10 value=11 enqueue_seq=11 count_after=7 capacity=8 wait_reason=NONE
+op_seq=30 op=ENQUEUE actor=P0 kind=DATA data_id=18 value=19 enqueue_seq=19 count_after=8 capacity=8 wait_reason=WAIT_SLOT
+op_seq=31 op=DEQUEUE actor=C0 kind=DATA data_id=11 value=12 enqueue_seq=12 count_after=7 capacity=8 wait_reason=NONE
+op_seq=32 op=ENQUEUE actor=P0 kind=DATA data_id=19 value=20 enqueue_seq=20 count_after=8 capacity=8 wait_reason=WAIT_SLOT
+op_seq=33 op=DEQUEUE actor=C0 kind=DATA data_id=12 value=13 enqueue_seq=13 count_after=7 capacity=8 wait_reason=NONE
+op_seq=34 op=ENQUEUE actor=MAIN kind=STOP data_id=- value=0 enqueue_seq=21 count_after=8 capacity=8 wait_reason=WAIT_SLOT
+op_seq=35 op=DEQUEUE actor=C0 kind=DATA data_id=13 value=14 enqueue_seq=14 count_after=7 capacity=8 wait_reason=NONE
+op_seq=36 op=DEQUEUE actor=C0 kind=DATA data_id=14 value=15 enqueue_seq=15 count_after=6 capacity=8 wait_reason=NONE
+op_seq=37 op=DEQUEUE actor=C0 kind=DATA data_id=15 value=16 enqueue_seq=16 count_after=5 capacity=8 wait_reason=NONE
+op_seq=38 op=DEQUEUE actor=C0 kind=DATA data_id=16 value=17 enqueue_seq=17 count_after=4 capacity=8 wait_reason=NONE
+op_seq=39 op=DEQUEUE actor=C0 kind=DATA data_id=17 value=18 enqueue_seq=18 count_after=3 capacity=8 wait_reason=NONE
+op_seq=40 op=DEQUEUE actor=C0 kind=DATA data_id=18 value=19 enqueue_seq=19 count_after=2 capacity=8 wait_reason=NONE
+op_seq=41 op=DEQUEUE actor=C0 kind=DATA data_id=19 value=20 enqueue_seq=20 count_after=1 capacity=8 wait_reason=NONE
+op_seq=42 op=DEQUEUE actor=C0 kind=STOP data_id=- value=0 enqueue_seq=21 count_after=0 capacity=8 wait_reason=NONE
+oracle: DATA=20/20 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,8] final=0 workers=create2/join2
+observed: full_snapshots=14 empty_snapshots=1 WAIT_SLOT=13 WAIT_ITEM=1 data_pending_after_producer_join=8
+PASS case=queued-stop
+exit_code=0

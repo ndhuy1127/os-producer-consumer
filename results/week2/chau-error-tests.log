@@ -1,0 +1,109 @@
+W2-C actual execution (Asia/Saigon): 2026-10-12T14:17:57.107900+07:00
+root=/mnt/d/HUST/os-producer-consumer
+branch=dev/chau
+HEAD_base=9cf345c12ca59fb1a6bf476147551cb89f7e043b
+source=working tree before commit; HEAD_base does not contain new code
+source_manifest_sha256=b4dde74335815fdc922975efe8c293576c3169d26b1bc85d0d4b352a9445730a
+source_manifest=results/week2/chau-source.sha256
+
+$ python3 scripts/check_pc_errors.py
+subprocess_timeout=40s expected_exit=0
+$ ./bin/pc-error-test wait-eintr (timeout=5s expected_exit=0)
+PASS fault=wait-eintr pc_run=0 expected=0 creates=2 joins=2 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=1 guard_EINTR=1 permission_EINTR=1
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test trywait-eintr (timeout=5s expected_exit=0)
+PASS fault=trywait-eintr pc_run=0 expected=0 creates=2 joins=2 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test producer-create (timeout=5s expected_exit=0)
+PASS fault=producer-create pc_run=1 expected=1 creates=1 joins=1 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=1 guard_EINTR=0 permission_EINTR=0
+pthread_create producer: Resource temporarily unavailable
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test consumer-create (timeout=5s expected_exit=0)
+PASS fault=consumer-create pc_run=1 expected=1 creates=0 joins=0 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pthread_create consumer: Resource temporarily unavailable
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test init-empty (timeout=5s expected_exit=0)
+PASS fault=init-empty pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+sem_init empty: No space left on device
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test init-full (timeout=5s expected_exit=0)
+PASS fault=init-full pc_run=1 expected=1 creates=0 joins=0 sem_init=1 sem_destroy=1 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+sem_init full: No space left on device
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test init-guard (timeout=5s expected_exit=0)
+PASS fault=init-guard pc_run=1 expected=1 creates=0 joins=0 sem_init=2 sem_destroy=2 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+sem_init guard: No space left on device
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test malloc (timeout=5s expected_exit=0)
+PASS fault=malloc pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+buffer_init: BUFFER_NO_MEMORY (5)
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test calloc-record (timeout=5s expected_exit=0)
+PASS fault=calloc-record pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc allocation: insufficient memory
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test calloc-slot (timeout=5s expected_exit=0)
+PASS fault=calloc-slot pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc allocation: insufficient memory
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test calloc-produced (timeout=5s expected_exit=0)
+PASS fault=calloc-produced pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc allocation: insufficient memory
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test calloc-consumed (timeout=5s expected_exit=0)
+PASS fault=calloc-consumed pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc allocation: insufficient memory
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test destroy (timeout=5s expected_exit=0)
+PASS fault=destroy pc_run=1 expected=1 creates=2 joins=2 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+sem_destroy guard: Invalid argument
+sem_destroy full: Invalid argument
+sem_destroy empty: Invalid argument
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-N0 (timeout=5s expected_exit=0)
+PASS fault=config-N0 pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P=C=1, K=0..1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-Nbig (timeout=5s expected_exit=0)
+PASS fault=config-Nbig pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P=C=1, K=0..1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-P2 (timeout=5s expected_exit=0)
+PASS fault=config-P2 pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P=C=1, K=0..1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-C2 (timeout=5s expected_exit=0)
+PASS fault=config-C2 pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P=C=1, K=0..1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-Kbig (timeout=5s expected_exit=0)
+PASS fault=config-Kbig pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P=C=1, K=0..1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-delay (timeout=5s expected_exit=0)
+PASS fault=config-delay pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P=C=1, K=0..1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test fatal-guard (timeout=5s expected_exit=1)
+fatal: sem_wait guard: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-wait (timeout=5s expected_exit=1)
+fatal: sem_wait permission: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-trywait (timeout=5s expected_exit=1)
+fatal: sem_trywait permission: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-post (timeout=5s expected_exit=1)
+fatal: sem_post full after enqueue: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-join (timeout=5s expected_exit=1)
+fatal: pthread_join producer: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-push (timeout=5s expected_exit=1)
+fatal: buffer_push: BUFFER_INVALID_ARGUMENT (1); terminating process
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-pop (timeout=5s expected_exit=1)
+fatal: buffer_pop: BUFFER_INVALID_ARGUMENT (1); terminating process
+PASS process_exit=1 expected_exit=1
+Error tests: 26/26 PASS
+exit_code=0
