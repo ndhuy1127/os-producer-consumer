@@ -17,7 +17,7 @@ Tuần 1 đã tích hợp [lý thuyết](docs/theory-week1-chau.md), [thiết k�
 
 **W2-C của Lê Hải Châu đạt 100% phạm vi 1 producer/1 consumer:** ba semaphore, STOP hữu hạn, kiểm chứng ID/FIFO/biên và xử lý lỗi; [minh chứng Châu](results/week2/chau-validation.md) giữ nguyên. `dev/huy` đã fast-forward nhận bàn giao `bd00780` từ origin/dev/chau trước khi ghép phần Huy.
 
-**W2-H đạt 100% phạm vi Tuần 2:** giữ buffer đã kiểm chứng, hoàn thiện CLI/kiểm tra đầu vào, log production và kiểm tra qua chương trình chính ở thường/quiet. Codex thực hiện theo yêu cầu trên nhánh Huy, trên máy ChouPro Ubuntu/WSL ngày 12/10/2026; không ghi Huy trực tiếp chạy hoặc phê duyệt. [Minh chứng Huy](results/week2/huy-validation.md), [báo cáo chung](docs/reports/week2.md) và [tiến độ](docs/progress.md) xác nhận **mốc kỹ thuật bản cơ bản Tuần 2 đạt trên dev/huy**, chưa merge/bàn giao main. Nhiều producer/consumer thuộc Tuần 3. Kế hoạch kéo dài 4 tuần; chưa có ngày bắt đầu/hạn nộp.
+**W2-H đạt 100% phạm vi Tuần 2:** giữ buffer đã kiểm chứng, hoàn thiện CLI/kiểm tra đầu vào, log production và kiểm tra qua chương trình chính ở thường/quiet. Codex thực hiện theo yêu cầu trên nhánh Huy, trên máy ChouPro Ubuntu/WSL ngày 12/10/2026; không ghi Huy trực tiếp chạy hoặc phê duyệt. [Minh chứng Huy](results/week2/huy-validation.md), [báo cáo chung](docs/reports/week2.md) và [tiến độ](docs/progress.md) xác nhận **bản cơ bản Tuần 2 đã được Codex review và kiểm tra đạt**; [review chung](results/week2/group-validation.md) giữ kết quả riêng, trạng thái merge/bàn giao main xem [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3). Nhiều producer/consumer thuộc Tuần 3. Kế hoạch kéo dài 4 tuần; chưa có ngày bắt đầu/hạn nộp.
 
 ## Môi trường và build
 

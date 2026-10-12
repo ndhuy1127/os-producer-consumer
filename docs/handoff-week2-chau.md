@@ -1,6 +1,6 @@
 # Bàn giao Tuần 2 — Châu → Huy
 
-W2-C đã nghiệm thu **lõi 1P/1C** trên máy Châu ngày 12/10/2026; [báo cáo](reports/week2.md), [minh chứng](../results/week2/chau-validation.md). Bộ đệm của Huy và log Tuần 1 giữ nguyên. Chưa có bằng chứng Huy triển khai/phê duyệt CLI/log Tuần 2; tài liệu này mô tả giao diện sẵn để ghép.
+W2-C đã nghiệm thu **lõi 1P/1C** trên máy Châu ngày 12/10/2026; [báo cáo](reports/week2.md), [minh chứng](../results/week2/chau-validation.md). Bộ đệm của Huy và log Tuần 1 giữ nguyên. Các phần dưới mô tả **snapshot bàn giao W2-C trước CLI/log**. Sau đó W2-H đã ghép/kiểm chứng qua Codex theo yêu cầu; [minh chứng Huy](../results/week2/huy-validation.md), [review bản ghép](../results/week2/group-validation.md), trạng thái bàn giao main theo [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3). Không ghi Huy trực tiếp phê duyệt.
 
 ## API cấu hình và vòng đời
 
@@ -52,6 +52,6 @@ timeout 7s ./bin/pc-test T04 --records
 timeout 7s ./bin/pc-test T05 --records
 ```
 
-[main.c](../src/main.c) hiện chạy không đối số, in tổng kết tối thiểu và từ chối mọi đối số với exit 2. Huy ghép parser/help/quiet và trình bày log tại entry point, điền pc_config rồi gọi cùng pc_run. Nếu thêm module C vào src/, Makefile đưa vào chương trình chính; main của test/ví dụ vẫn build riêng. Lỗi parse phải kết thúc trước pc_run/create; kiểm tra giới hạn kiểu đích theo đặc tả, không dùng atoi. T08 cần kiểm thử parser thật sau khi ghép, các ca config API hiện tại không thay thế T08.
+Ở snapshot W2-C, main chạy không đối số, in tổng kết tối thiểu và từ chối mọi đối số với exit 2. Phần Huy cần ghép parser/help/quiet và trình bày log tại entry point, điền pc_config rồi gọi cùng pc_run; việc này đã hoàn thành ở [main.c](../src/main.c) hiện tại. Nếu thêm module C vào src/, Makefile đưa vào chương trình chính; main của test/ví dụ vẫn build riêng. Lỗi parse phải kết thúc trước pc_run/create; kiểm tra giới hạn kiểu đích theo đặc tả, không dùng atoi. Các ca config API không thay thế T08; parser thật được kiểm chứng trong minh chứng Huy/review chung.
 
 T02–T05 đã đạt **trên lõi**; sau ghép CLI/log, Huy kiểm tra lại đường chạy sản phẩm/cờ/quiet và ghi minh chứng riêng. K0 và queued-stop chỉ kiểm tra kết thúc cơ bản 1P/1C; T09 còn cấu hình nhiều consumer. T06–T08 và mở rộng nhiều luồng Tuần 3 chưa làm. Không gán phần test lõi này thành xác nhận W2-H hoàn thành.
