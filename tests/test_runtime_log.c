@@ -9,13 +9,18 @@ static int check(int quiet, int status, int verified)
 {
     struct pc_record records[] = {
         {UINT64_MAX, PC_ENQUEUE, PC_PRODUCER, {ITEM_DATA, UINT64_MAX, -7},
-         UINT64_MAX, 1, 2, PC_WAIT_SLOT},
+         UINT64_MAX, 1, 2, PC_WAIT_SLOT, 0},
         {2, PC_DEQUEUE, PC_CONSUMER, {ITEM_STOP, UINT64_MAX, 0},
-         3, 0, 2, PC_WAIT_ITEM}
+         3, 0, 2, PC_WAIT_ITEM, 0},
+        {3, PC_DEQUEUE, PC_CONSUMER, {ITEM_DATA, 5, 6},
+         1, 0, 2, PC_WAIT_NONE, PC_MAX_WORKERS - 1}
     }; /* Formatting fixture only; not runtime/FIFO evidence. */
     struct pc_result result = {
-        .config = {2, 1, 1, 1, 0, 0}, .summary = {.verified = verified},
-        .records = records, .record_count = 2
+        .config = {2, 2, 64, 1, 0, 0},
+        .summary = {.verified = verified, .producers_created = 2, .consumers_created = 64,
+                    .producer_items = {[1] = 7}, .consumer_items = {[63] = 5},
+                    .consumer_stops = {[63] = 1}},
+        .records = records, .record_count = 3
     };
     FILE *output = tmpfile();
     if (output == NULL) return 0;
@@ -26,16 +31,33 @@ static int check(int quiet, int status, int verified)
     if (ferror(output) || length == sizeof(text) - 1) ok = 0;
     if (fclose(output) != 0) ok = 0;
     const char *conclusion = status == PC_OK && verified ? "verification=PASS" : "verification=FAIL";
-    ok = ok && strstr(text, conclusion) != NULL && strstr(text, "records=2") != NULL;
+    ok = ok && strstr(text, conclusion) != NULL && strstr(text, "records=3") != NULL &&
+         strstr(text, "producers(DATA): P0=0 P1=7\n") != NULL &&
+         strstr(text, " C62=0/0 C63=5/1\n") != NULL;
     if (quiet) {
         ok = ok && strstr(text, "op_seq=") == NULL;
     } else {
         ok = ok && strstr(text, "op_seq=18446744073709551615") != NULL &&
              strstr(text, "actor=P0 kind=DATA data_id=18446744073709551615 value=-7") != NULL &&
              strstr(text, "actor=C0 kind=STOP data_id=- value=0") != NULL &&
+             strstr(text, "actor=C63 kind=DATA data_id=5 value=6") != NULL &&
              strstr(text, "wait_reason=WAIT_SLOT") != NULL &&
              strstr(text, "wait_reason=WAIT_ITEM") != NULL;
     }
+    return ok;
+}
+
+/* A worker index outside 0..63 is rejected instead of printed. */
+static int invalid_index(void)
+{
+    struct pc_record bad = {1, PC_ENQUEUE, PC_PRODUCER, {ITEM_DATA, 0, 1},
+                            1, 1, 2, PC_WAIT_NONE, PC_MAX_WORKERS};
+    struct pc_result result = {.config = {2, 1, 1, 1, 0, 0}, .records = &bad, .record_count = 1};
+    FILE *output = tmpfile();
+    if (output == NULL) return 0;
+    errno = 0;
+    int ok = runtime_log_result(output, &result, PC_OK, 0) == PC_RUNTIME_ERROR && errno == EINVAL;
+    if (fclose(output) != 0) ok = 0;
     return ok;
 }
 
@@ -60,6 +82,9 @@ int main(void)
     if (read_only != NULL && fclose(read_only) != 0) ok = 0;
     ++total; passed += ok;
     printf("%s log output error propagation\n", ok ? "PASS" : "FAIL");
+    ok = invalid_index();
+    ++total; passed += ok;
+    printf("%s log rejects worker index %d\n", ok ? "PASS" : "FAIL", PC_MAX_WORKERS);
     printf("Log formatter tests: %zu/%zu %s\n", passed, total, passed == total ? "PASS" : "FAIL");
     return passed == total ? PC_OK : PC_RUNTIME_ERROR;
 }

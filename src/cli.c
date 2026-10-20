@@ -15,12 +15,12 @@ struct numeric_option {
 };
 
 static const struct numeric_option numeric_options[] = {
-    {"--capacity", CAPACITY, 1, 65536},
-    {"--producers", PRODUCERS, 1, 1},
-    {"--consumers", CONSUMERS, 1, 1},
-    {"--items-per-producer", ITEMS, 0, 1000000},
-    {"--producer-delay-ms", PRODUCER_DELAY, 0, 60000},
-    {"--consumer-delay-ms", CONSUMER_DELAY, 0, 60000}
+    {"--capacity", CAPACITY, 1, PC_MAX_CAPACITY},
+    {"--producers", PRODUCERS, 1, PC_MAX_WORKERS},
+    {"--consumers", CONSUMERS, 1, PC_MAX_WORKERS},
+    {"--items-per-producer", ITEMS, 0, PC_MAX_TOTAL_ITEMS},
+    {"--producer-delay-ms", PRODUCER_DELAY, 0, PC_MAX_DELAY_MS},
+    {"--consumer-delay-ms", CONSUMER_DELAY, 0, PC_MAX_DELAY_MS}
 };
 
 static int number(const struct numeric_option *option, const char *text,
@@ -43,10 +43,6 @@ static int number(const struct numeric_option *option, const char *text,
         fprintf(errors, "CLI: %s value overflows unsigned integer conversion\n", option->name);
         return PC_CONFIG_ERROR;
     }
-    if ((option->id == PRODUCERS || option->id == CONSUMERS) && parsed > 1) {
-        fprintf(errors, "CLI: %s > 1 is not supported in Week 2; require P=C=1\n", option->name);
-        return PC_CONFIG_ERROR;
-    }
     if (parsed < option->minimum || parsed > option->maximum) {
         fprintf(errors, "CLI: %s must be in [%" PRIuMAX ",%" PRIuMAX "]\n",
                 option->name, option->minimum, option->maximum);
@@ -65,15 +61,16 @@ static int number(const struct numeric_option *option, const char *text,
 static int resources_valid(const struct pc_config *config, FILE *errors)
 {
     /* Match the core's capacity/array limits; the core remains the final check
-     * before allocation. P=C=1 has already been enforced for this release. */
+     * before allocation. Each value has already been range-checked. */
     size_t n = config->capacity, k = config->items_per_producer;
     if (n > SEM_VALUE_MAX || n > UINT_MAX || n > SIZE_MAX / sizeof(struct item) ||
         n > SIZE_MAX / sizeof(uint64_t)) {
         fprintf(errors, "CLI: --capacity exceeds semaphore or allocation limits\n");
         return PC_CONFIG_ERROR;
     }
-    if (k != 0 && config->producers > SIZE_MAX / k) {
-        fprintf(errors, "CLI: total DATA size overflows\n");
+    if (k != 0 && config->producers > PC_MAX_TOTAL_ITEMS / k) {
+        fprintf(errors, "CLI: total DATA P*K = --producers * --items-per-producer must be <= %d\n",
+                PC_MAX_TOTAL_ITEMS);
         return PC_CONFIG_ERROR;
     }
     size_t total = config->producers * k;
@@ -164,11 +161,12 @@ int cli_print_help(FILE *output, const char *program)
 {
     if (fprintf(output,
         "Usage: %s [options]\n"
-        "Finite Producer-Consumer, Week 2: exactly 1 producer / 1 consumer.\n"
+        "Finite Producer-Consumer: P producers, C consumers, bounded FIFO buffer.\n"
         "  --capacity N                1..65536 (also semaphore/size limits), default 8\n"
-        "  --producers P               only 1 in Week 2, default 1\n"
-        "  --consumers C               only 1 in Week 2, default 1\n"
-        "  --items-per-producer K      0..1000000, default 20; K=0 is valid\n"
+        "  --producers P               1..64, default 1\n"
+        "  --consumers C               1..64, default 1\n"
+        "  --items-per-producer K      0..1000000 and P*K <= 1000000, default 20; K=0 is valid\n"
+        "Producer p creates DATA IDs p*K..p*K+K-1; main sends one STOP per consumer.\n"
         "  --producer-delay-ms Dp      0..60000 milliseconds, default 0\n"
         "  --consumer-delay-ms Dc      0..60000 milliseconds, default 0\n"
         "  --quiet                     suppress operation records; keep verification/summary\n"

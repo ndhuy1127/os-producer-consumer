@@ -25,19 +25,13 @@ MAIN_HOOK_WRAPS := pc_run pc_result_destroy pthread_create sem_init sem_destroy
 comma := ,
 
 .DEFAULT_GOAL := all
-.PHONY: all clean test help thread-demo buffer-test test-buffer pc-test pc-error-test test-pc test-errors cli-tests test-cli
+.PHONY: all clean test help thread-demo buffer-test test-buffer pc-test pc-error-test test-pc test-errors cli-tests test-cli test-stress
 
-ifeq ($(wildcard src/main.c),)
-all:
-	@printf '%s\n' 'Chua co src/main.c; chuong trinh Producer-Consumer chua duoc trien khai.' >&2
-	@exit 2
-else
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	@mkdir -p $(@D)
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
-endif
 
 build/%.o: src/%.c
 	@mkdir -p $(@D)
@@ -88,7 +82,7 @@ $(ERROR_TARGET): $(ERROR_OBJECTS)
 	$(CC) $(LDFLAGS) $^ $(addprefix -Wl$(comma)--wrap=,$(ERROR_WRAPS)) $(LDLIBS) -o $@
 
 test-pc: pc-test
-	timeout 15s ./$(PC_TARGET) all
+	timeout 60s ./$(PC_TARGET) all
 
 test-errors: pc-error-test
 	python3 scripts/check_pc_errors.py
@@ -124,10 +118,13 @@ test-cli: cli-tests
 
 test: test-buffer test-pc test-errors test-cli
 
+test-stress: $(TARGET)
+	python3 scripts/check_stress.py
+
 -include $(sort $(OBJECTS:.o=.d) $(BUFFER_OBJECTS:.o=.d) $(THREAD_OBJECT:.o=.d) $(PC_OBJECTS:.o=.d) $(ERROR_OBJECTS:.o=.d) $(CLI_PARSE_OBJECTS:.o=.d) $(LOG_OBJECTS:.o=.d) $(MAIN_HOOK_OBJECTS:.o=.d))
 
 clean:
 	rm -rf -- build bin
 
 help:
-	@printf '%s\n' 'make: build bin/producer-consumer, CLI --help/--quiet; mac dinh N=8 P=C=1 K=20.' 'make thread-demo: build bin/thread-demo.' 'make test-buffer: 12 ca bo dem tuan tu.' 'make test-pc: 8 ca loi dong bo 1P/1C, timeout 15s.' 'make test-errors: 26 ca loi API/semaphore, timeout tung ca.' 'make test-cli: CLI/log production, quiet, parser bounds and main error hooks.' 'make test: all regression + CLI/log tests.' 'python3 scripts/validate_week2_huy.py: ghi minh chung huy-*; khong chay script W2-C tren CLI moi.' 'make clean: don build/ va bin/.'
+	@printf '%s\n' 'make: build bin/producer-consumer (P,C=1..64; mac dinh N=8 P=C=1 K=20), --help/--quiet.' 'make thread-demo: build bin/thread-demo.' 'make test-buffer: 12 ca bo dem tuan tu.' 'make test-pc: 16 preset loi 1P/1C va nhieu luong, timeout 60s.' 'make test-errors: 32 ca loi API/semaphore/tao luong, timeout tung ca.' 'make test-cli: CLI/log production, quiet, parser bounds va main error hooks.' 'make test: tat ca nhom tren.' 'make test-stress: chay lap cau hinh nhieu luong (T07...), in bang ket qua.' 'python3 scripts/validate_week3.py: ghi minh chung results/week3 (gom ASan/UBSan/TSan).' 'make clean: don build/ va bin/.'
