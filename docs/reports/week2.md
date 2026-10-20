@@ -1,6 +1,6 @@
 # Báo cáo chung Tuần 2 — Bản cơ bản
 
-**W2-C và W2-H đạt 100% phạm vi cơ bản 1 producer/1 consumer; bản ghép đã được Codex review và kiểm tra đạt theo yêu cầu.** Kiểm chứng ngày 12/10/2026 (Asia/Saigon) trên checkout ChouPro Ubuntu/WSL; không ghi Huy/Châu trực tiếp review/phê duyệt hoặc cả hai đã đọc chéo. Minh chứng Châu/Huy giữ nguyên; kết quả review ghi riêng [group-validation](../../results/week2/group-validation.md). Trạng thái bàn giao main và merge SHA được xác nhận trên GitHub tại [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3), không suy ra từ tài liệu trước merge. Chưa có ngày bắt đầu/hạn nộp.
+**W2-C và W2-H đạt 100% phạm vi cơ bản 1 producer/1 consumer; bản ghép đã được Codex review và kiểm tra đạt theo yêu cầu.** Kiểm chứng ngày 12/10/2026 (Asia/Saigon) trên checkout ChouPro Ubuntu/WSL; không ghi Huy/Châu trực tiếp review/phê duyệt hoặc cả hai đã đọc chéo. Minh chứng Châu/Huy giữ nguyên; kết quả review ghi riêng [group-validation](../../results/week2/group-validation.md). [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3) đã merge vào main ngày 13/10/2026 (Asia/Saigon) ở merge commit `d125734`, theo GitHub. Chưa có ngày bắt đầu/hạn nộp.
 
 ## 1. Mục tiêu tuần
 
@@ -70,10 +70,12 @@ Mỗi ca runtime có timeout, đối chiếu từng ID/value/kind, FIFO theo tha
 
 **Review bản ghép theo yêu cầu bàn giao:** Codex đọc diff origin/main→dev/huy, kế hoạch/báo cáo/thiết kế/hợp đồng, nguồn chính, Makefile/tests/checker và manifest/log lịch sử. Không phát hiện lỗi runtime cần sửa trong phạm vi 1P/1C. Đã thực chạy build sạch đủ production/thread-demo/test, thread-demo và một lần make test: buffer 12/12, lõi 8/8, lỗi/API 26/26, production thường/quiet 16/16, 116 CLI sai × production/hook, help/5 biên parser/7 formatter/6 lỗi main đều đạt; mọi target exit 0, child lỗi trả mã đúng dự kiến. Kiểm tra khung/liên kết/diff/hash đạt. [Log mới](../../results/week2/group-review.log), [manifest 22 file](../../results/week2/group-source.sha256) khớp nguồn commit 7c356e9. Chỉ sửa tài liệu/minh chứng; không chạy sanitizer mới, sử dụng log đã bàn giao khớp nguồn với leak detection bật. 31 file minh chứng lịch sử/báo cáo Tuần 1 được đối chiếu nguyên byte.
 
+**Chạy lại trên máy Huy sau merge:** ngày 20/10/2026, Claude Code chạy lại bản đã merge `d125734` trên máy của Huy (WSL2 Ubuntu 24.04, GCC 13.3.0, Make 4.3, Python 3.12.3) theo yêu cầu của Huy, không sửa nguồn. `sha256sum -c` khớp 22/22 file của manifest W2-H; build sạch, thread-demo và `make test` đều exit 0 (buffer 12/12, lõi 8/8, lỗi/API 26/26, CLI/log 16 lần chạy + 116 đầu vào sai). Đây là lần đầu bản Tuần 2 được chạy trên máy Huy; chưa có ghi nhận Huy hoặc Châu đọc chéo code của nhau. [Log](../../results/week2/huy-machine-recheck.log).
+
 ## 5. Việc chưa hoàn thành hoặc đang vướng
 
-Không còn vướng kỹ thuật trong W2-C/W2-H phạm vi Tuần 2 cơ bản; review và kiểm tra bản ghép đạt. Trạng thái merge/bàn giao main theo PR #3. P/C>1 chưa hỗ trợ; T06/T07 chưa chạy, T08 chỉ CLI hiện hỗ trợ 1P/1C, K0/queued-stop không đánh dấu toàn T09 nhiều luồng PASS. Chưa xác nhận Huy/Châu trực tiếp review/phê duyệt hay hai người đọc chéo. Giáo trình/kế hoạch Word liên quan chưa được truy cập để xác minh, không tuyên bố đã đọc.
+Không còn vướng kỹ thuật trong W2-C/W2-H phạm vi Tuần 2 cơ bản; review và kiểm tra bản ghép đạt. PR #3 đã merge ở `d125734`. P/C>1 chưa hỗ trợ; T06/T07 chưa chạy, T08 chỉ CLI hiện hỗ trợ 1P/1C, K0/queued-stop không đánh dấu toàn T09 nhiều luồng PASS. Chưa xác nhận Huy/Châu trực tiếp review/phê duyệt hay hai người đọc chéo. Giáo trình/kế hoạch Word liên quan chưa được truy cập để xác minh, không tuyên bố đã đọc.
 
 ## 6. Công việc tiếp theo
 
-Bàn giao qua PR #3 bằng merge commit, giữ commit gốc và hai nhánh thành viên; trạng thái thao tác thực xem GitHub/PR và kết quả bàn giao. Sau merge, đồng bộ main/dev/chau/dev/huy local/remote, đối chiếu tree/hash với bản review, checkout dev/chau rồi smoke test ngắn. Tuần 3 mới triển khai nhiều producer/consumer, T06/T07/phần nhiều luồng T09 và cập nhật giới hạn CLI; không triển khai công việc đó trong lượt chốt Tuần 2. [Tiến độ](../progress.md), [quy tắc báo cáo](README.md).
+Đã bàn giao qua PR #3 bằng merge commit `d125734`, giữ commit gốc và hai nhánh thành viên; khi kiểm tra ngày 20/10/2026, main, dev/chau và dev/huy trên GitHub cùng trỏ `d125734`. Tuần 3 triển khai nhiều producer/consumer, T06/T07/phần nhiều luồng T09 và nới giới hạn CLI, xem [báo cáo Tuần 3](week3.md). [Tiến độ](../progress.md), [quy tắc báo cáo](README.md).

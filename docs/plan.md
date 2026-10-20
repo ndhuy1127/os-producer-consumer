@@ -11,4 +11,4 @@
 
 Tuần 4, cả hai đọc chéo code, luyện demo và chuẩn bị trả lời câu hỏi. Mỗi tuần chỉ xác nhận mốc khi có file/code, lệnh và kết quả kiểm tra thực tế. Việc có Makefile ở khung ban đầu chưa chứng minh môi trường C hoặc bộ đệm đã hoàn thành.
 
-Ca kiểm thử dự kiến được mô tả ở [test-plan.md](test-plan.md). Thiết kế và lựa chọn chưa chốt dùng [design.md](design.md). Không có chương trình thì không đánh dấu PASS.
+Ca kiểm thử dự kiến được mô tả ở [test-plan.md](test-plan.md). Thiết kế đã chốt và thay đổi theo từng tuần ghi ở [design.md](design.md). Không có chương trình thì không đánh dấu PASS.

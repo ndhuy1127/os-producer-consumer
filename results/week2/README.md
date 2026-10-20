@@ -1,6 +1,6 @@
 # Minh chứng Tuần 2
 
-**W2-C và W2-H đã nghiệm thu ngày 12/10/2026 (Asia/Saigon), phạm vi 1P/1C; bản ghép đã được Codex review và kiểm tra đạt theo yêu cầu.** Trạng thái merge/bàn giao main xem [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3). Thực hiện trên checkout ChouPro WSL; không ghi Huy/Châu trực tiếp review/phê duyệt. [Đánh giá Châu](chau-validation.md), [đánh giá Huy](huy-validation.md), [báo cáo](../../docs/reports/week2.md), [API bàn giao Châu](../../docs/handoff-week2-chau.md).
+**W2-C và W2-H đã nghiệm thu ngày 12/10/2026 (Asia/Saigon), phạm vi 1P/1C; bản ghép đã được Codex review và kiểm tra đạt theo yêu cầu.** [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3) đã merge vào main ở `d125734` (13/10/2026, Asia/Saigon). Thực hiện trên checkout ChouPro WSL; không ghi Huy/Châu trực tiếp review/phê duyệt. [Đánh giá Châu](chau-validation.md), [đánh giá Huy](huy-validation.md), [báo cáo](../../docs/reports/week2.md), [API bàn giao Châu](../../docs/handoff-week2-chau.md).
 
 | Minh chứng review chung | Nội dung |
 | --- | --- |
@@ -38,5 +38,6 @@ Log Châu ghi HEAD nền 9cf345c và hash nguồn W2-C trước commit; sau đó
 | [huy-source.sha256](huy-source.sha256) | 22 file build/nguồn/header/test/script thực dùng |
 | [huy-test-summary.json](huy-test-summary.json) | Kết quả máy đọc được, cấu hình và số snapshot/chờ thực |
 | [huy-validation.md](huy-validation.md) | Nghiệm thu W2-H, phạm vi, lệnh và giới hạn |
+| [huy-machine-recheck.log](huy-machine-recheck.log) | 20/10/2026: chạy lại bản đã merge `d125734` trên máy Huy, không sửa nguồn; hash 22/22 khớp manifest W2-H, build/thread-demo/make test exit 0 |
 
 Các huy-* ghi HEAD nền bd00780 cộng nguồn working tree mới/hash, không gán code mới cho commit nền. Tái lập trên dev/huy bằng `python3 scripts/validate_week2_huy.py` (ghi lại huy-*), đối chiếu bằng `sha256sum -c results/week2/huy-source.sha256`. Không chạy writer Châu. Binary/object/cache chỉ build/bin hoặc /tmp; Tuần 1 và chau-* được giữ nguyên.
