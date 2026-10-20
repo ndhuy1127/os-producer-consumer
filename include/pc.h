@@ -5,6 +5,12 @@
 #include <stdint.h>
 #include "item.h"
 
+/* Limits shared by the core and the CLI parser. */
+#define PC_MAX_CAPACITY 65536
+#define PC_MAX_WORKERS 64          /* Per kind: producers and consumers. */
+#define PC_MAX_TOTAL_ITEMS 1000000 /* P*K DATA items in one run. */
+#define PC_MAX_DELAY_MS 60000
+
 enum pc_status { PC_OK = 0, PC_RUNTIME_ERROR = 1, PC_CONFIG_ERROR = 2 };
 enum pc_operation { PC_ENQUEUE, PC_DEQUEUE };
 enum pc_actor { PC_PRODUCER, PC_CONSUMER, PC_MAIN };
@@ -22,12 +28,13 @@ struct pc_config {
 struct pc_record {
     uint64_t op_seq;
     enum pc_operation op;
-    enum pc_actor actor; /* P0, C0, or MAIN in the Week 2 implementation. */
+    enum pc_actor actor;
     struct item item;
     uint64_t enqueue_seq;
     size_t count_after;
     size_t capacity;
     enum pc_wait_reason wait_reason;
+    size_t actor_index; /* Producer p or consumer c; 0 for MAIN. */
 };
 
 struct pc_summary {
@@ -40,6 +47,11 @@ struct pc_summary {
     size_t producers_joined, consumers_joined;
     size_t data_pending_after_producer_join;
     int verified;
+    /* DATA not owned by the enqueuing producer, or out of j order per producer. */
+    size_t order_errors;
+    size_t producer_items[PC_MAX_WORKERS]; /* DATA enqueued by producer p. */
+    size_t consumer_items[PC_MAX_WORKERS]; /* DATA processed by consumer c. */
+    size_t consumer_stops[PC_MAX_WORKERS]; /* STOP dequeued by consumer c. */
 };
 
 struct pc_result {
@@ -50,7 +62,9 @@ struct pc_result {
 };
 
 struct pc_config pc_default_config(void);
-/* Synchronous, finite run. Week 2 accepts only producers=consumers=1.
+/* Synchronous, finite run with P producers and C consumers (1..64 each).
+ * Producer p enqueues IDs p*K..p*K+K-1; main joins all producers, then
+ * enqueues one STOP per consumer and joins all consumers.
  * result must be zero-initialized and destroyed before reuse; never copy an
  * owning result. Records (including STOP) remain available after all joins.
  * Recoverable failures return 1; invalid config returns 2 before workers.

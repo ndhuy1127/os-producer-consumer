@@ -13,6 +13,7 @@
 
 struct pc_context {
     struct pc_config config; /* Immutable while workers run. */
+    size_t total_items;      /* P*K, checked before multiplication. */
     struct buffer buffer;
     sem_t empty, full, guard;
     int empty_initialized, full_initialized, guard_initialized;
@@ -25,6 +26,7 @@ struct pc_context {
 
 struct worker_args {
     struct pc_context *context;
+    size_t index;     /* Producer p or consumer c. */
     size_t completed; /* Written by this worker; main reads only after join. */
 };
 
@@ -128,8 +130,9 @@ static void sleep_ms(unsigned int milliseconds)
 
 /* All record/oracle/buffer access below occurs with guard held. */
 static void record_operation(struct pc_context *context, enum pc_operation op,
-                             enum pc_actor actor, struct item item,
-                             uint64_t sequence, enum pc_wait_reason reason)
+                             enum pc_actor actor, size_t actor_index,
+                             struct item item, uint64_t sequence,
+                             enum pc_wait_reason reason)
 {
     struct pc_result *result = context->result;
     struct pc_summary *summary = &result->summary;
@@ -141,7 +144,7 @@ static void record_operation(struct pc_context *context, enum pc_operation op,
         .op_seq = (uint64_t)result->record_count + 1,
         .op = op, .actor = actor, .item = item, .enqueue_seq = sequence,
         .count_after = count, .capacity = context->config.capacity,
-        .wait_reason = reason
+        .wait_reason = reason, .actor_index = actor_index
     };
     ++result->record_count;
     if (count > context->config.capacity ||
@@ -157,13 +160,17 @@ static void record_operation(struct pc_context *context, enum pc_operation op,
         ++summary->fifo_errors;
     }
     if (item.kind == ITEM_STOP) {
-        if (op == PC_ENQUEUE) ++summary->stop_enqueued;
-        else ++summary->stop_dequeued;
+        if (op == PC_ENQUEUE) {
+            ++summary->stop_enqueued;
+        } else {
+            ++summary->stop_dequeued;
+            if (actor_index < PC_MAX_WORKERS) ++summary->consumer_stops[actor_index];
+        }
         return;
     }
     if (op == PC_ENQUEUE) ++summary->data_enqueued;
     else ++summary->data_dequeued;
-    if (item.id >= context->config.items_per_producer) {
+    if (item.id >= context->total_items) {
         ++summary->out_of_range;
         return;
     }
@@ -174,7 +181,8 @@ static void record_operation(struct pc_context *context, enum pc_operation op,
     ++frequency[(size_t)item.id];
 }
 
-static void enqueue(struct pc_context *context, struct item item, enum pc_actor actor)
+static void enqueue(struct pc_context *context, struct item item,
+                    enum pc_actor actor, size_t actor_index)
 {
     enum pc_wait_reason reason = take_permission(&context->empty, PC_WAIT_SLOT);
     take_guard(context, &context->empty);
@@ -186,13 +194,14 @@ static void enqueue(struct pc_context *context, struct item item, enum pc_actor 
         fatal_buffer("buffer_push", error);
     }
     context->slot_sequence[slot] = ++context->enqueues;
-    record_operation(context, PC_ENQUEUE, actor, item, context->enqueues, reason);
+    record_operation(context, PC_ENQUEUE, actor, actor_index, item,
+                     context->enqueues, reason);
     post_checked(&context->guard, "sem_post guard after enqueue");
     /* Push succeeded: never restore empty as though it had not happened. */
     post_checked(&context->full, "sem_post full after enqueue");
 }
 
-static struct item dequeue(struct pc_context *context)
+static struct item dequeue(struct pc_context *context, size_t consumer_index)
 {
     enum pc_wait_reason reason = take_permission(&context->full, PC_WAIT_ITEM);
     take_guard(context, &context->full);
@@ -205,7 +214,8 @@ static struct item dequeue(struct pc_context *context)
         fatal_buffer("buffer_pop", error);
     }
     ++context->dequeues;
-    record_operation(context, PC_DEQUEUE, PC_CONSUMER, item, sequence, reason);
+    record_operation(context, PC_DEQUEUE, PC_CONSUMER, consumer_index, item,
+                     sequence, reason);
     post_checked(&context->guard, "sem_post guard after dequeue");
     post_checked(&context->empty, "sem_post empty after dequeue"); /* Also STOP. */
     return item;
@@ -215,9 +225,12 @@ static void *producer(void *argument)
 {
     struct worker_args *args = argument;
     const struct pc_config *config = &args->context->config;
-    for (size_t id = 0; id < config->items_per_producer; ++id) {
-        struct item item = {ITEM_DATA, (uint64_t)id, (int)(id % 1000U) + 1};
-        enqueue(args->context, item, PC_PRODUCER);
+    /* Producer p owns IDs p*K..p*K+K-1, so no two producers share an ID. */
+    uint64_t first = (uint64_t)args->index * config->items_per_producer;
+    for (size_t j = 0; j < config->items_per_producer; ++j) {
+        uint64_t id = first + j;
+        struct item item = {ITEM_DATA, id, (int)(id % 1000U) + 1};
+        enqueue(args->context, item, PC_PRODUCER, args->index);
         ++args->completed;
         sleep_ms(config->producer_delay_ms);
     }
@@ -228,9 +241,9 @@ static void *consumer(void *argument)
 {
     struct worker_args *args = argument;
     for (;;) {
-        struct item item = dequeue(args->context);
+        struct item item = dequeue(args->context, args->index);
         if (item.kind == ITEM_STOP) {
-            return NULL;
+            return NULL; /* Each consumer takes exactly one STOP. */
         }
         /* Simulated DATA processing and result belong to this worker. */
         ++args->completed;
@@ -245,40 +258,48 @@ struct pc_config pc_default_config(void)
 
 static int config_valid(const struct pc_config *config)
 {
-    if (config == NULL || config->capacity == 0 || config->capacity > 65536 ||
+    if (config == NULL || config->capacity == 0 ||
+        config->capacity > PC_MAX_CAPACITY ||
         config->capacity > SEM_VALUE_MAX || config->capacity > UINT_MAX ||
-        config->producers != 1 || config->consumers != 1 ||
-        config->items_per_producer > 1000000 ||
-        config->producer_delay_ms > 60000 || config->consumer_delay_ms > 60000) {
+        config->producers == 0 || config->producers > PC_MAX_WORKERS ||
+        config->consumers == 0 || config->consumers > PC_MAX_WORKERS ||
+        config->items_per_producer > PC_MAX_TOTAL_ITEMS ||
+        config->producer_delay_ms > PC_MAX_DELAY_MS ||
+        config->consumer_delay_ms > PC_MAX_DELAY_MS) {
         return 0;
     }
     size_t capacity = config->capacity, items = config->items_per_producer;
-    /* Include one STOP and both operations; check before multiplication. */
+    /* Check P*K before multiplying; then add C STOPs and both operations. */
+    if (items != 0 && config->producers > PC_MAX_TOTAL_ITEMS / items) {
+        return 0;
+    }
+    size_t total = config->producers * items;
+    size_t entries = total + config->consumers;
     return capacity <= SIZE_MAX / sizeof(struct item) &&
            capacity <= SIZE_MAX / sizeof(uint64_t) &&
-           items <= SIZE_MAX / sizeof(unsigned int) &&
-           items < SIZE_MAX && items + 1 <= SIZE_MAX / 2 &&
-           2 * (items + 1) <= SIZE_MAX / sizeof(struct pc_record) &&
-           2 * (items + 1) <= UINT64_MAX;
+           total <= SIZE_MAX / sizeof(unsigned int) &&
+           entries <= SIZE_MAX / 2 &&
+           2 * entries <= SIZE_MAX / sizeof(struct pc_record) &&
+           2 * entries <= UINT64_MAX;
 }
 
 static int initialize(struct pc_context *context)
 {
-    size_t items = context->config.items_per_producer;
+    size_t total = context->total_items;
     int error = buffer_init(&context->buffer, context->config.capacity);
     if (error != BUFFER_OK) {
         fprintf(stderr, "buffer_init: %s (%d)\n", buffer_error(error), error);
         return PC_RUNTIME_ERROR;
     }
-    context->record_capacity = 2 * (items + 1);
+    context->record_capacity = 2 * (total + context->config.consumers);
     context->result->records = calloc(context->record_capacity, sizeof(struct pc_record));
     context->slot_sequence = calloc(context->config.capacity, sizeof(uint64_t));
-    if (items > 0) {
-        context->produced = calloc(items, sizeof(unsigned int));
-        context->consumed = calloc(items, sizeof(unsigned int));
+    if (total > 0) {
+        context->produced = calloc(total, sizeof(unsigned int));
+        context->consumed = calloc(total, sizeof(unsigned int));
     }
     if (context->result->records == NULL || context->slot_sequence == NULL ||
-        (items > 0 && (context->produced == NULL || context->consumed == NULL))) {
+        (total > 0 && (context->produced == NULL || context->consumed == NULL))) {
         fprintf(stderr, "pc allocation: insufficient memory\n");
         return PC_RUNTIME_ERROR;
     }
@@ -332,87 +353,152 @@ static void join_checked(pthread_t thread, const char *name)
     }
 }
 
-static void verify(struct pc_context *context, size_t producer_completed,
-                   size_t consumer_completed)
+static void verify(struct pc_context *context,
+                   const struct worker_args *producers, size_t producers_created,
+                   const struct worker_args *consumers, size_t consumers_created)
 {
     struct pc_summary *summary = &context->result->summary;
-    size_t items = context->config.items_per_producer;
+    const struct pc_record *records = context->result->records;
+    size_t record_count = context->result->record_count;
+    size_t total = context->total_items, items = context->config.items_per_producer;
     /* No workers remain: main may now read the oracle and buffer without guard. */
-    summary->data_processed = consumer_completed;
+    size_t produced_total = 0, processed_total = 0;
+    for (size_t p = 0; p < producers_created; ++p) {
+        summary->producer_items[p] = producers[p].completed;
+        produced_total += producers[p].completed;
+    }
+    for (size_t c = 0; c < consumers_created; ++c) {
+        summary->consumer_items[c] = consumers[c].completed;
+        processed_total += consumers[c].completed;
+    }
+    summary->data_processed = processed_total;
     summary->final_count = context->buffer.count;
     /* Compare actual item copies in the two guarded operation streams, too;
      * metadata alone would not detect a swapped/corrupted payload. */
     size_t next_enqueue = 0;
-    for (size_t i = 0; i < context->result->record_count; ++i) {
-        const struct pc_record *out = &context->result->records[i];
+    for (size_t i = 0; i < record_count; ++i) {
+        const struct pc_record *out = &records[i];
         if (out->op != PC_DEQUEUE) continue;
-        while (next_enqueue < i && context->result->records[next_enqueue].op != PC_ENQUEUE)
+        while (next_enqueue < i && records[next_enqueue].op != PC_ENQUEUE)
             ++next_enqueue;
         if (next_enqueue >= i) {
             ++summary->fifo_errors;
             continue;
         }
-        const struct pc_record *in = &context->result->records[next_enqueue++];
+        const struct pc_record *in = &records[next_enqueue++];
         if (in->item.kind != out->item.kind || in->item.id != out->item.id ||
             in->item.value != out->item.value || in->enqueue_seq != out->enqueue_seq)
             ++summary->fifo_errors;
     }
-    for (size_t id = 0; id < items; ++id) {
+    /* ID p*K+j must be enqueued by producer p, and each producer's items must
+     * be enqueued and dequeued in j order. */
+    size_t next_in[PC_MAX_WORKERS] = {0}, next_out[PC_MAX_WORKERS] = {0};
+    for (size_t i = 0; i < record_count; ++i) {
+        const struct pc_record *r = &records[i];
+        if (r->item.kind != ITEM_DATA || r->item.id >= total) continue;
+        size_t owner = (size_t)(r->item.id / items), j = (size_t)(r->item.id % items);
+        if (r->op == PC_ENQUEUE) {
+            if (r->actor != PC_PRODUCER || r->actor_index != owner || j != next_in[owner])
+                ++summary->order_errors;
+            next_in[owner] = j + 1;
+        } else {
+            if (r->actor != PC_CONSUMER || r->actor_index >= consumers_created ||
+                j != next_out[owner])
+                ++summary->order_errors;
+            next_out[owner] = j + 1;
+        }
+    }
+    for (size_t id = 0; id < total; ++id) {
         if (context->produced[id] == 0 || context->consumed[id] == 0) ++summary->missing;
         if (context->produced[id] > 1 || context->consumed[id] > 1) ++summary->duplicate;
     }
-    summary->verified = summary->producers_created == 1 &&
-        summary->consumers_created == 1 && summary->producers_joined == 1 &&
-        summary->consumers_joined == 1 && summary->data_enqueued == items &&
-        summary->data_dequeued == items && producer_completed == items &&
-        consumer_completed == items && summary->missing == 0 &&
-        summary->duplicate == 0 && summary->out_of_range == 0 &&
-        summary->value_errors == 0 && summary->fifo_errors == 0 &&
+    int one_stop_each = 1;
+    for (size_t c = 0; c < consumers_created; ++c) {
+        if (summary->consumer_stops[c] != 1) one_stop_each = 0;
+    }
+    const struct pc_config *config = &context->config;
+    summary->verified = summary->producers_created == config->producers &&
+        summary->consumers_created == config->consumers &&
+        summary->producers_joined == config->producers &&
+        summary->consumers_joined == config->consumers &&
+        summary->data_enqueued == total && summary->data_dequeued == total &&
+        produced_total == total && processed_total == total &&
+        summary->missing == 0 && summary->duplicate == 0 &&
+        summary->out_of_range == 0 && summary->value_errors == 0 &&
+        summary->fifo_errors == 0 && summary->order_errors == 0 &&
         summary->count_errors == 0 && summary->final_count == 0 &&
-        summary->stop_enqueued == 1 && summary->stop_dequeued == 1 &&
-        context->result->record_count == context->record_capacity;
+        summary->stop_enqueued == config->consumers &&
+        summary->stop_dequeued == config->consumers && one_stop_each &&
+        record_count == context->record_capacity;
 }
 
 int pc_run(const struct pc_config *config, struct pc_result *result)
 {
     if (result == NULL || result->records != NULL || !config_valid(config)) {
-        fprintf(stderr, "pc configuration: require N=1..65536, P=C=1, K=0..1000000, delays=0..60000ms, zero result\n");
+        fprintf(stderr, "pc configuration: require N=1..65536, P,C=1..64, "
+                "K=0..1000000 with P*K<=1000000, delays=0..60000ms, zero result\n");
         return PC_CONFIG_ERROR;
     }
     *result = (struct pc_result){.config = *config};
-    struct pc_context context = {.config = *config, .result = result};
+    struct pc_context context = {
+        .config = *config, .result = result,
+        .total_items = config->producers * config->items_per_producer
+    };
     int status = initialize(&context);
     if (status != PC_OK) {
         cleanup(&context);
         return status;
     }
-    pthread_t consumer_thread, producer_thread;
-    struct worker_args consumer_args = {&context, 0}, producer_args = {&context, 0};
+    /* Handles and per-worker arguments live in this frame until every join. */
+    pthread_t consumers[PC_MAX_WORKERS], producers[PC_MAX_WORKERS];
+    struct worker_args consumer_args[PC_MAX_WORKERS], producer_args[PC_MAX_WORKERS];
     struct pc_summary *summary = &result->summary;
-    int error = pthread_create(&consumer_thread, NULL, consumer, &consumer_args);
-    if (error != 0) {
-        fprintf(stderr, "pthread_create consumer: %s\n", strerror(error));
+    size_t consumers_created = 0, producers_created = 0;
+    for (; consumers_created < config->consumers; ++consumers_created) {
+        size_t c = consumers_created;
+        consumer_args[c] = (struct worker_args){&context, c, 0};
+        int error = pthread_create(&consumers[c], NULL, consumer, &consumer_args[c]);
+        if (error != 0) {
+            fprintf(stderr, "pthread_create consumer %zu: %s\n", c, strerror(error));
+            status = PC_RUNTIME_ERROR;
+            break;
+        }
+    }
+    summary->consumers_created = consumers_created;
+    if (consumers_created == 0) {
         cleanup(&context);
         return PC_RUNTIME_ERROR;
     }
-    summary->consumers_created = 1;
-    error = pthread_create(&producer_thread, NULL, producer, &producer_args);
-    if (error != 0) {
-        fprintf(stderr, "pthread_create producer: %s\n", strerror(error));
-        status = PC_RUNTIME_ERROR;
-    } else {
-        summary->producers_created = 1;
-        join_checked(producer_thread, "pthread_join producer");
-        summary->producers_joined = 1;
+    /* A consumer create error means no producer is started at all. */
+    for (; status == PC_OK && producers_created < config->producers; ++producers_created) {
+        size_t p = producers_created;
+        producer_args[p] = (struct worker_args){&context, p, 0};
+        int error = pthread_create(&producers[p], NULL, producer, &producer_args[p]);
+        if (error != 0) {
+            fprintf(stderr, "pthread_create producer %zu: %s\n", p, strerror(error));
+            status = PC_RUNTIME_ERROR;
+            break;
+        }
     }
-    /* Consumer may still be active: even this read of count needs guard. */
+    summary->producers_created = producers_created;
+    for (size_t p = 0; p < producers_created; ++p) {
+        join_checked(producers[p], "pthread_join producer");
+        ++summary->producers_joined;
+    }
+    /* No producer remains, so every DATA still queued precedes every STOP.
+     * Consumers may still be active: even this read of count needs guard. */
     take_guard(&context, NULL);
     summary->data_pending_after_producer_join = context.buffer.count;
     post_checked(&context.guard, "sem_post guard after producer join snapshot");
-    enqueue(&context, (struct item){ITEM_STOP, 0, 0}, PC_MAIN);
-    join_checked(consumer_thread, "pthread_join consumer");
-    summary->consumers_joined = 1;
-    verify(&context, producer_args.completed, consumer_args.completed);
+    /* One STOP per created consumer; each consumer exits at its first STOP. */
+    for (size_t c = 0; c < consumers_created; ++c) {
+        enqueue(&context, (struct item){ITEM_STOP, 0, 0}, PC_MAIN, 0);
+    }
+    for (size_t c = 0; c < consumers_created; ++c) {
+        join_checked(consumers[c], "pthread_join consumer");
+        ++summary->consumers_joined;
+    }
+    verify(&context, producer_args, producers_created, consumer_args, consumers_created);
     if (!summary->verified) status = PC_RUNTIME_ERROR;
     if (cleanup(&context) != PC_OK) status = PC_RUNTIME_ERROR;
     return status;
