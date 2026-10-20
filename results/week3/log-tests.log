@@ -1,0 +1,161 @@
+Week 3 actual execution (Asia/Saigon): 2026-10-20T23:17:48+07:00
+root=/mnt/d/os-producer-consumer
+branch=dev/huy
+HEAD=3bda04b4091784c48898ce23589c4af9d5eb3b11
+source=exactly HEAD (sources clean)
+source_manifest_sha256=8bb98e5f51266eaa885f73160a1ca6c1485fb59aa95445bae923de40fd42c30a
+source_manifest=results/week3/source.sha256
+operator=Claude Code theo yeu cau Huy, may cua Huy (WSL Ubuntu-24.04); W3-C chua duoc Chau review/xac nhan
+
+$ ./bin/log-test
+timeout=5s expected_exit=0
+stdout:
+PASS log quiet=0 status=0 verified=1
+PASS log quiet=0 status=1 verified=1
+PASS log quiet=0 status=0 verified=0
+PASS log quiet=1 status=0 verified=1
+PASS log quiet=1 status=1 verified=1
+PASS log quiet=1 status=0 verified=0
+PASS log output error propagation
+PASS log rejects worker index 64
+Log formatter tests: 8/8 PASS
+stderr:
+exit_code=0
+
+$ ./bin/main-hook-test --capacity 1 --producers 2 --consumers 2 --items-per-producer 3
+timeout=5s expected_exit=1
+PC_MAIN_TEST_MODE=init-error (test binary only)
+stdout:
+config: N=1 P=2 C=2 K=3 Dp_ms=0 Dc_ms=0
+DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+buffer: min=0 max=0 final=0 count_errors=0; STOP: enqueued=0 dequeued=0
+waits: WAIT_SLOT=0 WAIT_ITEM=0 records=0 data_pending_after_producer_join=0
+producers(DATA):
+consumers(DATA/STOP):
+workers: created=0P/0C joined=0P/0C; verification=FAIL run_status=1
+stderr:
+sem_init empty: No space left on device
+test_hook: pc_run status=1 verified=0 records_owned=1
+test_hook: result_destroy records_before=1 records_after=0
+producer-consumer: run failed (status=1)
+exit_code=1
+
+$ ./bin/main-hook-test --capacity 1 --producers 2 --consumers 2 --items-per-producer 3 --quiet
+timeout=5s expected_exit=1
+PC_MAIN_TEST_MODE=init-error (test binary only)
+stdout:
+config: N=1 P=2 C=2 K=3 Dp_ms=0 Dc_ms=0
+DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+buffer: min=0 max=0 final=0 count_errors=0; STOP: enqueued=0 dequeued=0
+waits: WAIT_SLOT=0 WAIT_ITEM=0 records=0 data_pending_after_producer_join=0
+producers(DATA):
+consumers(DATA/STOP):
+workers: created=0P/0C joined=0P/0C; verification=FAIL run_status=1
+stderr:
+sem_init empty: No space left on device
+test_hook: pc_run status=1 verified=0 records_owned=1
+test_hook: result_destroy records_before=1 records_after=0
+producer-consumer: run failed (status=1)
+exit_code=1
+
+$ ./bin/main-hook-test --capacity 1 --producers 2 --consumers 2 --items-per-producer 3
+timeout=5s expected_exit=1
+PC_MAIN_TEST_MODE=cleanup-error (test binary only)
+stdout:
+config: N=1 P=2 C=2 K=3 Dp_ms=0 Dc_ms=0
+op_seq=1 op=ENQUEUE actor=P0 kind=DATA data_id=0 value=1 enqueue_seq=1 count_after=1 capacity=1 wait_reason=NONE
+op_seq=2 op=DEQUEUE actor=C0 kind=DATA data_id=0 value=1 enqueue_seq=1 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+op_seq=3 op=ENQUEUE actor=P0 kind=DATA data_id=1 value=2 enqueue_seq=2 count_after=1 capacity=1 wait_reason=WAIT_SLOT
+op_seq=4 op=DEQUEUE actor=C1 kind=DATA data_id=1 value=2 enqueue_seq=2 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+op_seq=5 op=ENQUEUE actor=P1 kind=DATA data_id=3 value=4 enqueue_seq=3 count_after=1 capacity=1 wait_reason=WAIT_SLOT
+op_seq=6 op=DEQUEUE actor=C0 kind=DATA data_id=3 value=4 enqueue_seq=3 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+op_seq=7 op=ENQUEUE actor=P0 kind=DATA data_id=2 value=3 enqueue_seq=4 count_after=1 capacity=1 wait_reason=WAIT_SLOT
+op_seq=8 op=DEQUEUE actor=C1 kind=DATA data_id=2 value=3 enqueue_seq=4 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+op_seq=9 op=ENQUEUE actor=P1 kind=DATA data_id=4 value=5 enqueue_seq=5 count_after=1 capacity=1 wait_reason=WAIT_SLOT
+op_seq=10 op=DEQUEUE actor=C0 kind=DATA data_id=4 value=5 enqueue_seq=5 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+op_seq=11 op=ENQUEUE actor=P1 kind=DATA data_id=5 value=6 enqueue_seq=6 count_after=1 capacity=1 wait_reason=WAIT_SLOT
+op_seq=12 op=DEQUEUE actor=C1 kind=DATA data_id=5 value=6 enqueue_seq=6 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+op_seq=13 op=ENQUEUE actor=MAIN kind=STOP data_id=- value=0 enqueue_seq=7 count_after=1 capacity=1 wait_reason=NONE
+op_seq=14 op=DEQUEUE actor=C0 kind=STOP data_id=- value=0 enqueue_seq=7 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+op_seq=15 op=ENQUEUE actor=MAIN kind=STOP data_id=- value=0 enqueue_seq=8 count_after=1 capacity=1 wait_reason=WAIT_SLOT
+op_seq=16 op=DEQUEUE actor=C1 kind=STOP data_id=- value=0 enqueue_seq=8 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+DATA: enqueued=6 dequeued=6 processed=6 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+waits: WAIT_SLOT=6 WAIT_ITEM=8 records=16 data_pending_after_producer_join=0
+producers(DATA): P0=3 P1=3
+consumers(DATA/STOP): C0=3/1 C1=3/1
+workers: created=2P/2C joined=2P/2C; verification=FAIL run_status=1
+stderr:
+sem_destroy guard: Invalid argument
+test_hook: pc_run status=1 verified=1 records_owned=1
+test_hook: result_destroy records_before=1 records_after=0
+producer-consumer: run failed (status=1)
+exit_code=1
+
+$ ./bin/main-hook-test --capacity 1 --producers 2 --consumers 2 --items-per-producer 3 --quiet
+timeout=5s expected_exit=1
+PC_MAIN_TEST_MODE=cleanup-error (test binary only)
+stdout:
+config: N=1 P=2 C=2 K=3 Dp_ms=0 Dc_ms=0
+DATA: enqueued=6 dequeued=6 processed=6 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+waits: WAIT_SLOT=6 WAIT_ITEM=8 records=16 data_pending_after_producer_join=0
+producers(DATA): P0=3 P1=3
+consumers(DATA/STOP): C0=3/1 C1=3/1
+workers: created=2P/2C joined=2P/2C; verification=FAIL run_status=1
+stderr:
+sem_destroy guard: Invalid argument
+test_hook: pc_run status=1 verified=1 records_owned=1
+test_hook: result_destroy records_before=1 records_after=0
+producer-consumer: run failed (status=1)
+exit_code=1
+
+$ ./bin/main-hook-test --capacity 1 --producers 2 --consumers 2 --items-per-producer 3
+timeout=5s expected_exit=1
+PC_MAIN_TEST_MODE=unverified (test binary only)
+stdout:
+config: N=1 P=2 C=2 K=3 Dp_ms=0 Dc_ms=0
+op_seq=1 op=ENQUEUE actor=P0 kind=DATA data_id=0 value=1 enqueue_seq=1 count_after=1 capacity=1 wait_reason=NONE
+op_seq=2 op=DEQUEUE actor=C0 kind=DATA data_id=0 value=1 enqueue_seq=1 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+op_seq=3 op=ENQUEUE actor=P1 kind=DATA data_id=3 value=4 enqueue_seq=2 count_after=1 capacity=1 wait_reason=NONE
+op_seq=4 op=DEQUEUE actor=C0 kind=DATA data_id=3 value=4 enqueue_seq=2 count_after=0 capacity=1 wait_reason=NONE
+op_seq=5 op=ENQUEUE actor=P1 kind=DATA data_id=4 value=5 enqueue_seq=3 count_after=1 capacity=1 wait_reason=NONE
+op_seq=6 op=DEQUEUE actor=C1 kind=DATA data_id=4 value=5 enqueue_seq=3 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+op_seq=7 op=ENQUEUE actor=P1 kind=DATA data_id=5 value=6 enqueue_seq=4 count_after=1 capacity=1 wait_reason=NONE
+op_seq=8 op=DEQUEUE actor=C0 kind=DATA data_id=5 value=6 enqueue_seq=4 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+op_seq=9 op=ENQUEUE actor=P0 kind=DATA data_id=1 value=2 enqueue_seq=5 count_after=1 capacity=1 wait_reason=WAIT_SLOT
+op_seq=10 op=DEQUEUE actor=C0 kind=DATA data_id=1 value=2 enqueue_seq=5 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+op_seq=11 op=ENQUEUE actor=P0 kind=DATA data_id=2 value=3 enqueue_seq=6 count_after=1 capacity=1 wait_reason=WAIT_SLOT
+op_seq=12 op=DEQUEUE actor=C1 kind=DATA data_id=2 value=3 enqueue_seq=6 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+op_seq=13 op=ENQUEUE actor=MAIN kind=STOP data_id=- value=0 enqueue_seq=7 count_after=1 capacity=1 wait_reason=NONE
+op_seq=14 op=DEQUEUE actor=C0 kind=STOP data_id=- value=0 enqueue_seq=7 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+op_seq=15 op=ENQUEUE actor=MAIN kind=STOP data_id=- value=0 enqueue_seq=8 count_after=1 capacity=1 wait_reason=WAIT_SLOT
+op_seq=16 op=DEQUEUE actor=C1 kind=STOP data_id=- value=0 enqueue_seq=8 count_after=0 capacity=1 wait_reason=WAIT_ITEM
+DATA: enqueued=6 dequeued=6 processed=6 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+waits: WAIT_SLOT=3 WAIT_ITEM=7 records=16 data_pending_after_producer_join=0
+producers(DATA): P0=3 P1=3
+consumers(DATA/STOP): C0=4/1 C1=2/1
+workers: created=2P/2C joined=2P/2C; verification=FAIL run_status=1
+stderr:
+test_hook: pc_run status=0 verified=0 records_owned=1
+test_hook: result_destroy records_before=1 records_after=0
+producer-consumer: run failed (status=1)
+exit_code=1
+
+$ ./bin/main-hook-test --capacity 1 --producers 2 --consumers 2 --items-per-producer 3 --quiet
+timeout=5s expected_exit=1
+PC_MAIN_TEST_MODE=unverified (test binary only)
+stdout:
+config: N=1 P=2 C=2 K=3 Dp_ms=0 Dc_ms=0
+DATA: enqueued=6 dequeued=6 processed=6 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+waits: WAIT_SLOT=6 WAIT_ITEM=8 records=16 data_pending_after_producer_join=0
+producers(DATA): P0=3 P1=3
+consumers(DATA/STOP): C0=3/1 C1=3/1
+workers: created=2P/2C joined=2P/2C; verification=FAIL run_status=1
+stderr:
+test_hook: pc_run status=0 verified=0 records_owned=1
+test_hook: result_destroy records_before=1 records_after=0
+producer-consumer: run failed (status=1)
+exit_code=1

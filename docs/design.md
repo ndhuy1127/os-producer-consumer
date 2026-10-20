@@ -1,8 +1,10 @@
-# Thiết kế Producer–Consumer — nền Tuần 1 và triển khai Tuần 2
+# Thiết kế Producer–Consumer — Tuần 1 đến Tuần 3
 
 Tuần 1 đã ghép thiết kế Châu với API thực tế của Huy, chốt đặc tả và kiểm tra bản chung; PR #1/#2 đã merge ở nền `9cf345c`. Lý thuyết ở [theory-week1-chau.md](theory-week1-chau.md), minh chứng lịch sử ở [group-validation.md](../results/week1/group-validation.md). Codex thực hiện theo yêu cầu Châu, không thay sự phê duyệt của Huy hoặc đọc chéo trực tiếp.
 
-**Tuần 2 đã ghép và kiểm chứng lõi 1P/1C, STOP cùng CLI/log production; W2-C và W2-H hoàn thành phạm vi cơ bản, bản ghép đã được Codex review/kiểm tra theo yêu cầu.** Phần 1–8 giữ cơ sở thiết kế; phần 9 là bàn giao Châu, phần 10 là tích hợp Huy. [Minh chứng W2-C](../results/week2/chau-validation.md), [bàn giao API](handoff-week2-chau.md), [minh chứng W2-H](../results/week2/huy-validation.md), [review chung](../results/week2/group-validation.md). Trạng thái merge main xem [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3); chưa nghiệm thu nhiều luồng.
+**Tuần 2 đã ghép và kiểm chứng lõi 1P/1C, STOP cùng CLI/log production; W2-C và W2-H hoàn thành phạm vi cơ bản, bản ghép đã được Codex review/kiểm tra theo yêu cầu.** Phần 1–8 giữ cơ sở thiết kế; phần 9 là bàn giao Châu, phần 10 là tích hợp Huy. [Minh chứng W2-C](../results/week2/chau-validation.md), [bàn giao API](handoff-week2-chau.md), [minh chứng W2-H](../results/week2/huy-validation.md), [review chung](../results/week2/group-validation.md). [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3) đã merge vào main ở `d125734`.
+
+**Tuần 3 mở rộng lên P producer và C consumer (1..64 mỗi loại)**, giữ nguyên các nguyên tắc ở phần 1–7; chi tiết ở [phần 11](#11-tuần-3--nhiều-producerconsumer). Phần 9–10 mô tả snapshot Tuần 2. W3-C và W3-H do Claude Code thực hiện theo yêu cầu của Huy; Châu chưa review.
 
 ## 1. Bài toán và cấu hình
 
@@ -10,7 +12,7 @@ Producer tạo dữ liệu hữu hạn, consumer lấy dữ liệu qua hàng đ�
 
 Chốt K là số DATA mỗi producer, tổng DATA = P*K; P,C > 0, K >= 0. Mặc định `(N,P,C,K,Dp_ms,Dc_ms) = (8,1,1,20,0,0)`. Giới hạn: N=1..65536 (đồng thời <= SEM_VALUE_MAX và SIZE_MAX/sizeof(item)); P,C=1..64; K=0..1000000 và P*K<=1000000; mỗi độ trễ 0..60000 **millisecond**. K=0 hợp lệ, chỉ cần dừng consumer bằng STOP. Trước tạo worker phải kiểm tra tràn phép nhân, ID, kích thước cấp phát và bộ đếm gồm STOP.
 
-Tên cờ và quy tắc từ chối lỗi, quiet/help, mã thoát 0/1/2 ở [config-log-week1-huy.md](config-log-week1-huy.md); cấu hình/kiểm tra thực ở [test-plan.md](test-plan.md). Parser đã ghép; API/CLI Tuần 2 chỉ P=C=1, chưa mở rộng nhiều luồng.
+Tên cờ và quy tắc từ chối lỗi, quiet/help, mã thoát 0/1/2 ở [config-log-week1-huy.md](config-log-week1-huy.md); cấu hình/kiểm tra thực ở [test-plan.md](test-plan.md). Parser đã ghép; Tuần 2 chỉ nhận P=C=1, từ Tuần 3 API/CLI nhận P, C = 1..64 ([phần 11](#11-tuần-3--nhiều-producerconsumer)).
 
 ## 2. Bộ đệm vòng FIFO
 
@@ -141,15 +143,15 @@ Phương án Châu chọn: **main join producer rồi đưa một STOP cho mỗi
 
 Consumer dequeue STOP, nhả guard, `post(empty)` rồi mới kết thúc. Mỗi consumer dừng ở STOP đầu tiên nên không lấy nhiều STOP; C STOP đủ cho C consumer. C có thể lớn hơn N: main đưa STOP dần qua enqueue thông thường, không cần buffer chứa tất cả cùng lúc.
 
-FIFO bảo đảm mọi DATA đã enqueue trước STOP được **lấy ra** trước khi STOP được lấy. Một consumer có thể đang xử lý DATA ngoài guard trong lúc consumer khác lấy STOP; vì main join mọi consumer, tổng kết chỉ diễn ra khi xử lý DATA đó cũng đã xong. Giả định phép tạo/xử lý dữ liệu là hữu hạn và bộ lập lịch cho các luồng cơ hội chạy. Khi count cuối bằng 0 và mọi luồng đã join mới hủy semaphore/bộ nhớ. STOP không tính vào số DATA hoặc tập ID. Tuần 2 đã nghiệm thu trường hợp 1P/1C; nhiều consumer vẫn là thiết kế cho Tuần 3.
+FIFO bảo đảm mọi DATA đã enqueue trước STOP được **lấy ra** trước khi STOP được lấy. Một consumer có thể đang xử lý DATA ngoài guard trong lúc consumer khác lấy STOP; vì main join mọi consumer, tổng kết chỉ diễn ra khi xử lý DATA đó cũng đã xong. Giả định phép tạo/xử lý dữ liệu là hữu hạn và bộ lập lịch cho các luồng cơ hội chạy. Khi count cuối bằng 0 và mọi luồng đã join mới hủy semaphore/bộ nhớ. STOP không tính vào số DATA hoặc tập ID. Tuần 2 nghiệm thu trường hợp 1P/1C; Tuần 3 đã triển khai và kiểm thử nhiều producer/consumer, kể cả C > N.
 
 ## 7. Log và xác minh
 
-Schema chốt gồm `op_seq`, `op=ENQUEUE|DEQUEUE`, `actor=P0|C0|MAIN`, `kind=DATA|STOP`, `data_id` (số hoặc `-` cho STOP), `value`, `enqueue_seq`, `count_after`, `capacity`, `wait_reason=NONE|WAIT_SLOT|WAIT_ITEM`. Tăng số thứ tự, chụp record/occupancy tại thao tác thành công **trong guard**; gồm cả STOP. Enqueue_seq tăng cho mỗi enqueue, lưu trong mảng metadata N ô của context theo ô tail; dequeue lấy metadata cùng ô head trước pop. Không đổi struct item hoặc API buffer. Cấp phát trước tối đa `2*(P*K+C)` record thao tác sau kiểm tra tràn; main in theo op_seq sau join, quiet bỏ in chi tiết nhưng giữ oracle và tổng kết.
+Schema chốt gồm `op_seq`, `op=ENQUEUE|DEQUEUE`, `actor=P<p>|C<c>|MAIN` (Tuần 2 chỉ có P0/C0), `kind=DATA|STOP`, `data_id` (số hoặc `-` cho STOP), `value`, `enqueue_seq`, `count_after`, `capacity`, `wait_reason=NONE|WAIT_SLOT|WAIT_ITEM`. Tăng số thứ tự, chụp record/occupancy tại thao tác thành công **trong guard**; gồm cả STOP. Enqueue_seq tăng cho mỗi enqueue, lưu trong mảng metadata N ô của context theo ô tail; dequeue lấy metadata cùng ô head trước pop. Không đổi struct item hoặc API buffer. Cấp phát trước tối đa `2*(P*K+C)` record thao tác sau kiểm tra tràn; main in theo op_seq sau join, quiet bỏ in chi tiết nhưng giữ oracle và tổng kết.
 
 Chốt quan sát thiếu quyền: helper chờ empty/full thử sem_trywait trước; thành công thì không wait thêm; EINTR thử lại; EAGAIN gán cờ chờ local rồi sem_wait (thử lại EINTR). Cờ local được gắn vào record thao tác sau khi lấy guard; guard dùng sem_wait trực tiếp. EAGAIN chỉ chứng minh thiếu quyền tại lần thử, không chứng minh sem_wait đã block hoặc count=N/0. Snapshot count=N/0 trong guard chứng minh trạng thái đầy/rỗng riêng. Không dùng timestamp, thứ tự dòng in ngoài guard hoặc sem_getvalue để suy ra FIFO/an toàn. Cách probe không đổi thứ tự lấy quyền trước guard trong giả mã.
 
-Tổng kết gồm cấu hình, DATA/processed và tần suất ID, lỗi value/FIFO/count, min/max/final count, STOP, WAIT_SLOT/WAIT_ITEM và worker create/join. **Record/helper của Châu và CLI/log production của Huy đã ghép.** T02–T05 đạt qua CLI 1P/1C; T08 kiểm chứng phạm vi CLI Tuần 2, T09 mới kết thúc cơ bản; T06/T07 chưa chạy. Script dùng timeout 5+ceil(2*K*(Dp_ms+Dc_ms)/1000) giây cho từng cấu hình 1P/1C; không phải bảo đảm scheduler.
+Tổng kết gồm cấu hình, DATA/processed và tần suất ID, lỗi value/FIFO/count, min/max/final count, STOP, WAIT_SLOT/WAIT_ITEM và worker create/join. **Record/helper của Châu và CLI/log production của Huy đã ghép.** Tuần 3 thêm `order_errors` và tổng kết theo từng luồng; T01–T09 đều đã chạy đạt, xem [test-plan](test-plan.md). Script dùng timeout 5+ceil(2·P·K·(Dp_ms+Dc_ms)/1000) giây cho mỗi lần chạy (bằng công thức Tuần 2 khi P=1); đây là ngân sách kiểm thử, không phải bảo đảm của bộ lập lịch.
 
 ## 8. Tài liệu lý thuyết đã đối chiếu
 
@@ -160,6 +162,8 @@ Tổng kết gồm cấu hình, DATA/processed và tần suất ID, lỗi value/
 - [sem_init(3)](https://man7.org/linux/man-pages/man3/sem_init.3.html): giá trị ban đầu, pshared = 0 và giới hạn giá trị.
 - [sem_wait(3)](https://man7.org/linux/man-pages/man3/sem_wait.3.html), [sem_post(3)](https://man7.org/linux/man-pages/man3/sem_post.3.html): chờ/trả quyền, lỗi errno và EINTR khi wait.
 - [sem_destroy(3)](https://man7.org/linux/man-pages/man3/sem_destroy.3.html): chỉ hủy semaphore đã init khi không còn luồng đang chờ/sử dụng.
+
+Ngày 20/10/2026, khi soạn báo cáo nháp Tuần 3, đối chiếu lại [sem_overview(7)](https://man7.org/linux/man-pages/man7/sem_overview.7.html) mục DESCRIPTION, sem_wait(3) mục DESCRIPTION/ERRORS và sem_post(3) mục DESCRIPTION/ERRORS. sem_post(3) chỉ nói một luồng đang chờ được đánh thức, không quy định luồng nào, nên thiết kế không giả định công bằng giữa các consumer.
 
 Giáo trình *Modern Operating Systems*, ấn bản 4, Tanenbaum và Bos là nguồn đọc thêm được gợi ý; chưa truy cập để đối chiếu trang/mục. Không lưu PDF vào GitHub. Xem giải thích và ví dụ nguyên lý ở [theory-week1-chau.md](theory-week1-chau.md).
 
@@ -183,10 +187,46 @@ Helper `take_permission` dùng trywait/EINTR/EAGAIN theo phần 7, chỉ lấy m
 
 ## 10. Tích hợp Tuần 2 — W2-H
 
-[cli.c](../src/cli.c)/[cli.h](../include/cli.h) phân tích argv vào struct cli_options, dùng pc_default_config; chỉ nhận --option value, --quiet và --help dùng riêng. Chỉ ASCII digits, strtoumax/end pointer/errno/ERANGE, giới hạn kiểu/range, bitmap chống cờ lặp; lỗi cụ thể exit 2 trước pc_run. P/C>1 báo chưa hỗ trợ Tuần 2. Kiểm tra phép nhân DATA, cộng STOP, số/kích thước record, semaphore và buffer/metadata theo cùng điều kiện của lõi; không cấp phát hay tạo worker khi parse. Biên lớn chỉ kiểm tra bằng driver parser.
+[cli.c](../src/cli.c)/[cli.h](../include/cli.h) phân tích argv vào struct cli_options, dùng pc_default_config; chỉ nhận --option value, --quiet và --help dùng riêng. Chỉ ASCII digits, strtoumax/end pointer/errno/ERANGE, giới hạn kiểu/range, bitmap chống cờ lặp; lỗi cụ thể exit 2 trước pc_run. P/C>1 báo chưa hỗ trợ Tuần 2 (Tuần 3 bỏ giới hạn này). Kiểm tra phép nhân DATA, cộng STOP, số/kích thước record, semaphore và buffer/metadata theo cùng điều kiện của lõi; không cấp phát hay tạo worker khi parse. Biên lớn chỉ kiểm tra bằng driver parser.
 
 Main parse → help (không pc_run) hoặc zero-init result → pc_run → kiểm tra status/verified → [runtime_log_result](../src/runtime_log.c) sau mọi join → pc_result_destroy → trả status. Result sở hữu duy nhất records; logger mượn snapshot, không sao chép/free hay sửa context. Luồng, semaphore, buffer và oracle không đổi. Lỗi có phục hồi vẫn destroy result; status=1/verified=1 do cleanup lỗi vẫn FAIL, kể cả quiet. Logger kiểm tra lỗi stdio/fflush và main trả 1 khi output lỗi.
 
 Logger in config trước, record theo op_seq rồi tổng kết DATA, buffer/STOP, waits/record_count/DATA pending và worker/status. PRIu64/%zu đúng kiểu; STOP data_id=-, vẫn chiếm count. Quiet chỉ bỏ dòng op_seq, không bỏ records/oracle/summary. In sau chạy xong; không có I/O trong guard, log không biểu diễn thời gian thực hoặc thời gian block kernel.
 
-[check_cli_log.py](../scripts/check_cli_log.py) kiểm tra production với oracle queue tuyến tính từ stdout, đối chiếu schema/kind/id/value/enqueue_seq/FIFO/count và summary; 8 cấu hình thường + 8 quiet. Wrapper dùng cùng main để chặn pc_run/pthread_create ở đầu vào sai/help, có positive control exit 99; tiêm init/cleanup/verified để kiểm tra FAIL/thu hồi result. Không ghép wrapper vào production. [validate_week2_huy.py](../scripts/validate_week2_huy.py) build/hồi quy/CLI/log/sanitizer và chỉ ghi huy-*, không gọi writer lịch sử Châu. 16 runtime, 116 đầu vào sai, 5 biên parser, formatter 7 ca và main errors 6 ca đạt; [minh chứng Huy](../results/week2/huy-validation.md). Mốc kỹ thuật cơ bản và review bản ghép đạt; trạng thái bàn giao main theo PR #3.
+[check_cli_log.py](../scripts/check_cli_log.py) kiểm tra production với oracle queue tuyến tính từ stdout, đối chiếu schema/kind/id/value/enqueue_seq/FIFO/count và summary; 8 cấu hình thường + 8 quiet. Wrapper dùng cùng main để chặn pc_run/pthread_create ở đầu vào sai/help, có positive control exit 99; tiêm init/cleanup/verified để kiểm tra FAIL/thu hồi result. Không ghép wrapper vào production. [validate_week2_huy.py](../scripts/validate_week2_huy.py) build/hồi quy/CLI/log/sanitizer và chỉ ghi huy-*, không gọi writer lịch sử Châu. 16 runtime, 116 đầu vào sai, 5 biên parser, formatter 7 ca và main errors 6 ca đạt; [minh chứng Huy](../results/week2/huy-validation.md). Mốc kỹ thuật cơ bản và review bản ghép đạt; đã bàn giao qua PR #3 (`d125734`).
+
+## 11. Tuần 3 — nhiều producer/consumer
+
+Claude Code thực hiện theo yêu cầu của Huy: W3-C ở commit `c99d131`, W3-H ở commit `3bda04b`. Châu chưa review. Các nguyên tắc ở phần 1–7 giữ nguyên: ba semaphore empty/full/guard, lấy quyền empty/full trước guard, không giữ guard khi chờ hoặc ngủ, một STOP cho mỗi consumer, bản ghi chụp trong guard và in sau join.
+
+### 11.1 Lõi (W3-C)
+
+- **Giới hạn chung** trong [pc.h](../include/pc.h): `PC_MAX_CAPACITY` 65536, `PC_MAX_WORKERS` 64 (mỗi loại), `PC_MAX_TOTAL_ITEMS` 1000000, `PC_MAX_DELAY_MS` 60000. `config_valid` kiểm tra P, C ∈ [1, 64], rồi P·K ≤ 1000000 bằng phép chia **trước** khi nhân, rồi kích thước 2·(P·K + C) bản ghi.
+- **Context**: `total_items` = P·K; hai mảng tần suất P·K phần tử; `record_capacity` = 2·(P·K + C). Thứ tự `calloc` giữ như Tuần 2 để các ca tiêm lỗi cấp phát vẫn đúng vị trí.
+- **Luồng**: mảng `pthread_t` và `worker_args {context, index, completed}` cỡ 64 nằm trên stack của `pc_run`, sống tới sau mọi join. Producer p sinh ID p·K+j, value = ID mod 1000 + 1. Consumer c dừng ở STOP đầu tiên.
+- **Trình tự**: tạo C consumer → tạo P producer → join P producer → chụp `count` trong guard → C lần enqueue STOP với actor MAIN → join C consumer → kiểm chứng → hủy semaphore/bộ nhớ.
+- **Tạo luồng lỗi giữa chừng**: consumer thứ i lỗi với i > 0 thì không tạo producer nào, gửi i STOP, join i consumer, trả 1; i = 0 thì dọn ngay. Producer thứ j lỗi thì join j producer đã chạy, gửi C STOP, join mọi consumer, trả 1; dữ liệu của j producer vẫn được tiêu thụ hết nhưng kết quả không được tính là đạt. Lỗi semaphore/join khi đang chạy vẫn kết thúc toàn tiến trình với mã 1 như Tuần 2.
+- **Bản ghi và tổng kết**: `pc_record` thêm `actor_index`; `pc_summary` thêm `order_errors`, `producer_items[64]`, `consumer_items[64]`, `consumer_stops[64]`. Các trường mới đặt ở **cuối** struct để các khởi tạo theo vị trí có sẵn vẫn đúng.
+- **Kiểm chứng sau join** thêm: ID p·K+j phải do producer p đưa vào, và j tăng dần cho từng producer ở cả phía đưa vào lẫn lấy ra; mỗi consumer nhận đúng một STOP; số luồng tạo/join bằng P/C; số STOP đưa vào/lấy ra bằng C.
+
+### 11.2 Rà soát đồng bộ khi có nhiều luồng
+
+| Dữ liệu dùng chung | Ai ghi | Cách bảo vệ |
+| --- | --- | --- |
+| Bộ đệm, `slot_sequence`, `enqueues`/`dequeues`, bản ghi, mảng tần suất, bộ đếm theo thao tác (DATA/STOP, chờ, min/max, lỗi FIFO/count, `consumer_stops`) | Producer, consumer, main khi enqueue/dequeue | Chỉ đọc/ghi khi giữ guard |
+| `worker_args[i].completed` | Chỉ luồng i | Không chia sẻ; main đọc sau khi join luồng i |
+| Cấu hình, `total_items`, `record_capacity` | Main, trước khi tạo luồng | Chỉ đọc khi luồng chạy |
+| Số luồng đã tạo/join | Chỉ main | Ô nhớ riêng; luồng khác không đọc |
+| DATA còn đợi khi gửi STOP | Main | Đọc `count` trong guard vì consumer còn chạy |
+| Kết quả kiểm chứng (`missing`, `duplicate`, `order_errors`, số DATA theo luồng…) | Main | Sau mọi join, không còn luồng nào |
+
+Nhiều producer cùng chờ `empty` hay nhiều consumer cùng chờ `full` là an toàn vì semaphore đếm số quyền; việc sửa `tail`/`head`/`count` chỉ diễn ra trong guard. ThreadSanitizer không phát hiện data race trên 9 cấu hình nhiều luồng của chương trình chính và 16 preset lõi ([minh chứng](../results/week3/README.md)). Kết quả này chỉ bao phủ các lịch chạy đã xảy ra.
+
+### 11.3 CLI và log (W3-H)
+
+- [cli.c](../src/cli.c) nhận `--producers`/`--consumers` 1..64 và từ chối P·K > 1000000 (exit 2, chưa gọi `pc_run`); giá trị mặc định không đổi.
+- [runtime_log.c](../src/runtime_log.c) in `actor=P<p>|C<c>|MAIN`, từ chối chỉ số luồng ngoài 0..63; dòng DATA thêm `order_errors`; thêm `producers(DATA): P0=… P1=…` và `consumers(DATA/STOP): C0=x/1 …`. Tổng kết có 7 dòng (config, DATA, buffer, waits, producers, consumers, workers).
+
+### 11.4 Kiểm thử
+
+16 preset lõi, 32 ca tiêm lỗi, chương trình chính 15 cấu hình × thường/quiet, chạy lặp 7 cấu hình × 20 lần, ASan/UBSan và TSan đều đạt ngày 20/10/2026. Cấu hình và kết quả ở [test-plan](test-plan.md), [bảng kết quả](../results/week3/results-table.md); lập luận tính đúng ở [báo cáo nháp](final-report/bao-cao-nhap.md).

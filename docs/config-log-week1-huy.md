@@ -1,4 +1,6 @@
-# Đặc tả cấu hình và log — tích hợp Tuần 1
+# Đặc tả cấu hình và log — Tuần 1 đến Tuần 3
+
+> **Cập nhật Tuần 3 (20/10/2026, Claude Code theo yêu cầu Huy):** `--producers`/`--consumers` nhận 1..64; tham số hợp lệ từng cái nhưng P·K > 1000000 bị từ chối với thông báo `CLI: total DATA P*K ...`, exit 2, trước `pc_run`. Log in `actor=P<p>|C<c>|MAIN` theo chỉ số luồng; dòng DATA thêm `order_errors`; thêm hai dòng `producers(DATA): P0=… ` và `consumers(DATA/STOP): C0=x/1 …`, nên tổng kết có 7 dòng. Timeout kiểm thử là 5+ceil(2·P·K·(Dp+Dc)/1000) giây. Các mục bên dưới mô tả bản Tuần 2 (1P/1C) và vẫn đúng cho phần không nêu ở đây. Cách dùng đầy đủ: [hướng dẫn chạy](run-guide.md); thiết kế: [design.md §11](design.md#11-tuần-3--nhiều-producerconsumer).
 
 Đặc tả Tuần 1 do Huy chuẩn bị, được Codex rà soát/chốt theo yêu cầu Châu; không ghi phê duyệt hoặc đọc chéo trực tiếp. Cơ sở PR #1/thiết kế Châu ở `2c8d7f6`: P producer, C consumer, K DATA mỗi producer, tổng P*K, ID=p*K+j; STOP không tính DATA. **Tuần 2 đã triển khai CLI/log production trên dev/huy qua Codex theo yêu cầu**, dùng nguyên lõi W2-C; [minh chứng mới](../results/week2/huy-validation.md) tách khỏi [minh chứng Châu](../results/week2/chau-validation.md). API buffer giữ nguyên, không khóa thêm bên trong.
 
@@ -9,8 +11,8 @@
 | Cờ | Mặc định | Phạm vi đã chốt | Ý nghĩa |
 | --- | --- | --- | --- |
 | `--capacity N` | 8 | 1..65536, đồng thời <= SEM_VALUE_MAX và SIZE_MAX/sizeof(struct item) | Sức chứa gồm DATA và STOP |
-| `--producers P` | 1 | Tuần 2: chỉ 1; kế hoạch nhiều luồng: 1..64 | Số producer |
-| `--consumers C` | 1 | Tuần 2: chỉ 1; kế hoạch nhiều luồng: 1..64 | Số consumer |
+| `--producers P` | 1 | Tuần 2: chỉ 1; từ Tuần 3: 1..64 | Số producer |
+| `--consumers C` | 1 | Tuần 2: chỉ 1; từ Tuần 3: 1..64 | Số consumer |
 | `--items-per-producer K` | 20 | 0..1000000, tổng P*K <=1000000 | DATA của mỗi producer; K=0 chỉ kiểm tra dừng |
 | `--producer-delay-ms Dp` | 0 | 0..60000 | Độ trễ sau enqueue DATA, ngoài guard |
 | `--consumer-delay-ms Dc` | 0 | 0..60000 | Độ trễ sau xử lý DATA, ngoài guard |

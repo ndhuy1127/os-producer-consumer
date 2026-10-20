@@ -1,3 +1,11 @@
 # src
 
-[buffer.c](buffer.c) giữ API tuần tự; [pc.c](pc.c) giữ lõi Châu với empty/full/guard và 1P/1C hữu hạn. [cli.c](cli.c) parse/kiểm tra trước lõi; [runtime_log.c](runtime_log.c) đọc/in snapshot sau join, quiet giữ tổng kết. [main.c](main.c) ghép parse → pc_run → log → destroy result. `make` tạo bin/producer-consumer, mặc định N=8/K=20; test/ví dụ và wrapper có binary riêng. [Hợp đồng buffer](../docs/buffer-week1-huy.md), [bàn giao Châu](../docs/handoff-week2-chau.md), [minh chứng bản ghép](../results/week2/huy-validation.md).
+| File | Vai trò |
+| --- | --- |
+| [buffer.c](buffer.c) | Bộ đệm vòng FIFO tuần tự, không tự khóa ([hợp đồng](../docs/buffer-week1-huy.md)) |
+| [pc.c](pc.c) | Lõi: P producer, C consumer, semaphore empty/full/guard, C tín hiệu STOP, bản ghi trong guard, tự kiểm chứng sau join ([thiết kế](../docs/design.md)) |
+| [cli.c](cli.c) | Đọc và kiểm tra tham số trước khi chạy lõi |
+| [runtime_log.c](runtime_log.c) | In bản ghi và tổng kết sau khi mọi luồng đã join; quiet vẫn in tổng kết |
+| [main.c](main.c) | parse → `pc_run` → in log → giải phóng kết quả; mã thoát 0/1/2 |
+
+`make` tạo `bin/producer-consumer`; test, ví dụ và wrapper có binary riêng. Cách dùng: [run-guide.md](../docs/run-guide.md).

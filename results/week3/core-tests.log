@@ -1,0 +1,258 @@
+Week 3 actual execution (Asia/Saigon): 2026-10-20T23:17:48+07:00
+root=/mnt/d/os-producer-consumer
+branch=dev/huy
+HEAD=3bda04b4091784c48898ce23589c4af9d5eb3b11
+source=exactly HEAD (sources clean)
+source_manifest_sha256=8bb98e5f51266eaa885f73160a1ca6c1485fb59aa95445bae923de40fd42c30a
+source_manifest=results/week3/source.sha256
+operator=Claude Code theo yeu cau Huy, may cua Huy (WSL Ubuntu-24.04); W3-C chua duoc Chau review/xac nhan
+
+$ timeout 5s ./bin/thread-demo
+timeout=60s expected_exit=0
+stdout:
+worker 1: sum(1..10) = 55
+worker 2: sum(1..20) = 210
+joined worker 1: result = 55, expected = 55, OK
+joined worker 2: result = 210, expected = 210, OK
+worker 3: sum(1..30) = 465
+joined worker 3: result = 465, expected = 465, OK
+completed: all 3 workers joined and verified
+stderr:
+exit_code=0
+
+$ make test-buffer
+timeout=60s expected_exit=0
+stdout:
+Pham vi: bo dem FIFO TUAN TU; chua kiem thu Producer-Consumer/semaphore/CLI.
+./bin/buffer-test
+PASS: empty initialization
+PASS: one item and value copy
+PASS: FIFO and full rejection preserves data
+PASS: empty rejection preserves state/output
+PASS: 100 wrap-around rounds with independent FIFO oracle
+PASS: capacity 1, 50 cycles
+PASS: STOP is an ordinary FIFO item
+PASS: invalid arguments and lifecycle
+PASS: allocation size overflow
+PASS: live reinitialization preserves queue
+PASS: destroy/repeat/reuse
+PASS: injected malloc failure and recovery
+Sequential buffer tests: 12/12 PASS
+stderr:
+exit_code=0
+
+$ make test-pc
+timeout=120s expected_exit=0
+stdout:
+timeout 60s ./bin/pc-test all
+case=default N=8 P=1 C=1 K=20 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=42
+oracle: DATA=20/20 STOP=1/1 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,8] final=0 workers=create2/join2
+observed: full_snapshots=2 empty_snapshots=4 WAIT_SLOT=2 WAIT_ITEM=4 data_pending_after_producer_join=0 consumer_DATA=20
+PASS case=default
+case=source-N5 N=5 P=1 C=1 K=20 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=42
+oracle: DATA=20/20 STOP=1/1 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,5] final=0 workers=create2/join2
+observed: full_snapshots=4 empty_snapshots=5 WAIT_SLOT=3 WAIT_ITEM=5 data_pending_after_producer_join=0 consumer_DATA=20
+PASS case=source-N5
+case=T02 N=8 P=1 C=1 K=100 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=202
+oracle: DATA=100/100 STOP=1/1 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,8] final=0 workers=create2/join2
+observed: full_snapshots=12 empty_snapshots=14 WAIT_SLOT=12 WAIT_ITEM=14 data_pending_after_producer_join=0 consumer_DATA=100
+PASS case=T02
+case=T03 N=1 P=1 C=1 K=100 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=202
+oracle: DATA=100/100 STOP=1/1 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,1] final=0 workers=create2/join2
+observed: full_snapshots=101 empty_snapshots=101 WAIT_SLOT=96 WAIT_ITEM=100 data_pending_after_producer_join=0 consumer_DATA=100
+PASS case=T03
+case=T04 N=2 P=1 C=1 K=40 Dp_ms=0 Dc_ms=20
+pc_run_status=0 records=82
+oracle: DATA=40/40 STOP=1/1 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,2] final=0 workers=create2/join2
+observed: full_snapshots=40 empty_snapshots=1 WAIT_SLOT=39 WAIT_ITEM=1 data_pending_after_producer_join=2 consumer_DATA=40
+PASS case=T04
+case=T05 N=2 P=1 C=1 K=40 Dp_ms=20 Dc_ms=0
+pc_run_status=0 records=82
+oracle: DATA=40/40 STOP=1/1 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,1] final=0 workers=create2/join2
+observed: full_snapshots=0 empty_snapshots=41 WAIT_SLOT=0 WAIT_ITEM=41 data_pending_after_producer_join=0 consumer_DATA=40
+PASS case=T05
+case=K0 N=1 P=1 C=1 K=0 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=2
+oracle: DATA=0/0 STOP=1/1 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,1] final=0 workers=create2/join2
+observed: full_snapshots=1 empty_snapshots=1 WAIT_SLOT=0 WAIT_ITEM=1 data_pending_after_producer_join=0 consumer_DATA=0
+PASS case=K0
+case=queued-stop N=8 P=1 C=1 K=20 Dp_ms=0 Dc_ms=20
+pc_run_status=0 records=42
+oracle: DATA=20/20 STOP=1/1 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,8] final=0 workers=create2/join2
+observed: full_snapshots=14 empty_snapshots=1 WAIT_SLOT=13 WAIT_ITEM=1 data_pending_after_producer_join=8 consumer_DATA=20
+PASS case=queued-stop
+case=T06a N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=604
+oracle: DATA=300/300 STOP=2/2 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,3] final=0 workers=create5/join5
+observed: full_snapshots=140 empty_snapshots=82 WAIT_SLOT=175 WAIT_ITEM=103 data_pending_after_producer_join=0 consumer_DATA=159,141
+PASS case=T06a
+case=T06b N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=410
+oracle: DATA=200/200 STOP=5/5 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,2] final=0 workers=create7/join7
+observed: full_snapshots=96 empty_snapshots=109 WAIT_SLOT=4 WAIT_ITEM=127 data_pending_after_producer_join=0 consumer_DATA=50,41,30,41,38
+PASS case=T06b
+case=T07 N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=80006
+oracle: DATA=40000/40000 STOP=3/3 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,16] final=0 workers=create7/join7
+observed: full_snapshots=2866 empty_snapshots=1898 WAIT_SLOT=6936 WAIT_ITEM=3553 data_pending_after_producer_join=0 consumer_DATA=12909,13074,14017
+PASS case=T07
+case=T09a N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=8
+oracle: DATA=0/0 STOP=4/4 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,1] final=0 workers=create5/join5
+observed: full_snapshots=4 empty_snapshots=4 WAIT_SLOT=3 WAIT_ITEM=4 data_pending_after_producer_join=0 consumer_DATA=0,0,0,0
+PASS case=T09a
+case=T09b N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+pc_run_status=0 records=126
+oracle: DATA=60/60 STOP=3/3 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,2] final=0 workers=create5/join5
+observed: full_snapshots=44 empty_snapshots=19 WAIT_SLOT=46 WAIT_ITEM=8 data_pending_after_producer_join=0 consumer_DATA=20,20,20
+PASS case=T09b
+case=T04-multi N=2 P=3 C=2 K=40 Dp_ms=0 Dc_ms=20
+pc_run_status=0 records=244
+oracle: DATA=120/120 STOP=2/2 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,2] final=0 workers=create5/join5
+observed: full_snapshots=73 empty_snapshots=49 WAIT_SLOT=76 WAIT_ITEM=1 data_pending_after_producer_join=2 consumer_DATA=60,60
+PASS case=T04-multi
+case=T05-multi N=2 P=2 C=3 K=40 Dp_ms=20 Dc_ms=0
+pc_run_status=0 records=166
+oracle: DATA=80/80 STOP=3/3 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,2] final=0 workers=create5/join5
+observed: full_snapshots=21 empty_snapshots=62 WAIT_SLOT=1 WAIT_ITEM=63 data_pending_after_producer_join=0 consumer_DATA=34,21,25
+PASS case=T05-multi
+case=queued-stop-multi N=8 P=2 C=3 K=40 Dp_ms=0 Dc_ms=20
+pc_run_status=0 records=166
+oracle: DATA=80/80 STOP=3/3 IDs_once=PASS FIFO=PASS per_producer_order=PASS count=[0,8] final=0 workers=create5/join5
+observed: full_snapshots=40 empty_snapshots=1 WAIT_SLOT=41 WAIT_ITEM=3 data_pending_after_producer_join=8 consumer_DATA=26,27,27
+PASS case=queued-stop-multi
+Core preset tests: 16/16 PASS
+stderr:
+exit_code=0
+
+$ make test-errors
+timeout=300s expected_exit=0
+stdout:
+python3 scripts/check_pc_errors.py
+$ ./bin/pc-error-test wait-eintr (timeout=5s expected_exit=0)
+PASS fault=wait-eintr pc_run=0 expected=0 creates=2 joins=2 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=1 guard_EINTR=1 permission_EINTR=1
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test wait-eintr-multi (timeout=5s expected_exit=0)
+PASS fault=wait-eintr-multi pc_run=0 expected=0 creates=6 joins=6 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=1 guard_EINTR=1 permission_EINTR=1
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test trywait-eintr (timeout=5s expected_exit=0)
+PASS fault=trywait-eintr pc_run=0 expected=0 creates=2 joins=2 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test producer-create (timeout=5s expected_exit=0)
+PASS fault=producer-create pc_run=1 expected=1 creates=1 joins=1 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=1 guard_EINTR=0 permission_EINTR=0
+pthread_create producer 0: Resource temporarily unavailable
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test consumer-create (timeout=5s expected_exit=0)
+PASS fault=consumer-create pc_run=1 expected=1 creates=0 joins=0 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pthread_create consumer 0: Resource temporarily unavailable
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test producer-create-mid (timeout=5s expected_exit=0)
+PASS fault=producer-create-mid pc_run=1 expected=1 creates=3 joins=3 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pthread_create producer 1: Resource temporarily unavailable
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test consumer-create-mid (timeout=5s expected_exit=0)
+PASS fault=consumer-create-mid pc_run=1 expected=1 creates=1 joins=1 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pthread_create consumer 1: Resource temporarily unavailable
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test init-empty (timeout=5s expected_exit=0)
+PASS fault=init-empty pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+sem_init empty: No space left on device
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test init-full (timeout=5s expected_exit=0)
+PASS fault=init-full pc_run=1 expected=1 creates=0 joins=0 sem_init=1 sem_destroy=1 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+sem_init full: No space left on device
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test init-guard (timeout=5s expected_exit=0)
+PASS fault=init-guard pc_run=1 expected=1 creates=0 joins=0 sem_init=2 sem_destroy=2 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+sem_init guard: No space left on device
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test malloc (timeout=5s expected_exit=0)
+PASS fault=malloc pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+buffer_init: BUFFER_NO_MEMORY (5)
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test calloc-record (timeout=5s expected_exit=0)
+PASS fault=calloc-record pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc allocation: insufficient memory
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test calloc-slot (timeout=5s expected_exit=0)
+PASS fault=calloc-slot pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc allocation: insufficient memory
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test calloc-produced (timeout=5s expected_exit=0)
+PASS fault=calloc-produced pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc allocation: insufficient memory
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test calloc-consumed (timeout=5s expected_exit=0)
+PASS fault=calloc-consumed pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc allocation: insufficient memory
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test destroy (timeout=5s expected_exit=0)
+PASS fault=destroy pc_run=1 expected=1 creates=2 joins=2 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+sem_destroy guard: Invalid argument
+sem_destroy full: Invalid argument
+sem_destroy empty: Invalid argument
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-N0 (timeout=5s expected_exit=0)
+PASS fault=config-N0 pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P,C=1..64, K=0..1000000 with P*K<=1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-Nbig (timeout=5s expected_exit=0)
+PASS fault=config-Nbig pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P,C=1..64, K=0..1000000 with P*K<=1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-P0 (timeout=5s expected_exit=0)
+PASS fault=config-P0 pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P,C=1..64, K=0..1000000 with P*K<=1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-P65 (timeout=5s expected_exit=0)
+PASS fault=config-P65 pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P,C=1..64, K=0..1000000 with P*K<=1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-C0 (timeout=5s expected_exit=0)
+PASS fault=config-C0 pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P,C=1..64, K=0..1000000 with P*K<=1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-C65 (timeout=5s expected_exit=0)
+PASS fault=config-C65 pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P,C=1..64, K=0..1000000 with P*K<=1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-Kbig (timeout=5s expected_exit=0)
+PASS fault=config-Kbig pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P,C=1..64, K=0..1000000 with P*K<=1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-total (timeout=5s expected_exit=0)
+PASS fault=config-total pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P,C=1..64, K=0..1000000 with P*K<=1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-delay (timeout=5s expected_exit=0)
+PASS fault=config-delay pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P,C=1..64, K=0..1000000 with P*K<=1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test fatal-guard (timeout=5s expected_exit=1)
+fatal: sem_wait guard: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-wait (timeout=5s expected_exit=1)
+fatal: sem_wait permission: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-trywait (timeout=5s expected_exit=1)
+fatal: sem_trywait permission: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-post (timeout=5s expected_exit=1)
+fatal: sem_post full after enqueue: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-join (timeout=5s expected_exit=1)
+fatal: pthread_join producer: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-push (timeout=5s expected_exit=1)
+fatal: buffer_push: BUFFER_INVALID_ARGUMENT (1); terminating process
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-pop (timeout=5s expected_exit=1)
+fatal: buffer_pop: BUFFER_INVALID_ARGUMENT (1); terminating process
+PASS process_exit=1 expected_exit=1
+Error tests: 32/32 PASS
+stderr:
+exit_code=0
