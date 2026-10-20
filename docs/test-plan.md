@@ -1,6 +1,6 @@
 # Kế hoạch kiểm thử
 
-Trạng thái: **T01–T09 đều đã chạy và đạt** (ngày 20/10/2026, commit `3bda04b`, [minh chứng Tuần 3](../results/week3/README.md)). T01–T05 đạt từ Tuần 1–2 và chạy lại đạt ở Tuần 3; T06, T07, T09 nhiều luồng và T08 với giới hạn P/C = 1..64 được kiểm chứng ở Tuần 3. [Minh chứng Châu](../results/week2/chau-validation.md) giữ snapshot trước CLI; [minh chứng Huy](../results/week2/huy-validation.md) ghi bản ghép Tuần 2, [review chung](../results/week2/group-validation.md) kiểm tra lại đạt; PR #3 đã merge ở `d125734`. K là số DATA mỗi producer.
+Trạng thái: **T01–T09 đều đã chạy và đạt** (ngày 20/10/2026, commit `d2329b6`, [minh chứng Tuần 3](../results/week3/README.md)). T01–T05 đạt từ Tuần 1–2 và chạy lại đạt ở Tuần 3; T06, T07, T09 nhiều luồng và T08 với giới hạn P/C = 1..64 được kiểm chứng ở Tuần 3. [Minh chứng Châu](../results/week2/chau-validation.md) giữ snapshot trước CLI; [minh chứng Huy](../results/week2/huy-validation.md) ghi bản ghép Tuần 2, [review chung](../results/week2/group-validation.md) kiểm tra lại đạt; PR #3 đã merge ở `d125734`. K là số DATA mỗi producer.
 
 | ID | Tình huống dự kiến | Tiêu chí cần quan sát | Trạng thái |
 | --- | --- | --- | --- |
@@ -54,7 +54,7 @@ Timeout mỗi lần chạy: 5+ceil(2·P·K·(Dp_ms+Dc_ms)/1000) giây (Tuần 2 
 
 ## Tuần 3 — cấu hình nhiều luồng và kết quả thực chạy
 
-Chạy ngày 20/10/2026 (Asia/Saigon) trên máy Huy, commit `3bda04b`, bằng `python3 scripts/validate_week3.py`; Claude Code thực hiện theo yêu cầu của Huy. Mọi cấu hình dưới đây chạy ở cả test runner lõi (`make test-pc`) và chương trình chính (`make test-cli`, thường + quiet), đều đạt. Cột "Bắt buộc" là điều kiện test sẽ FAIL nếu không quan sát được.
+Chạy ngày 20/10/2026 (Asia/Saigon) trên máy Huy, commit `d2329b6`, bằng `python3 scripts/validate_week3.py`; Claude Code thực hiện theo yêu cầu của Huy. Mọi cấu hình dưới đây chạy ở cả test runner lõi (`make test-pc`) và chương trình chính (`make test-cli`, thường + quiet), đều đạt. Cột "Bắt buộc" là điều kiện test sẽ FAIL nếu không quan sát được.
 
 | Tên | N/P/C/K/Dp/Dc | Mục đích | Bắt buộc | Quan sát lần chạy thường qua CLI |
 | --- | --- | --- | --- | --- |

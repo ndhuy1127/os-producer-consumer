@@ -1,10 +1,12 @@
 # Minh chứng Tuần 3
 
-**Bản nhiều producer/consumer đạt toàn bộ kiểm thử đã chạy.** Chạy ngày 20/10/2026 lúc 23:17 (Asia/Saigon) trên máy của Huy (WSL2 Ubuntu 24.04, GCC 13.3.0, Make 4.3, Python 3.12.3), mã nguồn đúng commit `3bda04b` trên `dev/huy`, cây nguồn sạch. Claude Code thực hiện theo yêu cầu của Huy, bằng lệnh:
+**Bản nhiều producer/consumer đạt toàn bộ kiểm thử đã chạy.** Chạy ngày 20/10/2026 lúc 23:17 (Asia/Saigon) trên máy của Huy (WSL2 Ubuntu 24.04, GCC 13.3.0, Make 4.3, Python 3.12.3), mã nguồn đúng commit `d2329b6` trên `dev/huy`, cây nguồn sạch. Claude Code thực hiện theo yêu cầu của Huy, bằng lệnh:
 
 ```sh
 python3 scripts/validate_week3.py
 ```
+
+**Về SHA trong log:** các log ghi `HEAD=3bda04b4091784c48898ce23589c4af9d5eb3b11`. Đó là SHA của commit W3-H trước khi message của nó được viết lại ngày 21/10/2026 (bỏ dòng ghi công AI, chưa từng push). Nội dung file không đổi: commit hiện tại `d2329b695fbc7ecbda68727ec5d87d0a81c6a328` có cùng tree `6d99a2d847f411adb2b296114f4dcc68b5c1ffd2`, kiểm tra bằng `git rev-parse d2329b6^{tree}`; manifest bên dưới vẫn khớp. Log được giữ nguyên như lúc chạy, không sửa SHA.
 
 Script chỉ ghi vào thư mục này, không sửa minh chứng Tuần 1–2. Manifest [source.sha256](source.sha256) (23 file) có SHA256 `8bb98e5f…c30a`; đối chiếu bằng `sha256sum -c results/week3/source.sha256`. Phần W3-C (lõi nhiều luồng) **chưa được Châu review/xác nhận**.
 

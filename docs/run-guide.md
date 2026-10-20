@@ -52,7 +52,7 @@ Mã thoát: **0** khi chạy xong và kiểm chứng đạt (hoặc `--help`); *
 
 ## 4. Đọc kết quả
 
-Output thật của lệnh `./bin/producer-consumer --capacity 2 --producers 2 --consumers 2 --items-per-producer 2` (chạy ngày 20/10/2026, commit `3bda04b`; thứ tự thao tác thay đổi giữa các lần chạy):
+Output thật của lệnh `./bin/producer-consumer --capacity 2 --producers 2 --consumers 2 --items-per-producer 2` (chạy ngày 20/10/2026, commit `d2329b6`; thứ tự thao tác thay đổi giữa các lần chạy):
 
 ```text
 config: N=2 P=2 C=2 K=2 Dp_ms=0 Dc_ms=0

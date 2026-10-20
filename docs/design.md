@@ -197,7 +197,7 @@ Logger in config trước, record theo op_seq rồi tổng kết DATA, buffer/ST
 
 ## 11. Tuần 3 — nhiều producer/consumer
 
-Claude Code thực hiện theo yêu cầu của Huy: W3-C ở commit `c99d131`, W3-H ở commit `3bda04b`. Châu chưa review. Các nguyên tắc ở phần 1–7 giữ nguyên: ba semaphore empty/full/guard, lấy quyền empty/full trước guard, không giữ guard khi chờ hoặc ngủ, một STOP cho mỗi consumer, bản ghi chụp trong guard và in sau join.
+Claude Code thực hiện theo yêu cầu của Huy: W3-C ở commit `dd66ec3`, W3-H ở commit `d2329b6`. Châu chưa review. Các nguyên tắc ở phần 1–7 giữ nguyên: ba semaphore empty/full/guard, lấy quyền empty/full trước guard, không giữ guard khi chờ hoặc ngủ, một STOP cho mỗi consumer, bản ghi chụp trong guard và in sau join.
 
 ### 11.1 Lõi (W3-C)
 

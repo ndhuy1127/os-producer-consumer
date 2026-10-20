@@ -143,7 +143,7 @@ Với mỗi lần chạy, oracle kiểm tra: mỗi ID xuất hiện đúng một
 
 ### 7.2 Kết quả
 
-Chạy ngày 20/10/2026 trên WSL2 Ubuntu 24.04, GCC 13.3.0, mã nguồn commit `3bda04b`. Mọi lần chạy đều đạt: 16/16 preset lõi, 32/32 ca lỗi, 30/30 lần chạy chương trình chính, 140/140 lần chạy lặp; ASan/UBSan và TSan không có cảnh báo trên 9 cấu hình nhiều luồng và 16 preset lõi. Một số cấu hình nhiều luồng tiêu biểu (cấu hình ghi theo N/P/C/K/Dp/Dc, Dp/Dc tính bằng ms):
+Chạy ngày 20/10/2026 trên WSL2 Ubuntu 24.04, GCC 13.3.0, mã nguồn commit `d2329b6`. Mọi lần chạy đều đạt: 16/16 preset lõi, 32/32 ca lỗi, 30/30 lần chạy chương trình chính, 140/140 lần chạy lặp; ASan/UBSan và TSan không có cảnh báo trên 9 cấu hình nhiều luồng và 16 preset lõi. Một số cấu hình nhiều luồng tiêu biểu (cấu hình ghi theo N/P/C/K/Dp/Dc, Dp/Dc tính bằng ms):
 
 | Ca | Cấu hình | Mục đích | Quan sát (lần chạy thường) |
 | --- | --- | --- | --- |
