@@ -1,0 +1,136 @@
+Week 3 actual execution (Asia/Saigon): 2026-10-20T23:17:48+07:00
+root=/mnt/d/os-producer-consumer
+branch=dev/huy
+HEAD=3bda04b4091784c48898ce23589c4af9d5eb3b11
+source=exactly HEAD (sources clean)
+source_manifest_sha256=8bb98e5f51266eaa885f73160a1ca6c1485fb59aa95445bae923de40fd42c30a
+source_manifest=results/week3/source.sha256
+operator=Claude Code theo yeu cau Huy, may cua Huy (WSL Ubuntu-24.04); W3-C chua duoc Chau review/xac nhan
+
+$ uname -a
+timeout=60s expected_exit=0
+stdout:
+Linux LAPTOP-C9NI6QIU 6.18.33.2-microsoft-standard-WSL2 #1 SMP PREEMPT_DYNAMIC Thu Jun 18 21:54:43 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+stderr:
+exit_code=0
+
+$ cat /etc/os-release
+timeout=60s expected_exit=0
+stdout:
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=noble
+LOGO=ubuntu-logo
+stderr:
+exit_code=0
+
+$ gcc --version
+timeout=60s expected_exit=0
+stdout:
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+stderr:
+exit_code=0
+
+$ make --version
+timeout=60s expected_exit=0
+stdout:
+GNU Make 4.3
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2020 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+stderr:
+exit_code=0
+
+$ git --version
+timeout=60s expected_exit=0
+stdout:
+git version 2.43.0
+stderr:
+exit_code=0
+
+$ python3 --version
+timeout=60s expected_exit=0
+stdout:
+Python 3.12.3
+stderr:
+exit_code=0
+
+$ nproc
+timeout=60s expected_exit=0
+stdout:
+24
+stderr:
+exit_code=0
+
+$ git branch -vv
+timeout=60s expected_exit=0
+stdout:
+  dev/chau d125734 [origin/dev/chau] Merge pull request #3 from ndhuy1127/dev/huy
+* dev/huy  3bda04b [origin/dev/huy: ahead 3] W3-H: CLI/log nhiều luồng, script kiểm thử lặp và ghi minh chứng Tuần 3
+  main     d125734 [origin/main] Merge pull request #3 from ndhuy1127/dev/huy
+stderr:
+exit_code=0
+
+$ make clean
+timeout=60s expected_exit=0
+stdout:
+rm -rf -- build bin
+stderr:
+exit_code=0
+
+$ make all thread-demo buffer-test pc-test pc-error-test cli-tests
+timeout=300s expected_exit=0
+stdout:
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c src/buffer.c -o build/buffer.o
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c src/cli.c -o build/cli.o
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c src/main.c -o build/main.o
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c src/pc.c -o build/pc.o
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c src/runtime_log.c -o build/runtime_log.o
+cc  build/buffer.o build/cli.o build/main.o build/pc.o build/runtime_log.o -pthread -o bin/producer-consumer
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c examples/thread_lifecycle.c -o build/thread_lifecycle.o
+cc  build/thread_lifecycle.o -pthread -o bin/thread-demo
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -DBUFFER_TEST_WRAP_ALLOC -c tests/test_buffer.c -o build/test_buffer.o
+cc  build/buffer.o build/test_buffer.o -Wl,--wrap=malloc,--wrap=free -pthread -o bin/buffer-test
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c tests/test_pc.c -o build/test_pc.o
+cc  build/buffer.o build/pc.o build/test_pc.o -pthread -o bin/pc-test
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c tests/test_pc_faults.c -o build/test_pc_faults.o
+cc  build/buffer.o build/pc.o build/test_pc_faults.o -Wl,--wrap=sem_init -Wl,--wrap=sem_wait -Wl,--wrap=sem_trywait -Wl,--wrap=sem_post -Wl,--wrap=sem_destroy -Wl,--wrap=pthread_create -Wl,--wrap=pthread_join -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=free -Wl,--wrap=buffer_push -Wl,--wrap=buffer_pop -pthread -o bin/pc-error-test
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c tests/test_cli.c -o build/test_cli.o
+cc  build/buffer.o build/pc.o build/cli.o build/test_cli.o -pthread -o bin/cli-parse-test
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c tests/test_runtime_log.c -o build/test_runtime_log.o
+cc  build/runtime_log.o build/test_runtime_log.o -pthread -o bin/log-test
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c tests/test_main_hooks.c -o build/test_main_hooks.o
+cc  build/buffer.o build/cli.o build/main.o build/pc.o build/runtime_log.o build/test_main_hooks.o -Wl,--wrap=pc_run -Wl,--wrap=pc_result_destroy -Wl,--wrap=pthread_create -Wl,--wrap=sem_init -Wl,--wrap=sem_destroy -pthread -o bin/main-hook-test
+stderr:
+exit_code=0
+
+$ make help
+timeout=60s expected_exit=0
+stdout:
+make: build bin/producer-consumer (P,C=1..64; mac dinh N=8 P=C=1 K=20), --help/--quiet.
+make thread-demo: build bin/thread-demo.
+make test-buffer: 12 ca bo dem tuan tu.
+make test-pc: 16 preset loi 1P/1C va nhieu luong, timeout 60s.
+make test-errors: 32 ca loi API/semaphore/tao luong, timeout tung ca.
+make test-cli: CLI/log production, quiet, parser bounds va main error hooks.
+make test: tat ca nhom tren.
+make test-stress: chay lap cau hinh nhieu luong (T07...), in bang ket qua.
+python3 scripts/validate_week3.py: ghi minh chung results/week3 (gom ASan/UBSan/TSan).
+make clean: don build/ va bin/.
+stderr:
+exit_code=0

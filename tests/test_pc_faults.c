@@ -33,6 +33,7 @@ static sem_t *full_sem, *guard_sem;
 static sem_t consumer_ready;
 
 static int is_fault(const char *name) { return strcmp(fault, name) == 0; }
+static int eintr_fault(void) { return is_fault("wait-eintr") || is_fault("wait-eintr-multi"); }
 
 int __wrap_sem_init(sem_t *s, int shared, unsigned int value)
 {
@@ -53,13 +54,13 @@ int __wrap_sem_init(sem_t *s, int shared, unsigned int value)
 
 int __wrap_sem_wait(sem_t *s)
 {
-    if (is_fault("wait-eintr")) {
+    if (eintr_fault()) {
         atomic_int *flag = s == guard_sem ? &guard_eintr : &permission_eintr;
         if (atomic_exchange(flag, 1) == 0) {
             errno = EINTR; return -1;
         }
     }
-    if (s == full_sem && (is_fault("producer-create") || is_fault("wait-eintr")) &&
+    if (s == full_sem && (is_fault("producer-create") || eintr_fault()) &&
         atomic_exchange(&consumer_wait_seen, 1) == 0) {
         if (__real_sem_post(&consumer_ready) == -1) abort();
     }
@@ -96,8 +97,11 @@ int __wrap_pthread_create(pthread_t *t, const pthread_attr_t *attr,
                           void *(*start)(void *), void *arg)
 {
     ++create_calls;
-    if (create_calls == 2 && (is_fault("producer-create") || is_fault("wait-eintr") ||
-                              is_fault("fatal-wait"))) {
+    /* First producer create: after the default single consumer, or after the
+     * three consumers of wait-eintr-multi. */
+    size_t first_producer = is_fault("wait-eintr-multi") ? 4 : 2;
+    if (create_calls == first_producer &&
+        (is_fault("producer-create") || eintr_fault() || is_fault("fatal-wait"))) {
         /* Consumer has observed EAGAIN and entered the sem_wait(full) path;
          * no DATA/STOP has been posted. No sleep/polling to guess readiness. */
         while (__real_sem_wait(&consumer_ready) == -1) {
@@ -106,6 +110,9 @@ int __wrap_pthread_create(pthread_t *t, const pthread_attr_t *attr,
         if (is_fault("producer-create")) return EAGAIN;
     }
     if (is_fault("consumer-create") && create_calls == 1) return EAGAIN;
+    /* Mid-way failures with several workers already running. */
+    if (is_fault("consumer-create-mid") && create_calls == 2) return EAGAIN;
+    if (is_fault("producer-create-mid") && create_calls == 4) return EAGAIN;
     int error = __real_pthread_create(t, attr, start, arg);
     if (error == 0) ++create_successes;
     return error;
@@ -164,26 +171,61 @@ int main(int argc, char **argv)
     struct pc_config config = pc_default_config();
     struct pc_result result = {0};
     int expected = PC_RUNTIME_ERROR;
-    if (is_fault("wait-eintr") || is_fault("trywait-eintr")) expected = PC_OK;
+    if (eintr_fault() || is_fault("trywait-eintr")) expected = PC_OK;
+    if (is_fault("wait-eintr-multi")) {
+        config.capacity = 2; config.producers = 3; config.consumers = 3;
+        config.items_per_producer = 50;
+    }
+    if (is_fault("consumer-create-mid")) {
+        config.producers = 2; config.consumers = 3; config.items_per_producer = 5;
+    }
+    if (is_fault("producer-create-mid")) {
+        config.producers = 3; config.consumers = 2; config.items_per_producer = 5;
+    }
     if (is_fault("config-N0")) { config.capacity = 0; expected = PC_CONFIG_ERROR; }
     if (is_fault("config-Nbig")) { config.capacity = 65537; expected = PC_CONFIG_ERROR; }
-    if (is_fault("config-P2")) { config.producers = 2; expected = PC_CONFIG_ERROR; }
-    if (is_fault("config-C2")) { config.consumers = 2; expected = PC_CONFIG_ERROR; }
+    if (is_fault("config-P0")) { config.producers = 0; expected = PC_CONFIG_ERROR; }
+    if (is_fault("config-P65")) { config.producers = 65; expected = PC_CONFIG_ERROR; }
+    if (is_fault("config-C0")) { config.consumers = 0; expected = PC_CONFIG_ERROR; }
+    if (is_fault("config-C65")) { config.consumers = 65; expected = PC_CONFIG_ERROR; }
     if (is_fault("config-Kbig")) { config.items_per_producer = SIZE_MAX; expected = PC_CONFIG_ERROR; }
+    if (is_fault("config-total")) {
+        config.producers = 2; config.items_per_producer = 600000; /* P*K > 1000000 */
+        expected = PC_CONFIG_ERROR;
+    }
     if (is_fault("config-delay")) { config.consumer_delay_ms = 60001; expected = PC_CONFIG_ERROR; }
     int status = pc_run(&config, &result);
     int ok = status == expected && create_successes == join_calls &&
              init_successes == destroy_calls;
     if (expected == PC_CONFIG_ERROR) ok = ok && create_calls == 0 && init_calls == 0;
     if (expected == PC_OK) ok = ok && result.summary.verified;
-    if (is_fault("wait-eintr"))
+    const struct pc_summary *s = &result.summary;
+    if (eintr_fault())
         ok = ok && atomic_load(&guard_eintr) && atomic_load(&permission_eintr);
+    if (is_fault("wait-eintr-multi"))
+        ok = ok && create_successes == 6 && s->data_processed == 150 &&
+             s->stop_dequeued == 3;
     if (is_fault("trywait-eintr")) ok = ok && atomic_load(&injected);
     if (is_fault("producer-create"))
         ok = ok && atomic_load(&consumer_wait_seen) && create_successes == 1 &&
-             result.summary.producers_created == 0 && result.summary.consumers_joined == 1 &&
-             result.summary.stop_enqueued == 1 && result.summary.stop_dequeued == 1 &&
-             result.summary.final_count == 0 && result.summary.data_enqueued == 0;
+             s->producers_created == 0 && s->consumers_joined == 1 &&
+             s->stop_enqueued == 1 && s->stop_dequeued == 1 &&
+             s->final_count == 0 && s->data_enqueued == 0;
+    /* Second of three consumers fails: no producer starts; STOP the one running. */
+    if (is_fault("consumer-create-mid"))
+        ok = ok && create_successes == 1 && s->consumers_created == 1 &&
+             s->producers_created == 0 && s->consumers_joined == 1 &&
+             s->stop_enqueued == 1 && s->stop_dequeued == 1 &&
+             s->final_count == 0 && s->data_enqueued == 0 && !s->verified;
+    /* Second of three producers fails: join producer 0, STOP both consumers;
+     * its 5 DATA are still fully consumed before the STOPs. */
+    if (is_fault("producer-create-mid"))
+        ok = ok && create_successes == 3 && s->producers_created == 1 &&
+             s->producers_joined == 1 && s->consumers_joined == 2 &&
+             s->stop_enqueued == 2 && s->stop_dequeued == 2 &&
+             s->data_enqueued == 5 && s->data_dequeued == 5 && s->data_processed == 5 &&
+             s->fifo_errors == 0 && s->order_errors == 0 &&
+             s->final_count == 0 && !s->verified;
     pc_result_destroy(&result);
     ok = ok && atomic_load(&live_allocations) == 0;
     if (__real_sem_destroy(&consumer_ready) == -1) ok = 0;

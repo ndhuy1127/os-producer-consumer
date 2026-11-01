@@ -10,8 +10,8 @@ Trạng thái hợp lệ: **Chưa bắt đầu**, **Đang thực hiện**, **Đ�
 | W1-H | Môi trường C; Makefile; bộ đệm tuần tự; tham số; kế hoạch kiểm thử | Huy | 1 | Đã hoàn thành | [API](buffer-week1-huy.md), [cấu hình/log](config-log-week1-huy.md), [test-plan](test-plan.md), [minh chứng máy Huy](../results/week1/huy-validation.md); bản chung ở [group-validation](../results/week1/group-validation.md) |
 | W2-C | Producer/consumer; semaphore; tích hợp; kết thúc hữu hạn | Châu | 2 | Đã hoàn thành — 100% phạm vi 1P/1C | [Lõi](../src/pc.c), [API](../include/pc.h), [main](../src/main.c), [minh chứng thực chạy](../results/week2/chau-validation.md), [báo cáo](reports/week2.md), [bàn giao](handoff-week2-chau.md) |
 | W2-H | Bộ đệm; tham số; log; kiểm thử đầy/trống/N=1 | Huy | 2 | Đã hoàn thành — 100% phạm vi Tuần 2 1P/1C | [Parser](../src/cli.c), [logger](../src/runtime_log.c), [main tích hợp](../src/main.c), [minh chứng Huy](../results/week2/huy-validation.md), [báo cáo](reports/week2.md) |
-| W3-C | Nhiều luồng; ID riêng; rà soát đồng bộ; lý thuyết/thuật toán báo cáo | Châu | 3 | Chưa bắt đầu | Chưa có |
-| W3-H | Script test; xác thực dữ liệu/FIFO; kết quả; hướng dẫn chạy | Huy | 3 | Chưa bắt đầu | Chưa có |
+| W3-C | Nhiều luồng; ID riêng; rà soát đồng bộ; lý thuyết/thuật toán báo cáo | Châu | 3 | Đã hoàn thành — do Claude Code làm theo yêu cầu Huy, **chờ Châu review** | [Lõi](../src/pc.c), [thiết kế §11](design.md#11-tuần-3--nhiều-producerconsumer), [báo cáo nháp](final-report/bao-cao-nhap.md), [minh chứng](../results/week3/README.md), [báo cáo tuần](reports/week3.md) |
+| W3-H | Script test; xác thực dữ liệu/FIFO; kết quả; hướng dẫn chạy | Huy | 3 | Đã hoàn thành — do Claude Code làm theo yêu cầu Huy | [Script](../scripts/README.md), [bảng kết quả](../results/week3/results-table.md), [hướng dẫn chạy](run-guide.md), [minh chứng](../results/week3/README.md), [báo cáo tuần](reports/week3.md) |
 | W4-C | Bài toán; lý thuyết; thiết kế; thuật toán; nguyên lý/demo | Châu | 4 | Chưa bắt đầu | Chưa có |
 | W4-H | Kết quả test; minh chứng; hướng dẫn; gói nộp | Huy | 4 | Chưa bắt đầu | Chưa có |
 | W4-G | Đọc chéo code; luyện demo; chuẩn bị trả lời câu hỏi | Cả hai | 4 | Chưa bắt đầu | Chưa có |
@@ -24,7 +24,25 @@ W1-C và W1-H hoàn thành phần độc lập, minh chứng riêng được gi�
 
 **W2-H nghiệm thu cùng ngày:** dev/huy fast-forward nhận W2-C từ origin/dev/chau ở bd00780; parser/log ghép vào main, mặc định N=8 và giới hạn 1P/1C. 16 lần chạy CLI thường/quiet, 116 đầu vào sai với wrapper chặn lõi, help/biên/log/main errors, hồi quy và ASan/UBSan/leak detection đạt. Codex thực hiện theo yêu cầu trên máy ChouPro WSL, không ghi Huy trực tiếp chạy/phê duyệt. [Minh chứng Huy](../results/week2/huy-validation.md) ghi nguồn mới, không sửa Tuần 1/chau-* hoặc lõi/buffer.
 
-**Bản ghép Tuần 2 đã được Codex review và kiểm tra đạt theo yêu cầu:** build sạch, thread-demo, make test (buffer 12, lõi 8, lỗi/API 26, production thường/quiet 16, CLI sai 116), khung/liên kết/diff và hash nguồn đạt. Không phát hiện lỗi runtime cần sửa trong phạm vi 1P/1C; cập nhật tài liệu bàn giao, giữ nguyên minh chứng riêng Châu/Huy và Tuần 1. [Review chung](../results/week2/group-validation.md), [log thực chạy](../results/week2/group-review.log). Sanitizer dùng minh chứng cũ khớp nguồn, không ghi đã chạy mới. Trạng thái merge/bàn giao main và merge SHA xem [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3). T08 chỉ CLI hiện hỗ trợ 1P/1C; T06/T07 và cấu hình nhiều luồng T09 thuộc Tuần 3, chưa chạy. Không xác nhận Châu/Huy trực tiếp review/phê duyệt.
+**Bản ghép Tuần 2 đã được Codex review và kiểm tra đạt theo yêu cầu:** build sạch, thread-demo, make test (buffer 12, lõi 8, lỗi/API 26, production thường/quiet 16, CLI sai 116), khung/liên kết/diff và hash nguồn đạt. Không phát hiện lỗi runtime cần sửa trong phạm vi 1P/1C; cập nhật tài liệu bàn giao, giữ nguyên minh chứng riêng Châu/Huy và Tuần 1. [Review chung](../results/week2/group-validation.md), [log thực chạy](../results/week2/group-review.log). Sanitizer dùng minh chứng cũ khớp nguồn, không ghi đã chạy mới. [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3) đã merge vào main ở `d125734` (13/10/2026, Asia/Saigon); sau khi lịch sử được viết lại, main trỏ `443c4dc` cùng nội dung ([chi tiết](#lịch-sử-git-viết-lại)). Không xác nhận Châu/Huy trực tiếp review/phê duyệt. Ngày 20/10/2026, bản `d125734` được chạy lại trên máy Huy và đạt ([log](../results/week2/huy-machine-recheck.log)).
+
+**Tuần 3 hoàn thành ngày 20/10/2026 (Asia/Saigon) trên `dev/huy`:** Claude Code thực hiện cả W3-C và W3-H theo yêu cầu của Huy, trên máy Huy; commit `b9cb5e3` (lõi), `8afc7e9` (CLI/log/script) và commit minh chứng/tài liệu. Lõi nhận P, C = 1..64 với ID p·K+j và C tín hiệu STOP; T06, T07, T08, T09 đều đạt; 16 preset lõi, 32 ca lỗi, 30 lần chạy CLI, 140 lần chạy lặp, ASan/UBSan và TSan không cảnh báo ([minh chứng](../results/week3/README.md)). Có [báo cáo nháp](final-report/bao-cao-nhap.md) và [hướng dẫn chạy](run-guide.md). **Châu chưa review W3-C và báo cáo nháp; hai thành viên chưa đọc chéo; chưa tạo PR vào main.**
+
+## Lịch sử Git viết lại
+
+Theo GitHub Activity API, ngày 22/10/2026 lúc 11:47 (Asia/Saigon), tài khoản GitHub `ChouPro205` force-push cùng lúc `main`, `dev/chau` và `dev/huy`. Lịch sử mới đổi tác giả Git của commit chốt review Tuần 2 từ `Codex` sang `Lê Hải Châu`, nên commit đó và mọi commit sau đổi SHA; nội dung (tree) của từng commit giữ nguyên. Tài liệu không suy ra người làm từ Git author: phần chốt review Tuần 2 vẫn ghi theo minh chứng là Codex thực hiện theo yêu cầu. PR #3 trên GitHub vẫn ghi merge commit `d125734` và GitHub vẫn mở được các SHA cũ, nhưng chúng không còn thuộc nhánh nào nên bản clone mới không có; tài liệu dùng SHA hiện tại. Log minh chứng giữ nguyên SHA lúc chạy.
+
+| Commit | SHA cũ | SHA hiện tại | Tree |
+| --- | --- | --- | --- |
+| Merge PR #3 (main, dev/chau) | `d125734` | `443c4dc` | `5435152` |
+| Chốt review và minh chứng Tuần 2 | `7ae49f8` | `6b26b1b` | `5435152` |
+| Tuần 2: chạy lại trên máy Huy | `6f71779` | `452e38f` | `8e75dea` |
+| W3-C: lõi nhiều producer/consumer | `dd66ec3` | `b9cb5e3` | `d61e186` |
+| W3-H: CLI/log nhiều luồng, script | `d2329b6` (log Tuần 3 ghi `3bda04b`) | `8afc7e9` | `6d99a2d` |
+| Tuần 3: minh chứng, báo cáo nháp, tài liệu | `e1f475f` | `0226f1c` | `09a0e58` |
+| Tuần 3: cập nhật SHA trong tài liệu | `31d899a` | `fc3ba2f` | `33d26bd` |
+
+**Kiểm tra lại ngày 01/11/2026 (Asia/Saigon):** Claude Code thực hiện theo yêu cầu của Huy trên máy Huy, không sửa mã nguồn. Cả bảy cặp cùng tree; `sha256sum -c results/week3/source.sha256` khớp; `scripts/validate_week3.py` chạy trên bản clone mới của `fc3ba2f` exit 0 (build không cảnh báo, buffer 12/12, lõi 16/16, lỗi 32/32, 30 lần chạy CLI, 140 lần chạy lặp, ASan/UBSan và TSan không cảnh báo). [Log](../results/week3/recheck-2026-11-01.log) chỉ lưu tóm tắt; log từng nhóm trong results/week3 vẫn là của lần chạy 20/10/2026.
 
 ## Thiết lập dự án
 

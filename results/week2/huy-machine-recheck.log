@@ -1,0 +1,410 @@
+Week 2 recheck on Huy machine (Asia/Saigon): 2026-10-20T23:03:04+07:00
+root=/mnt/d/os-producer-consumer
+branch=dev/huy
+HEAD=d1257346ec93bd5b9e4fa8d410a8fdd0874f78df
+operator=Claude Code theo yeu cau Huy, may Windows cua Huy, WSL Ubuntu-24.04; khong sua nguon
+
+$ git status --short
+exit_code=0
+
+$ uname -r
+6.18.33.2-microsoft-standard-WSL2
+exit_code=0
+
+$ grep PRETTY_NAME /etc/os-release
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+exit_code=0
+
+$ gcc --version
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+exit_code=0
+
+$ make --version
+GNU Make 4.3
+Built for x86_64-pc-linux-gnu
+Copyright (C) 1988-2020 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+exit_code=0
+
+$ python3 --version
+Python 3.12.3
+exit_code=0
+
+$ sha256sum -c results/week2/huy-source.sha256
+Makefile: OK
+include/item.h: OK
+include/buffer.h: OK
+include/pc.h: OK
+include/cli.h: OK
+include/runtime_log.h: OK
+src/buffer.c: OK
+src/pc.c: OK
+src/cli.c: OK
+src/runtime_log.c: OK
+src/main.c: OK
+examples/thread_lifecycle.c: OK
+tests/test_buffer.c: OK
+tests/test_pc.c: OK
+tests/test_pc_faults.c: OK
+tests/test_cli.c: OK
+tests/test_main_hooks.c: OK
+tests/test_runtime_log.c: OK
+scripts/check_pc_errors.py: OK
+scripts/check_cli_log.py: OK
+scripts/check_scaffold.py: OK
+scripts/validate_week2_huy.py: OK
+exit_code=0
+
+$ make clean
+rm -rf -- build bin
+exit_code=0
+
+$ make all thread-demo buffer-test pc-test pc-error-test cli-tests
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c src/buffer.c -o build/buffer.o
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c src/cli.c -o build/cli.o
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c src/main.c -o build/main.o
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c src/pc.c -o build/pc.o
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c src/runtime_log.c -o build/runtime_log.o
+cc  build/buffer.o build/cli.o build/main.o build/pc.o build/runtime_log.o -pthread -o bin/producer-consumer
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c examples/thread_lifecycle.c -o build/thread_lifecycle.o
+cc  build/thread_lifecycle.o -pthread -o bin/thread-demo
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -DBUFFER_TEST_WRAP_ALLOC -c tests/test_buffer.c -o build/test_buffer.o
+cc  build/buffer.o build/test_buffer.o -Wl,--wrap=malloc,--wrap=free -pthread -o bin/buffer-test
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c tests/test_pc.c -o build/test_pc.o
+cc  build/buffer.o build/pc.o build/test_pc.o -pthread -o bin/pc-test
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c tests/test_pc_faults.c -o build/test_pc_faults.o
+cc  build/buffer.o build/pc.o build/test_pc_faults.o -Wl,--wrap=sem_init -Wl,--wrap=sem_wait -Wl,--wrap=sem_trywait -Wl,--wrap=sem_post -Wl,--wrap=sem_destroy -Wl,--wrap=pthread_create -Wl,--wrap=pthread_join -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=free -Wl,--wrap=buffer_push -Wl,--wrap=buffer_pop -pthread -o bin/pc-error-test
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c tests/test_cli.c -o build/test_cli.o
+cc  build/buffer.o build/pc.o build/cli.o build/test_cli.o -pthread -o bin/cli-parse-test
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c tests/test_runtime_log.c -o build/test_runtime_log.o
+cc  build/runtime_log.o build/test_runtime_log.o -pthread -o bin/log-test
+cc -Iinclude -std=c11 -Wall -Wextra -Wpedantic -O2 -pthread -MMD -MP -c tests/test_main_hooks.c -o build/test_main_hooks.o
+cc  build/buffer.o build/cli.o build/main.o build/pc.o build/runtime_log.o build/test_main_hooks.o -Wl,--wrap=pc_run -Wl,--wrap=pc_result_destroy -Wl,--wrap=pthread_create -Wl,--wrap=sem_init -Wl,--wrap=sem_destroy -pthread -o bin/main-hook-test
+exit_code=0
+
+$ timeout 5s ./bin/thread-demo
+worker 1: sum(1..10) = 55
+worker 2: sum(1..20) = 210
+worker 3: sum(1..30) = 465
+joined worker 1: result = 55, expected = 55, OK
+joined worker 2: result = 210, expected = 210, OK
+joined worker 3: result = 465, expected = 465, OK
+completed: all 3 workers joined and verified
+exit_code=0
+
+$ timeout 300s make test
+Pham vi: bo dem FIFO TUAN TU; chua kiem thu Producer-Consumer/semaphore/CLI.
+./bin/buffer-test
+PASS: empty initialization
+PASS: one item and value copy
+PASS: FIFO and full rejection preserves data
+PASS: empty rejection preserves state/output
+PASS: 100 wrap-around rounds with independent FIFO oracle
+PASS: capacity 1, 50 cycles
+PASS: STOP is an ordinary FIFO item
+PASS: invalid arguments and lifecycle
+PASS: allocation size overflow
+PASS: live reinitialization preserves queue
+PASS: destroy/repeat/reuse
+PASS: injected malloc failure and recovery
+Sequential buffer tests: 12/12 PASS
+timeout 15s ./bin/pc-test all
+case=default N=8 P=1 C=1 K=20 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=42
+oracle: DATA=20/20 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,8] final=0 workers=create2/join2
+observed: full_snapshots=2 empty_snapshots=4 WAIT_SLOT=2 WAIT_ITEM=4 data_pending_after_producer_join=0
+PASS case=default
+case=source-N5 N=5 P=1 C=1 K=20 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=42
+oracle: DATA=20/20 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,5] final=0 workers=create2/join2
+observed: full_snapshots=4 empty_snapshots=5 WAIT_SLOT=3 WAIT_ITEM=5 data_pending_after_producer_join=0
+PASS case=source-N5
+case=T02 N=8 P=1 C=1 K=100 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=202
+oracle: DATA=100/100 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,8] final=0 workers=create2/join2
+observed: full_snapshots=12 empty_snapshots=14 WAIT_SLOT=12 WAIT_ITEM=14 data_pending_after_producer_join=0
+PASS case=T02
+case=T03 N=1 P=1 C=1 K=100 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=202
+oracle: DATA=100/100 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,1] final=0 workers=create2/join2
+observed: full_snapshots=101 empty_snapshots=101 WAIT_SLOT=99 WAIT_ITEM=100 data_pending_after_producer_join=0
+PASS case=T03
+case=T04 N=2 P=1 C=1 K=40 Dp_ms=0 Dc_ms=20
+pc_run_status=0 records=82
+oracle: DATA=40/40 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,2] final=0 workers=create2/join2
+observed: full_snapshots=40 empty_snapshots=1 WAIT_SLOT=39 WAIT_ITEM=1 data_pending_after_producer_join=2
+PASS case=T04
+case=T05 N=2 P=1 C=1 K=40 Dp_ms=20 Dc_ms=0
+pc_run_status=0 records=82
+oracle: DATA=40/40 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,1] final=0 workers=create2/join2
+observed: full_snapshots=0 empty_snapshots=41 WAIT_SLOT=0 WAIT_ITEM=41 data_pending_after_producer_join=0
+PASS case=T05
+case=K0 N=1 P=1 C=1 K=0 Dp_ms=0 Dc_ms=0
+pc_run_status=0 records=2
+oracle: DATA=0/0 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,1] final=0 workers=create2/join2
+observed: full_snapshots=1 empty_snapshots=1 WAIT_SLOT=0 WAIT_ITEM=1 data_pending_after_producer_join=0
+PASS case=K0
+case=queued-stop N=8 P=1 C=1 K=20 Dp_ms=0 Dc_ms=20
+pc_run_status=0 records=42
+oracle: DATA=20/20 STOP=1/1 IDs_once=PASS FIFO=PASS count=[0,8] final=0 workers=create2/join2
+observed: full_snapshots=14 empty_snapshots=1 WAIT_SLOT=13 WAIT_ITEM=1 data_pending_after_producer_join=8
+PASS case=queued-stop
+python3 scripts/check_pc_errors.py
+$ ./bin/pc-error-test wait-eintr (timeout=5s expected_exit=0)
+PASS fault=wait-eintr pc_run=0 expected=0 creates=2 joins=2 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=1 guard_EINTR=1 permission_EINTR=1
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test trywait-eintr (timeout=5s expected_exit=0)
+PASS fault=trywait-eintr pc_run=0 expected=0 creates=2 joins=2 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test producer-create (timeout=5s expected_exit=0)
+PASS fault=producer-create pc_run=1 expected=1 creates=1 joins=1 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=1 guard_EINTR=0 permission_EINTR=0
+pthread_create producer: Resource temporarily unavailable
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test consumer-create (timeout=5s expected_exit=0)
+PASS fault=consumer-create pc_run=1 expected=1 creates=0 joins=0 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pthread_create consumer: Resource temporarily unavailable
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test init-empty (timeout=5s expected_exit=0)
+PASS fault=init-empty pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+sem_init empty: No space left on device
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test init-full (timeout=5s expected_exit=0)
+PASS fault=init-full pc_run=1 expected=1 creates=0 joins=0 sem_init=1 sem_destroy=1 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+sem_init full: No space left on device
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test init-guard (timeout=5s expected_exit=0)
+PASS fault=init-guard pc_run=1 expected=1 creates=0 joins=0 sem_init=2 sem_destroy=2 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+sem_init guard: No space left on device
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test malloc (timeout=5s expected_exit=0)
+PASS fault=malloc pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+buffer_init: BUFFER_NO_MEMORY (5)
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test calloc-record (timeout=5s expected_exit=0)
+PASS fault=calloc-record pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc allocation: insufficient memory
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test calloc-slot (timeout=5s expected_exit=0)
+PASS fault=calloc-slot pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc allocation: insufficient memory
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test calloc-produced (timeout=5s expected_exit=0)
+PASS fault=calloc-produced pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc allocation: insufficient memory
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test calloc-consumed (timeout=5s expected_exit=0)
+PASS fault=calloc-consumed pc_run=1 expected=1 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc allocation: insufficient memory
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test destroy (timeout=5s expected_exit=0)
+PASS fault=destroy pc_run=1 expected=1 creates=2 joins=2 sem_init=3 sem_destroy=3 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+sem_destroy guard: Invalid argument
+sem_destroy full: Invalid argument
+sem_destroy empty: Invalid argument
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-N0 (timeout=5s expected_exit=0)
+PASS fault=config-N0 pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P=C=1, K=0..1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-Nbig (timeout=5s expected_exit=0)
+PASS fault=config-Nbig pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P=C=1, K=0..1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-P2 (timeout=5s expected_exit=0)
+PASS fault=config-P2 pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P=C=1, K=0..1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-C2 (timeout=5s expected_exit=0)
+PASS fault=config-C2 pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P=C=1, K=0..1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-Kbig (timeout=5s expected_exit=0)
+PASS fault=config-Kbig pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P=C=1, K=0..1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test config-delay (timeout=5s expected_exit=0)
+PASS fault=config-delay pc_run=2 expected=2 creates=0 joins=0 sem_init=0 sem_destroy=0 live_allocations=0 consumer_wait_path=0 guard_EINTR=0 permission_EINTR=0
+pc configuration: require N=1..65536, P=C=1, K=0..1000000, delays=0..60000ms, zero result
+PASS process_exit=0 expected_exit=0
+$ ./bin/pc-error-test fatal-guard (timeout=5s expected_exit=1)
+fatal: sem_wait guard: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-wait (timeout=5s expected_exit=1)
+fatal: sem_wait permission: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-trywait (timeout=5s expected_exit=1)
+fatal: sem_trywait permission: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-post (timeout=5s expected_exit=1)
+fatal: sem_post full after enqueue: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-join (timeout=5s expected_exit=1)
+fatal: pthread_join producer: Invalid argument; terminating process (workers may be live)
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-push (timeout=5s expected_exit=1)
+fatal: buffer_push: BUFFER_INVALID_ARGUMENT (1); terminating process
+PASS process_exit=1 expected_exit=1
+$ ./bin/pc-error-test fatal-pop (timeout=5s expected_exit=1)
+fatal: buffer_pop: BUFFER_INVALID_ARGUMENT (1); terminating process
+PASS process_exit=1 expected_exit=1
+Error tests: 26/26 PASS
+python3 scripts/check_cli_log.py
+PASS runtime=default quiet=0 exit=0
+PASS runtime=default quiet=1 exit=0
+PASS runtime=source-N5 quiet=0 exit=0
+PASS runtime=source-N5 quiet=1 exit=0
+PASS runtime=T02 quiet=0 exit=0
+PASS runtime=T02 quiet=1 exit=0
+PASS runtime=T03 quiet=0 exit=0
+PASS runtime=T03 quiet=1 exit=0
+PASS runtime=T04 quiet=0 exit=0
+PASS runtime=T04 quiet=1 exit=0
+PASS runtime=T05 quiet=0 exit=0
+PASS runtime=T05 quiet=1 exit=0
+PASS runtime=K0 quiet=0 exit=0
+PASS runtime=K0 quiet=1 exit=0
+PASS runtime=queued-stop quiet=0 exit=0
+PASS runtime=queued-stop quiet=1 exit=0
+PASS invalid=unknown production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=positional production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=equals-not-supported production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=end-options-not-supported production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=quiet-duplicate production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=quiet-value production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=help-quiet production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=quiet-help production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=help-value production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=help-duplicate production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=flag-as-value production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-missing production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-duplicate production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-bad-0 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-bad-1 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-bad-2 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-bad-3 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-bad-4 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-bad-5 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-bad-6 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-bad-7 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-bad-8 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-bad-9 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-bad-10 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-bad-11 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-bad-12 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-missing production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-duplicate production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-bad-0 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-bad-1 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-bad-2 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-bad-3 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-bad-4 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-bad-5 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-bad-6 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-bad-7 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-bad-8 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-bad-9 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-bad-10 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-bad-11 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-bad-12 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-missing production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-duplicate production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-bad-0 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-bad-1 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-bad-2 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-bad-3 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-bad-4 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-bad-5 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-bad-6 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-bad-7 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-bad-8 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-bad-9 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-bad-10 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-bad-11 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-bad-12 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-missing production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-duplicate production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-bad-0 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-bad-1 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-bad-2 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-bad-3 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-bad-4 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-bad-5 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-bad-6 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-bad-7 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-bad-8 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-bad-9 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-bad-10 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-bad-11 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-bad-12 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-missing production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-duplicate production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-bad-0 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-bad-1 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-bad-2 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-bad-3 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-bad-4 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-bad-5 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-bad-6 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-bad-7 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-bad-8 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-bad-9 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-bad-10 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-bad-11 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-bad-12 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-missing production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-duplicate production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-bad-0 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-bad-1 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-bad-2 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-bad-3 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-bad-4 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-bad-5 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-bad-6 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-bad-7 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-bad-8 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-bad-9 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-bad-10 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-bad-11 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-bad-12 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-zero production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-zero production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-zero production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--capacity-above production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--items-per-producer-above production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producer-delay-ms-above production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumer-delay-ms-above production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-unsupported-2 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-unsupported-64 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-unsupported-65 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--producers-unsupported-18446744073709551615 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-unsupported-2 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-unsupported-64 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-unsupported-65 production_exit=2 hook_exit=2 no_core_or_workers
+PASS invalid=--consumers-unsupported-18446744073709551615 production_exit=2 hook_exit=2 no_core_or_workers
+PASS parser-only=defaults exit=0 no_runtime_claim
+PASS parser-only=lower exit=0 no_runtime_claim
+PASS parser-only=upper exit=0 no_runtime_claim
+PASS parser-only=leading-zeros exit=0 no_runtime_claim
+PASS parser-only=help exit=0 no_runtime_claim
+PASS main-error=init-error quiet=0 exit=1 cleanup_checked
+PASS main-error=init-error quiet=1 exit=1 cleanup_checked
+PASS main-error=cleanup-error quiet=0 exit=1 cleanup_checked
+PASS main-error=cleanup-error quiet=1 exit=1 cleanup_checked
+PASS main-error=unverified quiet=0 exit=1 cleanup_checked
+PASS main-error=unverified quiet=1 exit=1 cleanup_checked
+CLI/log PASS: runtime=16 invalid=116 (production+hook), help=2, parser_bounds=5, formatter=7, main_errors=6
+exit_code=0
+
+$ python3 scripts/check_scaffold.py
+Scaffold verified: 23 required files; 310 relative links; ignore rules; no tracked/staged AGENTS.md.
+No C algorithm, thread behavior or academic task has been validated.
+exit_code=0
+
+$ git status --short
+exit_code=0

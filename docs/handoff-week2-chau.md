@@ -1,6 +1,8 @@
 # Bàn giao Tuần 2 — Châu → Huy
 
-W2-C đã nghiệm thu **lõi 1P/1C** trên máy Châu ngày 12/10/2026; [báo cáo](reports/week2.md), [minh chứng](../results/week2/chau-validation.md). Bộ đệm của Huy và log Tuần 1 giữ nguyên. Các phần dưới mô tả **snapshot bàn giao W2-C trước CLI/log**. Sau đó W2-H đã ghép/kiểm chứng qua Codex theo yêu cầu; [minh chứng Huy](../results/week2/huy-validation.md), [review bản ghép](../results/week2/group-validation.md), trạng thái bàn giao main theo [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3). Không ghi Huy trực tiếp phê duyệt.
+W2-C đã nghiệm thu **lõi 1P/1C** trên máy Châu ngày 12/10/2026; [báo cáo](reports/week2.md), [minh chứng](../results/week2/chau-validation.md). Bộ đệm của Huy và log Tuần 1 giữ nguyên. Các phần dưới mô tả **snapshot bàn giao W2-C trước CLI/log**. Sau đó W2-H đã ghép/kiểm chứng qua Codex theo yêu cầu; [minh chứng Huy](../results/week2/huy-validation.md), [review bản ghép](../results/week2/group-validation.md); [PR #3](https://github.com/ndhuy1127/os-producer-consumer/pull/3) đã merge ở `d125734`. Không ghi Huy trực tiếp phê duyệt.
+
+> **Tuần 3:** API đã mở rộng cho P, C = 1..64 (`pc_record.actor_index`, các trường mới cuối `pc_summary`, record tối đa 2·(P·K+C)); giới hạn "P=C=1" bên dưới chỉ còn đúng với snapshot Tuần 2. Xem [design.md §11](design.md#11-tuần-3--nhiều-producerconsumer).
 
 ## API cấu hình và vòng đời
 

@@ -1,17 +1,18 @@
 # tests
 
-[test_buffer.c](test_buffer.c) gồm 12 ca tuần tự, chạy bằng `make test-buffer` hoặc `make test`. Kiểm tra từng kind/id/value với oracle FIFO độc lập, lỗi giữ nguyên dữ liệu, biên N=1, STOP, vòng đời, tràn kích thước và malloc thất bại được tiêm bằng GNU ld wrapper; kiểm tra mảng được free sau mỗi ca. Exit 0 chỉ khi tất cả ca PASS; lỗi trả EXIT_FAILURE.
+Chạy tất cả bằng `make test`; từng nhóm như bên dưới. Hướng dẫn đầy đủ ở [run-guide.md](../docs/run-guide.md), kết quả thực chạy Tuần 3 ở [results/week3](../results/week3/README.md).
 
-Bản sanitizer không bật wrapper chạy 11 ca thường. [Minh chứng Tuần 1](../results/week1/huy-validation.md) giữ nguyên.
+| File | Lệnh | Nội dung |
+| --- | --- | --- |
+| [test_buffer.c](test_buffer.c) | `make test-buffer` | 12 ca bộ đệm tuần tự: FIFO với oracle độc lập, đầy/rỗng, quay vòng, N=1, STOP, tham số sai, vòng đời, tràn kích thước, malloc lỗi (GNU ld wrapper); kiểm tra mảng được free sau mỗi ca |
+| [test_pc.c](test_pc.c) | `make test-pc`, hoặc `./bin/pc-test <preset> [--records]` | 16 preset gọi `pc_run`: 8 cấu hình 1P/1C của Tuần 2 và T06a, T06b, T07, T09a, T09b, T04-multi, T05-multi, queued-stop-multi |
+| [test_pc_faults.c](test_pc_faults.c) | `make test-errors` | 32 ca tiêm lỗi bằng GNU ld wrapper, mỗi ca một tiến trình, timeout 5 s |
+| [test_cli.c](test_cli.c) | trong `make test-cli` | Driver chỉ parse tham số, thử biên lớn mà không chạy luồng |
+| [test_runtime_log.c](test_runtime_log.c) | trong `make test-cli` | 8 ca formatter: uint64 lớn, STOP `data_id=-`, chỉ số luồng C63, quiet, status/verified sai vẫn FAIL, lỗi output, chỉ số luồng ≥ 64 bị từ chối |
+| [test_main_hooks.c](test_main_hooks.c) | trong `make test-cli` | Link với `main` thật; chặn `pc_run`/`pthread_create` để chứng minh tham số sai không chạy lõi; tiêm lỗi init/cleanup/verified |
 
-[test_pc.c](test_pc.c) gọi cùng pc_run với tám preset: default, source-N5, T02, T03, T04, T05, K0, queued-stop. Oracle là dãy tuyến tính append/read, độc lập với buffer vòng; đối chiếu từng kind/id/value/enqueue_seq, tần suất ID, count theo số lần thêm/lấy, actor/wait, STOP và cả hai create/join. T04 bắt buộc có snapshot đầy và WAIT_SLOT; T05 bắt buộc rỗng và WAIT_ITEM; queued-stop bắt buộc có DATA còn đợi sau producer join. Chạy `make test-pc` hoặc `timeout 7s ./bin/pc-test T04 --records`.
+**Oracle của test_pc.c** là một hàng đợi tuyến tính chỉ thêm, độc lập với bộ đệm vòng. Với từng bản ghi, nó kiểm tra kind/id/value/enqueue_seq so với phần tử đưa vào tương ứng; ID p·K+j phải do producer p đưa vào theo thứ tự j và được lấy ra theo cùng thứ tự; count bằng số thêm trừ số lấy và nằm trong [0, N]; mọi DATA lấy ra trước STOP đầu tiên; mỗi consumer nhận đúng một STOP; tổng kết theo luồng khớp số đếm của oracle; P+C luồng được tạo và join. T04/T04-multi bắt buộc có snapshot đầy và WAIT_SLOT; T05/T05-multi bắt buộc có snapshot rỗng và WAIT_ITEM; queued-stop và queued-stop-multi bắt buộc còn DATA khi main gửi STOP.
 
-[test_pc_faults.c](test_pc_faults.c) dùng GNU ld wrapper tách khỏi production; [check_pc_errors.py](../scripts/check_pc_errors.py) chạy 26 ca riêng với timeout 5s mỗi ca. EINTR cho guard/quyền/trywait phải phục hồi; producer create lỗi được đồng bộ bằng semaphore test để consumer đã vào đường sem_wait(full) sau EAGAIN, không dùng sleep đoán readiness. Kiểm tra join đủ, destroy đúng tài nguyên, cấp phát được free. Ca fatal phải exit 1 cùng thông báo lời gọi lỗi; không giả định đã cleanup sau fatal. Bộ kiểm tra cấu hình gọi API, **không** nghiệm thu parser CLI/T08.
+**Tiêm lỗi (test_pc_faults.c):** `EINTR` ở `sem_wait`/`sem_trywait` (cả khi 3P/3C) phải được thử lại; tạo consumer/producer lỗi ở luồng đầu tiên hoặc giữa chừng phải join đúng các luồng đã chạy; lỗi khởi tạo semaphore/cấp phát phải dọn đúng phần đã tạo; tham số sai (N=0/65537, P/C=0/65, K quá lớn, P·K > 1000000, độ trễ > 60000) bị từ chối trước khi tạo luồng; 7 lỗi nghiêm trọng phải thoát mã 1 kèm tên lời gọi lỗi. Mọi ca có phục hồi kiểm tra số lần tạo = số lần join, số semaphore khởi tạo = số lần hủy, không còn vùng nhớ chưa free. Ca chờ `EINTR` dùng semaphore riêng của test để biết consumer đã vào `sem_wait(full)`, không dùng `sleep` để đoán.
 
-Các test Châu giữ nguyên; [minh chứng Châu](../results/week2/chau-validation.md) là snapshot bàn giao. `make test` hiện chạy ba nhóm đó và test-cli.
-
-[test_cli.c](test_cli.c) là driver parser riêng để thử biên lớn (N=65536/K=1000000/delay=60000) không chạy worker. [test_runtime_log.c](test_runtime_log.c) có 7 ca formatter: số uint64_t lớn, STOP data_id=-, quiet, status=1/verified=1 vẫn FAIL, verified=0 vẫn FAIL và output error. Fixture formatter không phải bằng chứng dữ liệu/FIFO runtime.
-
-[test_main_hooks.c](test_main_hooks.c) chỉ link vào main-hook-test với cùng main production; trap pc_run/pthread_create (exit 99) ở parse sai/help, có positive control. Init/cleanup/verified được tiêm để kiểm tra main trả 1, không PASS và vẫn destroy records ở thường/quiet.
-
-[check_cli_log.py](../scripts/check_cli_log.py) chạy production 16 ca (8 thường/8 quiet) và 116 đầu vào sai + wrapper; parse stdout thành queue tuyến tính độc lập để kiểm tra từng ID/kind/value/FIFO/count/STOP/schema/summary. Quiet giữ records/oracle và được kiểm tra summary cùng các ca lỗi, không có record để làm oracle stdout. [Minh chứng Huy](../results/week2/huy-validation.md) phân biệt hai phạm vi này. T06/T07, runtime nhiều luồng và toàn T09 còn chờ Tuần 3; T08 chỉ CLI 1P/1C đã kiểm tra.
+Wrapper chỉ được link vào binary test, không có trong `bin/producer-consumer`. Fixture của formatter là dữ liệu dựng sẵn để thử định dạng, không phải bằng chứng FIFO khi chạy thật.

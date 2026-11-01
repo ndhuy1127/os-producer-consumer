@@ -1,0 +1,1113 @@
+{
+  "executed_at": "2026-10-20T23:17:48+07:00",
+  "HEAD": "3bda04b4091784c48898ce23589c4af9d5eb3b11",
+  "branch": "dev/huy",
+  "sources_clean": true,
+  "source_manifest_sha256": "8bb98e5f51266eaa885f73160a1ca6c1485fb59aa95445bae923de40fd42c30a",
+  "core": {
+    "thread_demo": "PASS",
+    "buffer_cases": 12,
+    "core_presets": 16,
+    "fault_cases": 32
+  },
+  "cli": {
+    "runtime_runs": [
+      {
+        "name": "default",
+        "quiet": false,
+        "config": [
+          8,
+          1,
+          1,
+          20,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 42,
+        "wait_slot": 2,
+        "wait_item": 4,
+        "pending_after_producer_join": 0,
+        "max_count": 8,
+        "consumer_data": [
+          20
+        ],
+        "full_snapshots": 2,
+        "empty_snapshots": 4,
+        "producer_wait_slot": 2
+      },
+      {
+        "name": "default",
+        "quiet": true,
+        "config": [
+          8,
+          1,
+          1,
+          20,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 42,
+        "wait_slot": 2,
+        "wait_item": 4,
+        "pending_after_producer_join": 0,
+        "max_count": 8,
+        "consumer_data": [
+          20
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      },
+      {
+        "name": "source-N5",
+        "quiet": false,
+        "config": [
+          5,
+          1,
+          1,
+          20,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 42,
+        "wait_slot": 3,
+        "wait_item": 5,
+        "pending_after_producer_join": 0,
+        "max_count": 5,
+        "consumer_data": [
+          20
+        ],
+        "full_snapshots": 4,
+        "empty_snapshots": 5,
+        "producer_wait_slot": 3
+      },
+      {
+        "name": "source-N5",
+        "quiet": true,
+        "config": [
+          5,
+          1,
+          1,
+          20,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 42,
+        "wait_slot": 2,
+        "wait_item": 9,
+        "pending_after_producer_join": 0,
+        "max_count": 5,
+        "consumer_data": [
+          20
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      },
+      {
+        "name": "T02",
+        "quiet": false,
+        "config": [
+          8,
+          1,
+          1,
+          100,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 202,
+        "wait_slot": 12,
+        "wait_item": 14,
+        "pending_after_producer_join": 0,
+        "max_count": 8,
+        "consumer_data": [
+          100
+        ],
+        "full_snapshots": 12,
+        "empty_snapshots": 14,
+        "producer_wait_slot": 12
+      },
+      {
+        "name": "T02",
+        "quiet": true,
+        "config": [
+          8,
+          1,
+          1,
+          100,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 202,
+        "wait_slot": 12,
+        "wait_item": 14,
+        "pending_after_producer_join": 0,
+        "max_count": 8,
+        "consumer_data": [
+          100
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      },
+      {
+        "name": "T03",
+        "quiet": false,
+        "config": [
+          1,
+          1,
+          1,
+          100,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 202,
+        "wait_slot": 99,
+        "wait_item": 101,
+        "pending_after_producer_join": 0,
+        "max_count": 1,
+        "consumer_data": [
+          100
+        ],
+        "full_snapshots": 101,
+        "empty_snapshots": 101,
+        "producer_wait_slot": 99
+      },
+      {
+        "name": "T03",
+        "quiet": true,
+        "config": [
+          1,
+          1,
+          1,
+          100,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 202,
+        "wait_slot": 99,
+        "wait_item": 101,
+        "pending_after_producer_join": 0,
+        "max_count": 1,
+        "consumer_data": [
+          100
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      },
+      {
+        "name": "T04",
+        "quiet": false,
+        "config": [
+          2,
+          1,
+          1,
+          40,
+          0,
+          20
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 82,
+        "wait_slot": 39,
+        "wait_item": 1,
+        "pending_after_producer_join": 2,
+        "max_count": 2,
+        "consumer_data": [
+          40
+        ],
+        "full_snapshots": 40,
+        "empty_snapshots": 1,
+        "producer_wait_slot": 38
+      },
+      {
+        "name": "T04",
+        "quiet": true,
+        "config": [
+          2,
+          1,
+          1,
+          40,
+          0,
+          20
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 82,
+        "wait_slot": 39,
+        "wait_item": 1,
+        "pending_after_producer_join": 2,
+        "max_count": 2,
+        "consumer_data": [
+          40
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      },
+      {
+        "name": "T05",
+        "quiet": false,
+        "config": [
+          2,
+          1,
+          1,
+          40,
+          20,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 82,
+        "wait_slot": 0,
+        "wait_item": 41,
+        "pending_after_producer_join": 0,
+        "max_count": 1,
+        "consumer_data": [
+          40
+        ],
+        "full_snapshots": 0,
+        "empty_snapshots": 41,
+        "producer_wait_slot": 0
+      },
+      {
+        "name": "T05",
+        "quiet": true,
+        "config": [
+          2,
+          1,
+          1,
+          40,
+          20,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 82,
+        "wait_slot": 0,
+        "wait_item": 41,
+        "pending_after_producer_join": 0,
+        "max_count": 1,
+        "consumer_data": [
+          40
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      },
+      {
+        "name": "K0",
+        "quiet": false,
+        "config": [
+          1,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 2,
+        "wait_slot": 0,
+        "wait_item": 1,
+        "pending_after_producer_join": 0,
+        "max_count": 1,
+        "consumer_data": [
+          0
+        ],
+        "full_snapshots": 1,
+        "empty_snapshots": 1,
+        "producer_wait_slot": 0
+      },
+      {
+        "name": "K0",
+        "quiet": true,
+        "config": [
+          1,
+          1,
+          1,
+          0,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 2,
+        "wait_slot": 0,
+        "wait_item": 1,
+        "pending_after_producer_join": 0,
+        "max_count": 1,
+        "consumer_data": [
+          0
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      },
+      {
+        "name": "queued-stop",
+        "quiet": false,
+        "config": [
+          8,
+          1,
+          1,
+          20,
+          0,
+          20
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 42,
+        "wait_slot": 13,
+        "wait_item": 1,
+        "pending_after_producer_join": 8,
+        "max_count": 8,
+        "consumer_data": [
+          20
+        ],
+        "full_snapshots": 14,
+        "empty_snapshots": 1,
+        "producer_wait_slot": 12
+      },
+      {
+        "name": "queued-stop",
+        "quiet": true,
+        "config": [
+          8,
+          1,
+          1,
+          20,
+          0,
+          20
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 42,
+        "wait_slot": 13,
+        "wait_item": 1,
+        "pending_after_producer_join": 8,
+        "max_count": 8,
+        "consumer_data": [
+          20
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      },
+      {
+        "name": "T06a",
+        "quiet": false,
+        "config": [
+          3,
+          3,
+          2,
+          100,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 604,
+        "wait_slot": 156,
+        "wait_item": 89,
+        "pending_after_producer_join": 0,
+        "max_count": 3,
+        "consumer_data": [
+          154,
+          146
+        ],
+        "full_snapshots": 122,
+        "empty_snapshots": 95,
+        "producer_wait_slot": 156
+      },
+      {
+        "name": "T06a",
+        "quiet": true,
+        "config": [
+          3,
+          3,
+          2,
+          100,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 604,
+        "wait_slot": 165,
+        "wait_item": 71,
+        "pending_after_producer_join": 0,
+        "max_count": 3,
+        "consumer_data": [
+          159,
+          141
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      },
+      {
+        "name": "T06b",
+        "quiet": false,
+        "config": [
+          2,
+          2,
+          5,
+          100,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 410,
+        "wait_slot": 3,
+        "wait_item": 112,
+        "pending_after_producer_join": 0,
+        "max_count": 2,
+        "consumer_data": [
+          43,
+          37,
+          44,
+          41,
+          35
+        ],
+        "full_snapshots": 104,
+        "empty_snapshots": 101,
+        "producer_wait_slot": 3
+      },
+      {
+        "name": "T06b",
+        "quiet": true,
+        "config": [
+          2,
+          2,
+          5,
+          100,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 410,
+        "wait_slot": 45,
+        "wait_item": 133,
+        "pending_after_producer_join": 0,
+        "max_count": 2,
+        "consumer_data": [
+          30,
+          49,
+          43,
+          30,
+          48
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      },
+      {
+        "name": "T09a",
+        "quiet": false,
+        "config": [
+          1,
+          1,
+          4,
+          0,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 8,
+        "wait_slot": 3,
+        "wait_item": 4,
+        "pending_after_producer_join": 0,
+        "max_count": 1,
+        "consumer_data": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "full_snapshots": 4,
+        "empty_snapshots": 4,
+        "producer_wait_slot": 0
+      },
+      {
+        "name": "T09a",
+        "quiet": true,
+        "config": [
+          1,
+          1,
+          4,
+          0,
+          0,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 8,
+        "wait_slot": 3,
+        "wait_item": 4,
+        "pending_after_producer_join": 0,
+        "max_count": 1,
+        "consumer_data": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      },
+      {
+        "name": "T09b",
+        "quiet": false,
+        "config": [
+          2,
+          2,
+          3,
+          30,
+          0,
+          10
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 126,
+        "wait_slot": 45,
+        "wait_item": 7,
+        "pending_after_producer_join": 1,
+        "max_count": 2,
+        "consumer_data": [
+          20,
+          20,
+          20
+        ],
+        "full_snapshots": 44,
+        "empty_snapshots": 19,
+        "producer_wait_slot": 43
+      },
+      {
+        "name": "T09b",
+        "quiet": true,
+        "config": [
+          2,
+          2,
+          3,
+          30,
+          0,
+          10
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 126,
+        "wait_slot": 50,
+        "wait_item": 5,
+        "pending_after_producer_join": 0,
+        "max_count": 2,
+        "consumer_data": [
+          20,
+          20,
+          20
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      },
+      {
+        "name": "T04-multi",
+        "quiet": false,
+        "config": [
+          2,
+          3,
+          2,
+          40,
+          0,
+          20
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 244,
+        "wait_slot": 72,
+        "wait_item": 2,
+        "pending_after_producer_join": 2,
+        "max_count": 2,
+        "consumer_data": [
+          60,
+          60
+        ],
+        "full_snapshots": 74,
+        "empty_snapshots": 48,
+        "producer_wait_slot": 71
+      },
+      {
+        "name": "T04-multi",
+        "quiet": true,
+        "config": [
+          2,
+          3,
+          2,
+          40,
+          0,
+          20
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 244,
+        "wait_slot": 70,
+        "wait_item": 1,
+        "pending_after_producer_join": 2,
+        "max_count": 2,
+        "consumer_data": [
+          60,
+          60
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      },
+      {
+        "name": "T05-multi",
+        "quiet": false,
+        "config": [
+          2,
+          2,
+          3,
+          40,
+          20,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 166,
+        "wait_slot": 0,
+        "wait_item": 66,
+        "pending_after_producer_join": 0,
+        "max_count": 2,
+        "consumer_data": [
+          25,
+          27,
+          28
+        ],
+        "full_snapshots": 20,
+        "empty_snapshots": 63,
+        "producer_wait_slot": 0
+      },
+      {
+        "name": "T05-multi",
+        "quiet": true,
+        "config": [
+          2,
+          2,
+          3,
+          40,
+          20,
+          0
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 166,
+        "wait_slot": 1,
+        "wait_item": 62,
+        "pending_after_producer_join": 0,
+        "max_count": 2,
+        "consumer_data": [
+          30,
+          25,
+          25
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      },
+      {
+        "name": "queued-stop-multi",
+        "quiet": false,
+        "config": [
+          8,
+          2,
+          3,
+          40,
+          0,
+          20
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 166,
+        "wait_slot": 42,
+        "wait_item": 3,
+        "pending_after_producer_join": 8,
+        "max_count": 8,
+        "consumer_data": [
+          27,
+          27,
+          26
+        ],
+        "full_snapshots": 42,
+        "empty_snapshots": 1,
+        "producer_wait_slot": 40
+      },
+      {
+        "name": "queued-stop-multi",
+        "quiet": true,
+        "config": [
+          8,
+          2,
+          3,
+          40,
+          0,
+          20
+        ],
+        "exit_code": 0,
+        "outcome": "PASS",
+        "records_retained": 166,
+        "wait_slot": 42,
+        "wait_item": 3,
+        "pending_after_producer_join": 8,
+        "max_count": 8,
+        "consumer_data": [
+          27,
+          26,
+          27
+        ],
+        "full_snapshots": null,
+        "empty_snapshots": null
+      }
+    ],
+    "invalid_cli_cases": 114,
+    "invalid_and_hook_processes": 228,
+    "help_processes": 2,
+    "forbidden_hook_control_exit": 99,
+    "parser_boundary_cases": 6,
+    "formatter_cases": 8,
+    "main_error_cases": 6,
+    "outcome": "PASS",
+    "exit_code": 0
+  },
+  "stress": [
+    {
+      "name": "T06a",
+      "config": [
+        3,
+        3,
+        2,
+        100,
+        0,
+        0
+      ],
+      "runs": 20,
+      "passed": 20,
+      "data_per_run": 300,
+      "elapsed_s": [
+        0.004,
+        0.009
+      ],
+      "max_count": [
+        3,
+        3
+      ],
+      "full_snapshots": [
+        97,
+        149
+      ],
+      "wait_slot": [
+        124,
+        175
+      ],
+      "wait_item": [
+        55,
+        136
+      ],
+      "pending": [
+        0,
+        0
+      ],
+      "consumer_share": [
+        123,
+        177
+      ]
+    },
+    {
+      "name": "T06b",
+      "config": [
+        2,
+        2,
+        5,
+        100,
+        0,
+        0
+      ],
+      "runs": 20,
+      "passed": 20,
+      "data_per_run": 200,
+      "elapsed_s": [
+        0.003,
+        0.02
+      ],
+      "max_count": [
+        2,
+        2
+      ],
+      "full_snapshots": [
+        67,
+        101
+      ],
+      "wait_slot": [
+        1,
+        41
+      ],
+      "wait_item": [
+        117,
+        144
+      ],
+      "pending": [
+        0,
+        0
+      ],
+      "consumer_share": [
+        27,
+        53
+      ]
+    },
+    {
+      "name": "T07",
+      "config": [
+        16,
+        4,
+        3,
+        10000,
+        0,
+        0
+      ],
+      "runs": 20,
+      "passed": 20,
+      "data_per_run": 40000,
+      "elapsed_s": [
+        0.118,
+        0.205
+      ],
+      "max_count": [
+        16,
+        16
+      ],
+      "full_snapshots": [
+        2536,
+        3850
+      ],
+      "wait_slot": [
+        6710,
+        7958
+      ],
+      "wait_item": [
+        3282,
+        4749
+      ],
+      "pending": [
+        0,
+        0
+      ],
+      "consumer_share": [
+        11779,
+        14437
+      ]
+    },
+    {
+      "name": "T09a",
+      "config": [
+        1,
+        1,
+        4,
+        0,
+        0,
+        0
+      ],
+      "runs": 20,
+      "passed": 20,
+      "data_per_run": 0,
+      "elapsed_s": [
+        0.001,
+        0.005
+      ],
+      "max_count": [
+        1,
+        1
+      ],
+      "full_snapshots": [
+        4,
+        4
+      ],
+      "wait_slot": [
+        2,
+        3
+      ],
+      "wait_item": [
+        4,
+        4
+      ],
+      "pending": [
+        0,
+        0
+      ],
+      "consumer_share": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "T09b",
+      "config": [
+        2,
+        2,
+        3,
+        30,
+        0,
+        10
+      ],
+      "runs": 20,
+      "passed": 20,
+      "data_per_run": 60,
+      "elapsed_s": [
+        0.208,
+        0.233
+      ],
+      "max_count": [
+        2,
+        2
+      ],
+      "full_snapshots": [
+        40,
+        50
+      ],
+      "wait_slot": [
+        40,
+        48
+      ],
+      "wait_item": [
+        4,
+        12
+      ],
+      "pending": [
+        0,
+        2
+      ],
+      "consumer_share": [
+        20,
+        20
+      ]
+    },
+    {
+      "name": "N1-8P8C",
+      "config": [
+        1,
+        8,
+        8,
+        500,
+        0,
+        0
+      ],
+      "runs": 20,
+      "passed": 20,
+      "data_per_run": 4000,
+      "elapsed_s": [
+        0.038,
+        0.08
+      ],
+      "max_count": [
+        1,
+        1
+      ],
+      "full_snapshots": [
+        4008,
+        4008
+      ],
+      "wait_slot": [
+        2059,
+        3149
+      ],
+      "wait_item": [
+        2166,
+        3264
+      ],
+      "pending": [
+        0,
+        0
+      ],
+      "consumer_share": [
+        409,
+        774
+      ]
+    },
+    {
+      "name": "max-workers",
+      "config": [
+        64,
+        64,
+        64,
+        100,
+        0,
+        0
+      ],
+      "runs": 20,
+      "passed": 20,
+      "data_per_run": 6400,
+      "elapsed_s": [
+        0.021,
+        0.045
+      ],
+      "max_count": [
+        21,
+        56
+      ],
+      "full_snapshots": [
+        0,
+        0
+      ],
+      "wait_slot": [
+        0,
+        2043
+      ],
+      "wait_item": [
+        2471,
+        3621
+      ],
+      "pending": [
+        0,
+        0
+      ],
+      "consumer_share": [
+        18,
+        216
+      ]
+    }
+  ],
+  "sanitizers": [
+    {
+      "tool": "ASan+UBSan",
+      "target": "bin/producer-consumer",
+      "configs": "T06a, T06b, T09a, T09b, T04-multi, T05-multi, N1-8P8C, max-workers, T07",
+      "outcome": "PASS, không có cảnh báo"
+    },
+    {
+      "tool": "ASan+UBSan",
+      "target": "pc-test all",
+      "configs": "16 preset lõi",
+      "outcome": "PASS, không có cảnh báo"
+    },
+    {
+      "tool": "TSan",
+      "target": "bin/producer-consumer",
+      "configs": "T06a, T06b, T09a, T09b, T04-multi, T05-multi, N1-8P8C, max-workers, T07",
+      "outcome": "PASS, không có cảnh báo"
+    },
+    {
+      "tool": "TSan",
+      "target": "pc-test all",
+      "configs": "16 preset lõi",
+      "outcome": "PASS, không có cảnh báo"
+    }
+  ]
+}

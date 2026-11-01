@@ -6,10 +6,12 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 RECOVERABLE = [
-    "wait-eintr", "trywait-eintr", "producer-create", "consumer-create",
+    "wait-eintr", "wait-eintr-multi", "trywait-eintr", "producer-create", "consumer-create",
+    "producer-create-mid", "consumer-create-mid",
     "init-empty", "init-full", "init-guard", "malloc", "calloc-record",
     "calloc-slot", "calloc-produced", "calloc-consumed", "destroy",
-    "config-N0", "config-Nbig", "config-P2", "config-C2", "config-Kbig", "config-delay",
+    "config-N0", "config-Nbig", "config-P0", "config-P65", "config-C0", "config-C65",
+    "config-Kbig", "config-total", "config-delay",
 ]
 FATAL = {
     "fatal-guard": "sem_wait guard",

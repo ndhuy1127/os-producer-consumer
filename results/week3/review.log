@@ -1,0 +1,45 @@
+Week 3 actual execution (Asia/Saigon): 2026-10-20T23:17:48+07:00
+root=/mnt/d/os-producer-consumer
+branch=dev/huy
+HEAD=3bda04b4091784c48898ce23589c4af9d5eb3b11
+source=exactly HEAD (sources clean)
+source_manifest_sha256=8bb98e5f51266eaa885f73160a1ca6c1485fb59aa95445bae923de40fd42c30a
+source_manifest=results/week3/source.sha256
+operator=Claude Code theo yeu cau Huy, may cua Huy (WSL Ubuntu-24.04); W3-C chua duoc Chau review/xac nhan
+
+$ python3 scripts/check_scaffold.py
+timeout=60s expected_exit=0
+stdout:
+Scaffold verified: 23 required files; 313 relative links; ignore rules; no tracked/staged AGENTS.md.
+No C algorithm, thread behavior or academic task has been validated.
+stderr:
+exit_code=0
+
+$ git diff --check
+timeout=60s expected_exit=0
+stdout:
+stderr:
+warning: in the working copy of 'results/week1/huy-buffer-test.log', CRLF will be replaced by LF the next time Git touches it
+exit_code=0
+
+$ git diff --exit-code HEAD -- results/week1 results/week2
+timeout=60s expected_exit=0
+stdout:
+stderr:
+exit_code=0
+
+$ git status --short
+timeout=60s expected_exit=0
+stdout:
+?? results/week3/build.log
+?? results/week3/cli-tests.log
+?? results/week3/core-tests.log
+?? results/week3/log-tests.log
+?? results/week3/review.log
+?? results/week3/runtime-tests.log
+?? results/week3/sanitizers.log
+?? results/week3/source.sha256
+?? results/week3/stress-tests.log
+stderr:
+exit_code=0
+PASS source manifest unchanged during the run; results/week1 and results/week2 untouched.

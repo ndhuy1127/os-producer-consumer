@@ -1,0 +1,1165 @@
+Week 3 actual execution (Asia/Saigon): 2026-10-20T23:17:48+07:00
+root=/mnt/d/os-producer-consumer
+branch=dev/huy
+HEAD=3bda04b4091784c48898ce23589c4af9d5eb3b11
+source=exactly HEAD (sources clean)
+source_manifest_sha256=8bb98e5f51266eaa885f73160a1ca6c1485fb59aa95445bae923de40fd42c30a
+source_manifest=results/week3/source.sha256
+operator=Claude Code theo yeu cau Huy, may cua Huy (WSL Ubuntu-24.04); W3-C chua duoc Chau review/xac nhan
+
+$ ./bin/producer-consumer --capacity 3 --producers 3 --consumers 2 --items-per-producer 100 --producer-delay-ms 0 --consumer-delay-ms 0
+repeat=20 timeout=5s each; full stdout oracle per run, log keeps summary lines only
+run=1 exit_code=0 elapsed_s=0.008 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=175 WAIT_ITEM=74 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=123/1 C1=177/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=2 exit_code=0 elapsed_s=0.004 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=157 WAIT_ITEM=55 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=139/1 C1=161/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=3 exit_code=0 elapsed_s=0.008 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=170 WAIT_ITEM=75 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=147/1 C1=153/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=4 exit_code=0 elapsed_s=0.008 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=166 WAIT_ITEM=77 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=168/1 C1=132/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=5 exit_code=0 elapsed_s=0.006 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=124 WAIT_ITEM=136 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=158/1 C1=142/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=6 exit_code=0 elapsed_s=0.006 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=135 WAIT_ITEM=70 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=154/1 C1=146/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=7 exit_code=0 elapsed_s=0.005 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=166 WAIT_ITEM=71 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=148/1 C1=152/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=8 exit_code=0 elapsed_s=0.006 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=158 WAIT_ITEM=83 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=129/1 C1=171/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=9 exit_code=0 elapsed_s=0.004 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=172 WAIT_ITEM=84 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=151/1 C1=149/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=10 exit_code=0 elapsed_s=0.006 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=142 WAIT_ITEM=80 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=127/1 C1=173/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=11 exit_code=0 elapsed_s=0.004 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=173 WAIT_ITEM=79 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=165/1 C1=135/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=12 exit_code=0 elapsed_s=0.004 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=148 WAIT_ITEM=76 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=145/1 C1=155/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=13 exit_code=0 elapsed_s=0.007 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=162 WAIT_ITEM=69 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=133/1 C1=167/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=14 exit_code=0 elapsed_s=0.007 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=162 WAIT_ITEM=68 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=148/1 C1=152/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=15 exit_code=0 elapsed_s=0.004 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=159 WAIT_ITEM=82 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=134/1 C1=166/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=16 exit_code=0 elapsed_s=0.004 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=156 WAIT_ITEM=82 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=135/1 C1=165/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=17 exit_code=0 elapsed_s=0.004 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=157 WAIT_ITEM=77 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=156/1 C1=144/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=18 exit_code=0 elapsed_s=0.009 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=164 WAIT_ITEM=80 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=145/1 C1=155/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=19 exit_code=0 elapsed_s=0.008 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=155 WAIT_ITEM=70 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=177/1 C1=123/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+run=20 exit_code=0 elapsed_s=0.005 oracle=PASS
+  config: N=3 P=3 C=2 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=300 dequeued=300 processed=300 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=3 final=0 count_errors=0; STOP: enqueued=2 dequeued=2
+  waits: WAIT_SLOT=168 WAIT_ITEM=77 records=604 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100
+  consumers(DATA/STOP): C0=145/1 C1=155/1
+  workers: created=3P/2C joined=3P/2C; verification=PASS run_status=0
+PASS stress=T06a runs=20/20 DATA/run=300 time=0.004-0.009s
+
+$ ./bin/producer-consumer --capacity 2 --producers 2 --consumers 5 --items-per-producer 100 --producer-delay-ms 0 --consumer-delay-ms 0
+repeat=20 timeout=5s each; full stdout oracle per run, log keeps summary lines only
+run=1 exit_code=0 elapsed_s=0.004 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=23 WAIT_ITEM=134 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=43/1 C1=30/1 C2=53/1 C3=39/1 C4=35/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=2 exit_code=0 elapsed_s=0.020 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=25 WAIT_ITEM=131 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=44/1 C1=44/1 C2=42/1 C3=34/1 C4=36/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=3 exit_code=0 elapsed_s=0.006 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=25 WAIT_ITEM=132 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=38/1 C1=39/1 C2=41/1 C3=41/1 C4=41/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=4 exit_code=0 elapsed_s=0.009 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=2 WAIT_ITEM=118 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=48/1 C1=38/1 C2=34/1 C3=37/1 C4=43/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=5 exit_code=0 elapsed_s=0.005 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=6 WAIT_ITEM=131 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=40/1 C1=42/1 C2=48/1 C3=33/1 C4=37/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=6 exit_code=0 elapsed_s=0.004 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=4 WAIT_ITEM=125 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=47/1 C1=40/1 C2=34/1 C3=38/1 C4=41/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=7 exit_code=0 elapsed_s=0.004 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=1 WAIT_ITEM=117 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=40/1 C1=34/1 C2=51/1 C3=41/1 C4=34/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=8 exit_code=0 elapsed_s=0.003 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=4 WAIT_ITEM=140 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=42/1 C1=35/1 C2=43/1 C3=41/1 C4=39/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=9 exit_code=0 elapsed_s=0.009 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=6 WAIT_ITEM=131 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=46/1 C1=44/1 C2=46/1 C3=27/1 C4=37/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=10 exit_code=0 elapsed_s=0.016 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=8 WAIT_ITEM=131 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=33/1 C1=43/1 C2=45/1 C3=44/1 C4=35/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=11 exit_code=0 elapsed_s=0.006 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=25 WAIT_ITEM=142 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=41/1 C1=42/1 C2=41/1 C3=34/1 C4=42/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=12 exit_code=0 elapsed_s=0.019 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=8 WAIT_ITEM=137 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=32/1 C1=42/1 C2=43/1 C3=46/1 C4=37/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=13 exit_code=0 elapsed_s=0.005 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=7 WAIT_ITEM=132 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=39/1 C1=47/1 C2=38/1 C3=41/1 C4=35/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=14 exit_code=0 elapsed_s=0.005 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=41 WAIT_ITEM=141 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=47/1 C1=35/1 C2=41/1 C3=39/1 C4=38/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=15 exit_code=0 elapsed_s=0.011 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=15 WAIT_ITEM=123 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=43/1 C1=40/1 C2=38/1 C3=35/1 C4=44/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=16 exit_code=0 elapsed_s=0.005 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=36 WAIT_ITEM=141 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=40/1 C1=50/1 C2=38/1 C3=45/1 C4=27/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=17 exit_code=0 elapsed_s=0.019 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=8 WAIT_ITEM=132 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=38/1 C1=46/1 C2=42/1 C3=43/1 C4=31/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=18 exit_code=0 elapsed_s=0.006 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=6 WAIT_ITEM=137 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=36/1 C1=44/1 C2=51/1 C3=32/1 C4=37/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=19 exit_code=0 elapsed_s=0.004 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=13 WAIT_ITEM=133 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=46/1 C1=44/1 C2=37/1 C3=37/1 C4=36/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+run=20 exit_code=0 elapsed_s=0.017 oracle=PASS
+  config: N=2 P=2 C=5 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=200 dequeued=200 processed=200 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=5 dequeued=5
+  waits: WAIT_SLOT=4 WAIT_ITEM=144 records=410 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100
+  consumers(DATA/STOP): C0=42/1 C1=46/1 C2=34/1 C3=40/1 C4=38/1
+  workers: created=2P/5C joined=2P/5C; verification=PASS run_status=0
+PASS stress=T06b runs=20/20 DATA/run=200 time=0.003-0.02s
+
+$ ./bin/producer-consumer --capacity 16 --producers 4 --consumers 3 --items-per-producer 10000 --producer-delay-ms 0 --consumer-delay-ms 0
+repeat=20 timeout=5s each; full stdout oracle per run, log keeps summary lines only
+run=1 exit_code=0 elapsed_s=0.177 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=6806 WAIT_ITEM=3953 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13480/1 C1=13099/1 C2=13421/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=2 exit_code=0 elapsed_s=0.130 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=7958 WAIT_ITEM=3282 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13291/1 C1=13192/1 C2=13517/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=3 exit_code=0 elapsed_s=0.127 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=7039 WAIT_ITEM=4029 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13233/1 C1=13018/1 C2=13749/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=4 exit_code=0 elapsed_s=0.126 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=6865 WAIT_ITEM=3980 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13273/1 C1=12749/1 C2=13978/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=5 exit_code=0 elapsed_s=0.139 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=7264 WAIT_ITEM=4326 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=11779/1 C1=14266/1 C2=13955/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=6 exit_code=0 elapsed_s=0.205 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=7486 WAIT_ITEM=3371 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13034/1 C1=13851/1 C2=13115/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=7 exit_code=0 elapsed_s=0.121 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=6825 WAIT_ITEM=4145 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13250/1 C1=13303/1 C2=13447/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=8 exit_code=0 elapsed_s=0.133 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=7288 WAIT_ITEM=4187 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13043/1 C1=13315/1 C2=13642/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=9 exit_code=0 elapsed_s=0.127 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=6969 WAIT_ITEM=4549 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13415/1 C1=12807/1 C2=13778/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=10 exit_code=0 elapsed_s=0.130 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=6727 WAIT_ITEM=4749 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13075/1 C1=13583/1 C2=13342/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=11 exit_code=0 elapsed_s=0.121 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=6803 WAIT_ITEM=4105 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13527/1 C1=13438/1 C2=13035/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=12 exit_code=0 elapsed_s=0.125 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=7447 WAIT_ITEM=3734 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=14437/1 C1=12976/1 C2=12587/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=13 exit_code=0 elapsed_s=0.125 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=6710 WAIT_ITEM=3991 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13422/1 C1=13201/1 C2=13377/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=14 exit_code=0 elapsed_s=0.132 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=7314 WAIT_ITEM=3704 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13977/1 C1=13388/1 C2=12635/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=15 exit_code=0 elapsed_s=0.118 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=6715 WAIT_ITEM=3903 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13748/1 C1=13288/1 C2=12964/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=16 exit_code=0 elapsed_s=0.126 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=6910 WAIT_ITEM=3645 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=14133/1 C1=12987/1 C2=12880/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=17 exit_code=0 elapsed_s=0.129 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=7125 WAIT_ITEM=4318 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13087/1 C1=13635/1 C2=13278/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=18 exit_code=0 elapsed_s=0.122 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=6759 WAIT_ITEM=3913 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13623/1 C1=13092/1 C2=13285/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=19 exit_code=0 elapsed_s=0.119 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=6851 WAIT_ITEM=3630 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13306/1 C1=13096/1 C2=13598/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+run=20 exit_code=0 elapsed_s=0.118 oracle=PASS
+  config: N=16 P=4 C=3 K=10000 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=40000 dequeued=40000 processed=40000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=16 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=7474 WAIT_ITEM=4106 records=80006 data_pending_after_producer_join=0
+  producers(DATA): P0=10000 P1=10000 P2=10000 P3=10000
+  consumers(DATA/STOP): C0=13375/1 C1=13211/1 C2=13414/1
+  workers: created=4P/3C joined=4P/3C; verification=PASS run_status=0
+PASS stress=T07 runs=20/20 DATA/run=40000 time=0.118-0.205s
+
+$ ./bin/producer-consumer --capacity 1 --producers 1 --consumers 4 --items-per-producer 0 --producer-delay-ms 0 --consumer-delay-ms 0
+repeat=20 timeout=5s each; full stdout oracle per run, log keeps summary lines only
+run=1 exit_code=0 elapsed_s=0.005 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=2 exit_code=0 elapsed_s=0.002 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=3 exit_code=0 elapsed_s=0.002 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=4 exit_code=0 elapsed_s=0.001 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=5 exit_code=0 elapsed_s=0.002 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=2 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=6 exit_code=0 elapsed_s=0.004 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=7 exit_code=0 elapsed_s=0.002 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=8 exit_code=0 elapsed_s=0.001 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=9 exit_code=0 elapsed_s=0.002 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=10 exit_code=0 elapsed_s=0.001 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=11 exit_code=0 elapsed_s=0.001 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=12 exit_code=0 elapsed_s=0.002 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=13 exit_code=0 elapsed_s=0.001 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=14 exit_code=0 elapsed_s=0.001 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=15 exit_code=0 elapsed_s=0.001 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=16 exit_code=0 elapsed_s=0.001 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=17 exit_code=0 elapsed_s=0.001 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=18 exit_code=0 elapsed_s=0.002 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=19 exit_code=0 elapsed_s=0.001 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+run=20 exit_code=0 elapsed_s=0.001 oracle=PASS
+  config: N=1 P=1 C=4 K=0 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=0 dequeued=0 processed=0 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=4 dequeued=4
+  waits: WAIT_SLOT=3 WAIT_ITEM=4 records=8 data_pending_after_producer_join=0
+  producers(DATA): P0=0
+  consumers(DATA/STOP): C0=0/1 C1=0/1 C2=0/1 C3=0/1
+  workers: created=1P/4C joined=1P/4C; verification=PASS run_status=0
+PASS stress=T09a runs=20/20 DATA/run=0 time=0.001-0.005s
+
+$ ./bin/producer-consumer --capacity 2 --producers 2 --consumers 3 --items-per-producer 30 --producer-delay-ms 0 --consumer-delay-ms 10
+repeat=20 timeout=7s each; full stdout oracle per run, log keeps summary lines only
+run=1 exit_code=0 elapsed_s=0.208 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=44 WAIT_ITEM=12 records=126 data_pending_after_producer_join=0
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=2 exit_code=0 elapsed_s=0.217 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=48 WAIT_ITEM=12 records=126 data_pending_after_producer_join=1
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=3 exit_code=0 elapsed_s=0.214 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=44 WAIT_ITEM=10 records=126 data_pending_after_producer_join=0
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=4 exit_code=0 elapsed_s=0.233 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=43 WAIT_ITEM=7 records=126 data_pending_after_producer_join=0
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=5 exit_code=0 elapsed_s=0.218 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=44 WAIT_ITEM=8 records=126 data_pending_after_producer_join=0
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=6 exit_code=0 elapsed_s=0.221 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=44 WAIT_ITEM=9 records=126 data_pending_after_producer_join=0
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=7 exit_code=0 elapsed_s=0.216 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=46 WAIT_ITEM=5 records=126 data_pending_after_producer_join=1
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=8 exit_code=0 elapsed_s=0.216 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=48 WAIT_ITEM=4 records=126 data_pending_after_producer_join=1
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=9 exit_code=0 elapsed_s=0.215 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=40 WAIT_ITEM=7 records=126 data_pending_after_producer_join=0
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=10 exit_code=0 elapsed_s=0.215 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=43 WAIT_ITEM=6 records=126 data_pending_after_producer_join=0
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=11 exit_code=0 elapsed_s=0.214 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=47 WAIT_ITEM=10 records=126 data_pending_after_producer_join=0
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=12 exit_code=0 elapsed_s=0.215 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=46 WAIT_ITEM=6 records=126 data_pending_after_producer_join=1
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=13 exit_code=0 elapsed_s=0.214 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=44 WAIT_ITEM=10 records=126 data_pending_after_producer_join=0
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=14 exit_code=0 elapsed_s=0.215 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=47 WAIT_ITEM=5 records=126 data_pending_after_producer_join=2
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=15 exit_code=0 elapsed_s=0.215 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=43 WAIT_ITEM=6 records=126 data_pending_after_producer_join=2
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=16 exit_code=0 elapsed_s=0.214 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=42 WAIT_ITEM=9 records=126 data_pending_after_producer_join=0
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=17 exit_code=0 elapsed_s=0.215 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=46 WAIT_ITEM=10 records=126 data_pending_after_producer_join=0
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=18 exit_code=0 elapsed_s=0.215 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=44 WAIT_ITEM=6 records=126 data_pending_after_producer_join=0
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=19 exit_code=0 elapsed_s=0.220 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=45 WAIT_ITEM=10 records=126 data_pending_after_producer_join=0
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+run=20 exit_code=0 elapsed_s=0.228 oracle=PASS
+  config: N=2 P=2 C=3 K=30 Dp_ms=0 Dc_ms=10
+  DATA: enqueued=60 dequeued=60 processed=60 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=2 final=0 count_errors=0; STOP: enqueued=3 dequeued=3
+  waits: WAIT_SLOT=44 WAIT_ITEM=11 records=126 data_pending_after_producer_join=0
+  producers(DATA): P0=30 P1=30
+  consumers(DATA/STOP): C0=20/1 C1=20/1 C2=20/1
+  workers: created=2P/3C joined=2P/3C; verification=PASS run_status=0
+PASS stress=T09b runs=20/20 DATA/run=60 time=0.208-0.233s
+
+$ ./bin/producer-consumer --capacity 1 --producers 8 --consumers 8 --items-per-producer 500 --producer-delay-ms 0 --consumer-delay-ms 0
+repeat=20 timeout=5s each; full stdout oracle per run, log keeps summary lines only
+run=1 exit_code=0 elapsed_s=0.049 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2059 WAIT_ITEM=2356 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=459/1 C1=427/1 C2=596/1 C3=534/1 C4=438/1 C5=454/1 C6=477/1 C7=615/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=2 exit_code=0 elapsed_s=0.049 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2256 WAIT_ITEM=2415 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=519/1 C1=476/1 C2=500/1 C3=528/1 C4=521/1 C5=523/1 C6=501/1 C7=432/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=3 exit_code=0 elapsed_s=0.049 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2092 WAIT_ITEM=2166 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=452/1 C1=536/1 C2=576/1 C3=436/1 C4=409/1 C5=523/1 C6=547/1 C7=521/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=4 exit_code=0 elapsed_s=0.048 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2174 WAIT_ITEM=2258 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=527/1 C1=493/1 C2=474/1 C3=497/1 C4=497/1 C5=519/1 C6=503/1 C7=490/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=5 exit_code=0 elapsed_s=0.039 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2244 WAIT_ITEM=2330 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=464/1 C1=457/1 C2=499/1 C3=449/1 C4=489/1 C5=559/1 C6=543/1 C7=540/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=6 exit_code=0 elapsed_s=0.038 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2274 WAIT_ITEM=2307 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=522/1 C1=488/1 C2=498/1 C3=524/1 C4=468/1 C5=506/1 C6=514/1 C7=480/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=7 exit_code=0 elapsed_s=0.047 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2471 WAIT_ITEM=2435 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=583/1 C1=447/1 C2=436/1 C3=466/1 C4=647/1 C5=468/1 C6=446/1 C7=507/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=8 exit_code=0 elapsed_s=0.050 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2524 WAIT_ITEM=2545 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=449/1 C1=438/1 C2=486/1 C3=475/1 C4=603/1 C5=476/1 C6=635/1 C7=438/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=9 exit_code=0 elapsed_s=0.052 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2479 WAIT_ITEM=2673 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=453/1 C1=449/1 C2=469/1 C3=553/1 C4=603/1 C5=488/1 C6=443/1 C7=542/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=10 exit_code=0 elapsed_s=0.066 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2957 WAIT_ITEM=2966 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=500/1 C1=473/1 C2=497/1 C3=546/1 C4=478/1 C5=507/1 C6=500/1 C7=499/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=11 exit_code=0 elapsed_s=0.044 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2407 WAIT_ITEM=2388 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=450/1 C1=500/1 C2=452/1 C3=426/1 C4=440/1 C5=467/1 C6=774/1 C7=491/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=12 exit_code=0 elapsed_s=0.056 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2583 WAIT_ITEM=2750 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=470/1 C1=456/1 C2=457/1 C3=455/1 C4=553/1 C5=575/1 C6=472/1 C7=562/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=13 exit_code=0 elapsed_s=0.048 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2429 WAIT_ITEM=2409 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=447/1 C1=562/1 C2=468/1 C3=493/1 C4=567/1 C5=430/1 C6=515/1 C7=518/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=14 exit_code=0 elapsed_s=0.042 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2324 WAIT_ITEM=2495 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=455/1 C1=515/1 C2=521/1 C3=519/1 C4=533/1 C5=540/1 C6=458/1 C7=459/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=15 exit_code=0 elapsed_s=0.047 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2452 WAIT_ITEM=2371 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=413/1 C1=532/1 C2=513/1 C3=522/1 C4=453/1 C5=555/1 C6=579/1 C7=433/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=16 exit_code=0 elapsed_s=0.061 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2551 WAIT_ITEM=2636 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=566/1 C1=460/1 C2=532/1 C3=449/1 C4=505/1 C5=507/1 C6=479/1 C7=502/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=17 exit_code=0 elapsed_s=0.068 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2759 WAIT_ITEM=2887 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=459/1 C1=543/1 C2=480/1 C3=503/1 C4=504/1 C5=461/1 C6=507/1 C7=543/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=18 exit_code=0 elapsed_s=0.080 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=3149 WAIT_ITEM=3264 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=532/1 C1=458/1 C2=469/1 C3=461/1 C4=515/1 C5=542/1 C6=461/1 C7=562/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=19 exit_code=0 elapsed_s=0.049 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2593 WAIT_ITEM=2525 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=510/1 C1=531/1 C2=596/1 C3=467/1 C4=467/1 C5=482/1 C6=511/1 C7=436/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+run=20 exit_code=0 elapsed_s=0.044 oracle=PASS
+  config: N=1 P=8 C=8 K=500 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=4000 dequeued=4000 processed=4000 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=1 final=0 count_errors=0; STOP: enqueued=8 dequeued=8
+  waits: WAIT_SLOT=2437 WAIT_ITEM=2500 records=8016 data_pending_after_producer_join=0
+  producers(DATA): P0=500 P1=500 P2=500 P3=500 P4=500 P5=500 P6=500 P7=500
+  consumers(DATA/STOP): C0=612/1 C1=467/1 C2=444/1 C3=488/1 C4=501/1 C5=467/1 C6=459/1 C7=562/1
+  workers: created=8P/8C joined=8P/8C; verification=PASS run_status=0
+PASS stress=N1-8P8C runs=20/20 DATA/run=4000 time=0.038-0.08s
+
+$ ./bin/producer-consumer --capacity 64 --producers 64 --consumers 64 --items-per-producer 100 --producer-delay-ms 0 --consumer-delay-ms 0
+repeat=20 timeout=5s each; full stdout oracle per run, log keeps summary lines only
+run=1 exit_code=0 elapsed_s=0.023 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=34 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=2 WAIT_ITEM=3358 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=86/1 C1=92/1 C2=70/1 C3=39/1 C4=75/1 C5=137/1 C6=104/1 C7=104/1 C8=183/1 C9=132/1 C10=111/1 C11=96/1 C12=93/1 C13=69/1 C14=177/1 C15=117/1 C16=115/1 C17=85/1 C18=93/1 C19=46/1 C20=97/1 C21=76/1 C22=55/1 C23=100/1 C24=142/1 C25=107/1 C26=64/1 C27=108/1 C28=80/1 C29=76/1 C30=85/1 C31=110/1 C32=144/1 C33=76/1 C34=61/1 C35=119/1 C36=64/1 C37=138/1 C38=103/1 C39=89/1 C40=50/1 C41=65/1 C42=133/1 C43=87/1 C44=55/1 C45=147/1 C46=74/1 C47=117/1 C48=114/1 C49=125/1 C50=80/1 C51=97/1 C52=90/1 C53=78/1 C54=125/1 C55=119/1 C56=127/1 C57=47/1 C58=121/1 C59=68/1 C60=122/1 C61=192/1 C62=139/1 C63=110/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=2 exit_code=0 elapsed_s=0.026 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=25 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=0 WAIT_ITEM=3602 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=88/1 C1=128/1 C2=76/1 C3=117/1 C4=99/1 C5=112/1 C6=109/1 C7=94/1 C8=95/1 C9=117/1 C10=106/1 C11=108/1 C12=111/1 C13=93/1 C14=73/1 C15=112/1 C16=102/1 C17=110/1 C18=98/1 C19=99/1 C20=86/1 C21=110/1 C22=97/1 C23=112/1 C24=94/1 C25=67/1 C26=127/1 C27=98/1 C28=79/1 C29=78/1 C30=87/1 C31=90/1 C32=75/1 C33=79/1 C34=94/1 C35=87/1 C36=94/1 C37=131/1 C38=108/1 C39=106/1 C40=85/1 C41=106/1 C42=100/1 C43=129/1 C44=97/1 C45=101/1 C46=95/1 C47=99/1 C48=115/1 C49=117/1 C50=122/1 C51=91/1 C52=89/1 C53=87/1 C54=92/1 C55=75/1 C56=106/1 C57=127/1 C58=79/1 C59=137/1 C60=94/1 C61=97/1 C62=127/1 C63=87/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=3 exit_code=0 elapsed_s=0.036 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=40 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=382 WAIT_ITEM=3405 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=96/1 C1=100/1 C2=116/1 C3=101/1 C4=116/1 C5=104/1 C6=108/1 C7=80/1 C8=83/1 C9=92/1 C10=67/1 C11=99/1 C12=100/1 C13=90/1 C14=114/1 C15=113/1 C16=129/1 C17=102/1 C18=95/1 C19=90/1 C20=92/1 C21=87/1 C22=92/1 C23=99/1 C24=103/1 C25=85/1 C26=156/1 C27=95/1 C28=100/1 C29=113/1 C30=116/1 C31=73/1 C32=94/1 C33=130/1 C34=86/1 C35=75/1 C36=91/1 C37=107/1 C38=109/1 C39=107/1 C40=97/1 C41=113/1 C42=102/1 C43=105/1 C44=115/1 C45=126/1 C46=105/1 C47=113/1 C48=113/1 C49=92/1 C50=84/1 C51=93/1 C52=95/1 C53=90/1 C54=74/1 C55=118/1 C56=92/1 C57=78/1 C58=108/1 C59=124/1 C60=116/1 C61=70/1 C62=76/1 C63=96/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=4 exit_code=0 elapsed_s=0.029 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=44 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=1218 WAIT_ITEM=3228 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=90/1 C1=112/1 C2=106/1 C3=92/1 C4=106/1 C5=129/1 C6=109/1 C7=91/1 C8=93/1 C9=123/1 C10=101/1 C11=105/1 C12=97/1 C13=95/1 C14=108/1 C15=129/1 C16=97/1 C17=87/1 C18=112/1 C19=104/1 C20=75/1 C21=105/1 C22=112/1 C23=96/1 C24=95/1 C25=102/1 C26=106/1 C27=95/1 C28=91/1 C29=122/1 C30=92/1 C31=95/1 C32=104/1 C33=99/1 C34=83/1 C35=77/1 C36=117/1 C37=122/1 C38=113/1 C39=85/1 C40=86/1 C41=95/1 C42=76/1 C43=101/1 C44=96/1 C45=105/1 C46=133/1 C47=91/1 C48=107/1 C49=131/1 C50=93/1 C51=71/1 C52=93/1 C53=109/1 C54=77/1 C55=84/1 C56=106/1 C57=134/1 C58=88/1 C59=101/1 C60=92/1 C61=93/1 C62=89/1 C63=77/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=5 exit_code=0 elapsed_s=0.030 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=21 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=0 WAIT_ITEM=3557 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=94/1 C1=107/1 C2=103/1 C3=79/1 C4=75/1 C5=94/1 C6=104/1 C7=112/1 C8=125/1 C9=100/1 C10=110/1 C11=65/1 C12=75/1 C13=110/1 C14=105/1 C15=113/1 C16=79/1 C17=184/1 C18=66/1 C19=119/1 C20=81/1 C21=116/1 C22=66/1 C23=83/1 C24=95/1 C25=111/1 C26=90/1 C27=91/1 C28=90/1 C29=97/1 C30=92/1 C31=82/1 C32=96/1 C33=112/1 C34=82/1 C35=85/1 C36=102/1 C37=103/1 C38=97/1 C39=138/1 C40=104/1 C41=70/1 C42=119/1 C43=72/1 C44=105/1 C45=125/1 C46=127/1 C47=109/1 C48=58/1 C49=108/1 C50=99/1 C51=138/1 C52=109/1 C53=107/1 C54=127/1 C55=115/1 C56=66/1 C57=118/1 C58=89/1 C59=111/1 C60=100/1 C61=118/1 C62=83/1 C63=95/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=6 exit_code=0 elapsed_s=0.035 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=23 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=0 WAIT_ITEM=3554 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=87/1 C1=108/1 C2=100/1 C3=115/1 C4=100/1 C5=134/1 C6=110/1 C7=110/1 C8=113/1 C9=83/1 C10=76/1 C11=91/1 C12=90/1 C13=74/1 C14=118/1 C15=151/1 C16=96/1 C17=67/1 C18=91/1 C19=101/1 C20=92/1 C21=101/1 C22=120/1 C23=102/1 C24=129/1 C25=145/1 C26=73/1 C27=103/1 C28=77/1 C29=119/1 C30=88/1 C31=124/1 C32=87/1 C33=102/1 C34=77/1 C35=68/1 C36=108/1 C37=83/1 C38=104/1 C39=104/1 C40=117/1 C41=95/1 C42=107/1 C43=102/1 C44=99/1 C45=91/1 C46=82/1 C47=74/1 C48=92/1 C49=110/1 C50=89/1 C51=74/1 C52=85/1 C53=109/1 C54=94/1 C55=91/1 C56=102/1 C57=103/1 C58=120/1 C59=99/1 C60=90/1 C61=82/1 C62=132/1 C63=140/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=7 exit_code=0 elapsed_s=0.025 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=50 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=2043 WAIT_ITEM=2471 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=164/1 C1=124/1 C2=133/1 C3=52/1 C4=130/1 C5=75/1 C6=154/1 C7=82/1 C8=124/1 C9=107/1 C10=53/1 C11=44/1 C12=72/1 C13=138/1 C14=90/1 C15=130/1 C16=103/1 C17=74/1 C18=92/1 C19=107/1 C20=76/1 C21=78/1 C22=125/1 C23=124/1 C24=145/1 C25=138/1 C26=95/1 C27=79/1 C28=113/1 C29=96/1 C30=120/1 C31=133/1 C32=114/1 C33=18/1 C34=92/1 C35=54/1 C36=123/1 C37=144/1 C38=116/1 C39=56/1 C40=117/1 C41=57/1 C42=92/1 C43=131/1 C44=145/1 C45=96/1 C46=81/1 C47=148/1 C48=64/1 C49=26/1 C50=56/1 C51=109/1 C52=77/1 C53=108/1 C54=114/1 C55=61/1 C56=101/1 C57=123/1 C58=101/1 C59=140/1 C60=51/1 C61=94/1 C62=124/1 C63=97/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=8 exit_code=0 elapsed_s=0.026 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=41 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=618 WAIT_ITEM=3596 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=105/1 C1=111/1 C2=103/1 C3=97/1 C4=101/1 C5=109/1 C6=101/1 C7=109/1 C8=107/1 C9=103/1 C10=120/1 C11=99/1 C12=113/1 C13=104/1 C14=121/1 C15=93/1 C16=114/1 C17=91/1 C18=85/1 C19=133/1 C20=92/1 C21=96/1 C22=93/1 C23=86/1 C24=98/1 C25=118/1 C26=86/1 C27=99/1 C28=97/1 C29=85/1 C30=85/1 C31=107/1 C32=87/1 C33=105/1 C34=98/1 C35=115/1 C36=90/1 C37=93/1 C38=105/1 C39=92/1 C40=100/1 C41=84/1 C42=82/1 C43=97/1 C44=69/1 C45=99/1 C46=99/1 C47=109/1 C48=107/1 C49=107/1 C50=105/1 C51=88/1 C52=84/1 C53=93/1 C54=105/1 C55=104/1 C56=99/1 C57=103/1 C58=100/1 C59=103/1 C60=124/1 C61=95/1 C62=108/1 C63=90/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=9 exit_code=0 elapsed_s=0.024 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=55 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=1 WAIT_ITEM=3488 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=135/1 C1=77/1 C2=108/1 C3=110/1 C4=84/1 C5=83/1 C6=91/1 C7=162/1 C8=90/1 C9=107/1 C10=139/1 C11=87/1 C12=116/1 C13=99/1 C14=119/1 C15=123/1 C16=125/1 C17=67/1 C18=124/1 C19=81/1 C20=62/1 C21=105/1 C22=80/1 C23=80/1 C24=88/1 C25=64/1 C26=90/1 C27=98/1 C28=80/1 C29=117/1 C30=110/1 C31=96/1 C32=59/1 C33=130/1 C34=88/1 C35=87/1 C36=80/1 C37=96/1 C38=97/1 C39=141/1 C40=96/1 C41=74/1 C42=138/1 C43=79/1 C44=91/1 C45=123/1 C46=101/1 C47=92/1 C48=101/1 C49=133/1 C50=138/1 C51=60/1 C52=98/1 C53=92/1 C54=102/1 C55=148/1 C56=116/1 C57=129/1 C58=76/1 C59=83/1 C60=41/1 C61=117/1 C62=76/1 C63=121/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=10 exit_code=0 elapsed_s=0.034 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=44 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=130 WAIT_ITEM=3614 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=112/1 C1=98/1 C2=124/1 C3=103/1 C4=112/1 C5=69/1 C6=86/1 C7=101/1 C8=81/1 C9=95/1 C10=99/1 C11=118/1 C12=108/1 C13=71/1 C14=97/1 C15=129/1 C16=100/1 C17=112/1 C18=113/1 C19=106/1 C20=75/1 C21=98/1 C22=130/1 C23=106/1 C24=92/1 C25=96/1 C26=99/1 C27=91/1 C28=125/1 C29=101/1 C30=108/1 C31=129/1 C32=86/1 C33=82/1 C34=115/1 C35=102/1 C36=113/1 C37=89/1 C38=83/1 C39=96/1 C40=88/1 C41=109/1 C42=100/1 C43=94/1 C44=95/1 C45=90/1 C46=89/1 C47=76/1 C48=119/1 C49=92/1 C50=118/1 C51=101/1 C52=85/1 C53=91/1 C54=105/1 C55=94/1 C56=85/1 C57=98/1 C58=114/1 C59=78/1 C60=134/1 C61=109/1 C62=95/1 C63=91/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=11 exit_code=0 elapsed_s=0.045 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=47 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=1213 WAIT_ITEM=3292 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=145/1 C1=100/1 C2=98/1 C3=119/1 C4=100/1 C5=78/1 C6=129/1 C7=114/1 C8=139/1 C9=115/1 C10=94/1 C11=87/1 C12=122/1 C13=91/1 C14=112/1 C15=112/1 C16=66/1 C17=111/1 C18=84/1 C19=76/1 C20=88/1 C21=101/1 C22=111/1 C23=94/1 C24=77/1 C25=88/1 C26=74/1 C27=97/1 C28=66/1 C29=94/1 C30=91/1 C31=78/1 C32=81/1 C33=80/1 C34=101/1 C35=67/1 C36=113/1 C37=79/1 C38=121/1 C39=104/1 C40=145/1 C41=94/1 C42=100/1 C43=100/1 C44=108/1 C45=96/1 C46=120/1 C47=124/1 C48=79/1 C49=95/1 C50=112/1 C51=92/1 C52=129/1 C53=118/1 C54=99/1 C55=80/1 C56=101/1 C57=101/1 C58=99/1 C59=119/1 C60=93/1 C61=89/1 C62=123/1 C63=87/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=12 exit_code=0 elapsed_s=0.026 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=38 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=293 WAIT_ITEM=2888 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=124/1 C1=48/1 C2=157/1 C3=187/1 C4=62/1 C5=126/1 C6=177/1 C7=170/1 C8=36/1 C9=77/1 C10=59/1 C11=48/1 C12=55/1 C13=28/1 C14=46/1 C15=128/1 C16=76/1 C17=194/1 C18=42/1 C19=54/1 C20=51/1 C21=37/1 C22=82/1 C23=133/1 C24=134/1 C25=107/1 C26=118/1 C27=143/1 C28=142/1 C29=47/1 C30=70/1 C31=34/1 C32=197/1 C33=79/1 C34=155/1 C35=97/1 C36=40/1 C37=31/1 C38=170/1 C39=52/1 C40=54/1 C41=106/1 C42=54/1 C43=78/1 C44=147/1 C45=64/1 C46=141/1 C47=196/1 C48=100/1 C49=62/1 C50=146/1 C51=202/1 C52=115/1 C53=112/1 C54=153/1 C55=142/1 C56=56/1 C57=139/1 C58=33/1 C59=110/1 C60=129/1 C61=30/1 C62=123/1 C63=95/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=13 exit_code=0 elapsed_s=0.034 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=42 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=561 WAIT_ITEM=3534 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=124/1 C1=85/1 C2=133/1 C3=106/1 C4=105/1 C5=136/1 C6=110/1 C7=110/1 C8=88/1 C9=90/1 C10=114/1 C11=107/1 C12=86/1 C13=90/1 C14=123/1 C15=74/1 C16=95/1 C17=113/1 C18=121/1 C19=105/1 C20=121/1 C21=94/1 C22=114/1 C23=104/1 C24=73/1 C25=115/1 C26=67/1 C27=89/1 C28=115/1 C29=95/1 C30=95/1 C31=79/1 C32=106/1 C33=121/1 C34=86/1 C35=94/1 C36=101/1 C37=84/1 C38=112/1 C39=113/1 C40=87/1 C41=111/1 C42=93/1 C43=109/1 C44=86/1 C45=97/1 C46=70/1 C47=106/1 C48=74/1 C49=95/1 C50=94/1 C51=89/1 C52=63/1 C53=100/1 C54=88/1 C55=107/1 C56=108/1 C57=116/1 C58=74/1 C59=115/1 C60=108/1 C61=105/1 C62=100/1 C63=112/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=14 exit_code=0 elapsed_s=0.022 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=45 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=872 WAIT_ITEM=3489 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=91/1 C1=132/1 C2=106/1 C3=104/1 C4=96/1 C5=83/1 C6=91/1 C7=140/1 C8=109/1 C9=136/1 C10=112/1 C11=117/1 C12=96/1 C13=77/1 C14=77/1 C15=97/1 C16=117/1 C17=103/1 C18=96/1 C19=108/1 C20=88/1 C21=139/1 C22=108/1 C23=103/1 C24=115/1 C25=69/1 C26=106/1 C27=97/1 C28=92/1 C29=67/1 C30=110/1 C31=90/1 C32=90/1 C33=98/1 C34=108/1 C35=92/1 C36=113/1 C37=96/1 C38=115/1 C39=89/1 C40=92/1 C41=102/1 C42=104/1 C43=132/1 C44=108/1 C45=75/1 C46=87/1 C47=108/1 C48=73/1 C49=99/1 C50=101/1 C51=88/1 C52=118/1 C53=86/1 C54=86/1 C55=93/1 C56=104/1 C57=106/1 C58=99/1 C59=83/1 C60=89/1 C61=100/1 C62=91/1 C63=103/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=15 exit_code=0 elapsed_s=0.045 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=37 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=0 WAIT_ITEM=3621 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=113/1 C1=92/1 C2=125/1 C3=84/1 C4=97/1 C5=83/1 C6=103/1 C7=132/1 C8=81/1 C9=106/1 C10=105/1 C11=94/1 C12=94/1 C13=102/1 C14=105/1 C15=123/1 C16=104/1 C17=85/1 C18=87/1 C19=103/1 C20=123/1 C21=118/1 C22=115/1 C23=82/1 C24=108/1 C25=115/1 C26=84/1 C27=93/1 C28=107/1 C29=93/1 C30=87/1 C31=116/1 C32=99/1 C33=118/1 C34=93/1 C35=122/1 C36=101/1 C37=111/1 C38=64/1 C39=65/1 C40=87/1 C41=118/1 C42=98/1 C43=87/1 C44=82/1 C45=106/1 C46=133/1 C47=113/1 C48=86/1 C49=102/1 C50=129/1 C51=90/1 C52=95/1 C53=106/1 C54=77/1 C55=124/1 C56=98/1 C57=95/1 C58=101/1 C59=64/1 C60=94/1 C61=112/1 C62=86/1 C63=85/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=16 exit_code=0 elapsed_s=0.030 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=49 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=1287 WAIT_ITEM=3072 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=112/1 C1=112/1 C2=105/1 C3=89/1 C4=104/1 C5=98/1 C6=89/1 C7=84/1 C8=94/1 C9=77/1 C10=119/1 C11=82/1 C12=108/1 C13=120/1 C14=103/1 C15=108/1 C16=101/1 C17=116/1 C18=84/1 C19=125/1 C20=94/1 C21=99/1 C22=89/1 C23=100/1 C24=94/1 C25=99/1 C26=98/1 C27=116/1 C28=98/1 C29=94/1 C30=128/1 C31=92/1 C32=88/1 C33=78/1 C34=88/1 C35=124/1 C36=90/1 C37=97/1 C38=68/1 C39=84/1 C40=96/1 C41=76/1 C42=165/1 C43=120/1 C44=104/1 C45=105/1 C46=94/1 C47=94/1 C48=113/1 C49=111/1 C50=80/1 C51=84/1 C52=101/1 C53=97/1 C54=98/1 C55=93/1 C56=104/1 C57=93/1 C58=99/1 C59=118/1 C60=87/1 C61=101/1 C62=84/1 C63=135/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=17 exit_code=0 elapsed_s=0.030 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=56 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=11 WAIT_ITEM=3149 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=128/1 C1=48/1 C2=85/1 C3=109/1 C4=89/1 C5=89/1 C6=157/1 C7=103/1 C8=69/1 C9=58/1 C10=59/1 C11=117/1 C12=84/1 C13=101/1 C14=137/1 C15=140/1 C16=82/1 C17=142/1 C18=175/1 C19=126/1 C20=183/1 C21=216/1 C22=74/1 C23=183/1 C24=78/1 C25=75/1 C26=55/1 C27=110/1 C28=78/1 C29=72/1 C30=89/1 C31=107/1 C32=102/1 C33=91/1 C34=110/1 C35=100/1 C36=54/1 C37=78/1 C38=97/1 C39=93/1 C40=110/1 C41=57/1 C42=65/1 C43=92/1 C44=190/1 C45=94/1 C46=130/1 C47=73/1 C48=79/1 C49=97/1 C50=61/1 C51=63/1 C52=85/1 C53=82/1 C54=114/1 C55=122/1 C56=103/1 C57=64/1 C58=92/1 C59=80/1 C60=63/1 C61=93/1 C62=185/1 C63=63/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=18 exit_code=0 elapsed_s=0.033 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=45 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=1168 WAIT_ITEM=3291 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=152/1 C1=89/1 C2=117/1 C3=112/1 C4=89/1 C5=123/1 C6=90/1 C7=103/1 C8=91/1 C9=91/1 C10=100/1 C11=90/1 C12=124/1 C13=108/1 C14=111/1 C15=106/1 C16=91/1 C17=83/1 C18=109/1 C19=85/1 C20=117/1 C21=98/1 C22=115/1 C23=109/1 C24=96/1 C25=109/1 C26=96/1 C27=77/1 C28=93/1 C29=98/1 C30=117/1 C31=116/1 C32=107/1 C33=104/1 C34=98/1 C35=96/1 C36=130/1 C37=81/1 C38=99/1 C39=86/1 C40=119/1 C41=98/1 C42=84/1 C43=96/1 C44=110/1 C45=107/1 C46=94/1 C47=109/1 C48=97/1 C49=67/1 C50=89/1 C51=107/1 C52=90/1 C53=106/1 C54=86/1 C55=97/1 C56=90/1 C57=78/1 C58=97/1 C59=124/1 C60=103/1 C61=71/1 C62=88/1 C63=87/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=19 exit_code=0 elapsed_s=0.024 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=44 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=975 WAIT_ITEM=3373 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=85/1 C1=115/1 C2=114/1 C3=74/1 C4=97/1 C5=103/1 C6=147/1 C7=112/1 C8=103/1 C9=94/1 C10=75/1 C11=88/1 C12=110/1 C13=124/1 C14=99/1 C15=117/1 C16=96/1 C17=83/1 C18=94/1 C19=81/1 C20=104/1 C21=94/1 C22=104/1 C23=98/1 C24=102/1 C25=119/1 C26=124/1 C27=72/1 C28=85/1 C29=84/1 C30=136/1 C31=104/1 C32=88/1 C33=103/1 C34=82/1 C35=95/1 C36=99/1 C37=94/1 C38=94/1 C39=97/1 C40=97/1 C41=100/1 C42=116/1 C43=83/1 C44=99/1 C45=108/1 C46=86/1 C47=91/1 C48=90/1 C49=82/1 C50=118/1 C51=103/1 C52=129/1 C53=115/1 C54=125/1 C55=89/1 C56=93/1 C57=95/1 C58=76/1 C59=96/1 C60=108/1 C61=99/1 C62=116/1 C63=97/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+run=20 exit_code=0 elapsed_s=0.021 oracle=PASS
+  config: N=64 P=64 C=64 K=100 Dp_ms=0 Dc_ms=0
+  DATA: enqueued=6400 dequeued=6400 processed=6400 missing=0 duplicate=0 out_of_range=0 value_errors=0 FIFO_errors=0 order_errors=0
+  buffer: min=0 max=50 final=0 count_errors=0; STOP: enqueued=64 dequeued=64
+  waits: WAIT_SLOT=96 WAIT_ITEM=3128 records=12928 data_pending_after_producer_join=0
+  producers(DATA): P0=100 P1=100 P2=100 P3=100 P4=100 P5=100 P6=100 P7=100 P8=100 P9=100 P10=100 P11=100 P12=100 P13=100 P14=100 P15=100 P16=100 P17=100 P18=100 P19=100 P20=100 P21=100 P22=100 P23=100 P24=100 P25=100 P26=100 P27=100 P28=100 P29=100 P30=100 P31=100 P32=100 P33=100 P34=100 P35=100 P36=100 P37=100 P38=100 P39=100 P40=100 P41=100 P42=100 P43=100 P44=100 P45=100 P46=100 P47=100 P48=100 P49=100 P50=100 P51=100 P52=100 P53=100 P54=100 P55=100 P56=100 P57=100 P58=100 P59=100 P60=100 P61=100 P62=100 P63=100
+  consumers(DATA/STOP): C0=72/1 C1=70/1 C2=88/1 C3=108/1 C4=120/1 C5=121/1 C6=68/1 C7=151/1 C8=106/1 C9=52/1 C10=195/1 C11=141/1 C12=140/1 C13=100/1 C14=116/1 C15=105/1 C16=85/1 C17=143/1 C18=137/1 C19=102/1 C20=138/1 C21=99/1 C22=51/1 C23=103/1 C24=123/1 C25=118/1 C26=50/1 C27=103/1 C28=67/1 C29=58/1 C30=112/1 C31=79/1 C32=101/1 C33=97/1 C34=133/1 C35=95/1 C36=64/1 C37=102/1 C38=78/1 C39=50/1 C40=89/1 C41=97/1 C42=117/1 C43=87/1 C44=97/1 C45=118/1 C46=72/1 C47=216/1 C48=82/1 C49=68/1 C50=115/1 C51=114/1 C52=110/1 C53=67/1 C54=156/1 C55=45/1 C56=111/1 C57=126/1 C58=72/1 C59=56/1 C60=56/1 C61=112/1 C62=73/1 C63=103/1
+  workers: created=64P/64C joined=64P/64C; verification=PASS run_status=0
+PASS stress=max-workers runs=20/20 DATA/run=6400 time=0.021-0.045s
+| Cấu hình | N/P/C/K/Dp/Dc | Lần chạy đạt | DATA mỗi lần | Thời gian (s) | count tối đa | Snapshot đầy | WAIT_SLOT | WAIT_ITEM | DATA còn đợi khi STOP | DATA ít/nhiều nhất của 1 consumer |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| T06a | 3/3/2/100/0/0 | 20/20 | 300 | 0.004–0.009 | 3 | 97–149 | 124–175 | 55–136 | 0 | 123–177 |
+| T06b | 2/2/5/100/0/0 | 20/20 | 200 | 0.003–0.02 | 2 | 67–101 | 1–41 | 117–144 | 0 | 27–53 |
+| T07 | 16/4/3/10000/0/0 | 20/20 | 40000 | 0.118–0.205 | 16 | 2536–3850 | 6710–7958 | 3282–4749 | 0 | 11779–14437 |
+| T09a | 1/1/4/0/0/0 | 20/20 | 0 | 0.001–0.005 | 1 | 4 | 2–3 | 4 | 0 | 0 |
+| T09b | 2/2/3/30/0/10 | 20/20 | 60 | 0.208–0.233 | 2 | 40–50 | 40–48 | 4–12 | 0–2 | 20 |
+| N1-8P8C | 1/8/8/500/0/0 | 20/20 | 4000 | 0.038–0.08 | 1 | 4008 | 2059–3149 | 2166–3264 | 0 | 409–774 |
+| max-workers | 64/64/64/100/0/0 | 20/20 | 6400 | 0.021–0.045 | 21–56 | 0 | 0–2043 | 2471–3621 | 0 | 18–216 |
