@@ -1,0 +1,70 @@
+Recheck after GitHub history rewrite (Asia/Saigon): 2026-11-01T23:29:37+07:00
+operator=Claude Code theo yeu cau Huy, may cua Huy (Windows Git Bash + WSL Ubuntu-24.04)
+scope=khong sua ma nguon; doi chieu tree va chay lai kiem chung tren ban clone
+
+$ git --version
+git version 2.55.0.windows.5
+exit_code=0
+
+$ git branch --show-current
+dev/huy
+exit_code=0
+
+$ git rev-parse HEAD origin/dev/huy origin/main origin/dev/chau
+fc3ba2fb9d1543b9a0fb7f08695d2fe2c3e38cc7
+fc3ba2fb9d1543b9a0fb7f08695d2fe2c3e38cc7
+443c4dcdb1054f80fe1fa42bb225e8beb2d96255
+443c4dcdb1054f80fe1fa42bb225e8beb2d96255
+exit_code=0
+
+$ git ls-remote --heads origin
+443c4dcdb1054f80fe1fa42bb225e8beb2d96255	refs/heads/dev/chau
+fc3ba2fb9d1543b9a0fb7f08695d2fe2c3e38cc7	refs/heads/dev/huy
+443c4dcdb1054f80fe1fa42bb225e8beb2d96255	refs/heads/main
+exit_code=0
+
+# Old SHA (before 22/10/2026) -> current SHA on GitHub: tree comparison
+d125734 -> 443c4dc tree 5435152 -> 5435152 SAME_TREE | author "Lê Hải Châu" -> "Lê Hải Châu"
+7ae49f8 -> 6b26b1b tree 5435152 -> 5435152 SAME_TREE | author "Codex" -> "Lê Hải Châu"
+6f71779 -> 452e38f tree 8e75dea -> 8e75dea SAME_TREE | author "ndhuy" -> "ndhuy"
+dd66ec3 -> b9cb5e3 tree d61e186 -> d61e186 SAME_TREE | author "ndhuy" -> "ndhuy"
+d2329b6 -> 8afc7e9 tree 6d99a2d -> 6d99a2d SAME_TREE | author "ndhuy" -> "ndhuy"
+e1f475f -> 0226f1c tree 09a0e58 -> 09a0e58 SAME_TREE | author "ndhuy" -> "ndhuy"
+31d899a -> fc3ba2f tree 33d26bd -> 33d26bd SAME_TREE | author "ndhuy" -> "ndhuy"
+
+$ git merge-base --is-ancestor origin/main HEAD
+exit_code=0
+
+# WSL: fresh clone, manifest, full validation
+
+$ uname -sr
+Linux 6.18.33.2-microsoft-standard-WSL2
+exit_code=0
+
+$ gcc --version
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Copyright (C) 2023 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+exit_code=0
+
+$ git clone -q -b dev/huy /mnt/d/os-producer-consumer /home/ndhuy/pc-recheck
+exit_code=0
+
+$ git log -1 --format=HEAD=%H tree=%T %s
+HEAD=fc3ba2fb9d1543b9a0fb7f08695d2fe2c3e38cc7 tree=33d26bd13e789ef8b4ce449f078c000205530b75 Tuần 3: cập nhật SHA commit trong tài liệu sau khi sửa message
+exit_code=0
+
+$ sha256sum -c --quiet results/week3/source.sha256
+exit_code=0
+
+$ python3 scripts/validate_week3.py   (clone only; per-test logs stay in the clone)
+Clean build PASS: C11, -Wall -Wextra -Wpedantic, -pthread, no warnings.
+Core PASS: thread demo, buffer 12/12, presets 16/16, fault injection 32/32.
+CLI/log PASS: 30 production runs, 114 invalid inputs + hooks.
+Stress PASS: 140 repeated runs.
+ASan+UBSan PASS: 9 production configs + 16 core presets.
+TSan PASS: 9 production configs + 16 core presets.
+Week 3 validation completed, exit=0; evidence in results/week3.
+exit_code=0 elapsed_s=61

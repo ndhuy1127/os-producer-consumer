@@ -10,7 +10,7 @@
 
 ## 2. Công việc phần Châu (W3-C)
 
-Thực hiện bởi Claude Code theo yêu cầu của Huy, commit `dd66ec3`; Châu chưa review. Giữ nguyên ba semaphore, thứ tự lấy quyền trước `guard`, API bộ đệm và các đường lỗi của Tuần 2.
+Thực hiện bởi Claude Code theo yêu cầu của Huy, commit `b9cb5e3`; Châu chưa review. Giữ nguyên ba semaphore, thứ tự lấy quyền trước `guard`, API bộ đệm và các đường lỗi của Tuần 2.
 
 | Nhiệm vụ | Việc thực tế đã làm | Trạng thái | Minh chứng |
 | --- | --- | --- | --- |
@@ -21,7 +21,7 @@ Thực hiện bởi Claude Code theo yêu cầu của Huy, commit `dd66ec3`; Ch�
 
 ## 3. Công việc phần Huy (W3-H)
 
-Thực hiện bởi Claude Code theo yêu cầu của Huy, commit `d2329b6` (code/script) và commit minh chứng/tài liệu kèm báo cáo này.
+Thực hiện bởi Claude Code theo yêu cầu của Huy, commit `8afc7e9` (code/script) và commit minh chứng/tài liệu kèm báo cáo này.
 
 | Nhiệm vụ | Việc thực tế đã làm | Trạng thái | Minh chứng |
 | --- | --- | --- | --- |
@@ -33,7 +33,7 @@ Thực hiện bởi Claude Code theo yêu cầu của Huy, commit `d2329b6` (cod
 
 ## 4. Kết quả tích hợp và kiểm thử của nhóm
 
-Chạy bằng `python3 scripts/validate_week3.py` ngày 20/10/2026 lúc 23:17 (Asia/Saigon), WSL2 Ubuntu 24.04, GCC 13.3.0, Make 4.3, Python 3.12.3; mã nguồn đúng commit `d2329b6`, cây nguồn sạch; manifest 23 file ở [source.sha256](../../results/week3/source.sha256). Script exit 0.
+Chạy bằng `python3 scripts/validate_week3.py` ngày 20/10/2026 lúc 23:17 (Asia/Saigon), WSL2 Ubuntu 24.04, GCC 13.3.0, Make 4.3, Python 3.12.3; mã nguồn đúng commit `8afc7e9`, cây nguồn sạch; manifest 23 file ở [source.sha256](../../results/week3/source.sha256). Script exit 0.
 
 | Lệnh/nhóm | Cấu hình | Kết quả | Exit |
 | --- | --- | --- | --- |
@@ -48,17 +48,20 @@ Chạy bằng `python3 scripts/validate_week3.py` ngày 20/10/2026 lúc 23:17 (A
 
 Quan sát chính (số của lần chạy này, phụ thuộc bộ lập lịch): T04-multi có 74 snapshot bộ đệm đầy và 71 lần producer thiếu chỗ; T05-multi có 63 snapshot rỗng và 66 lần consumer thiếu phần tử; T09a (N=1, 4 consumer, K=0) có WAIT_ITEM = 4 ở cả 20/20 lần chạy lặp, tức cả bốn consumer đều đang chờ khi STOP tới; queued-stop-multi còn 8 DATA trong bộ đệm khi main bắt đầu gửi STOP và tất cả được lấy trước STOP. T07 (40000 DATA) chạy 0,118–0,205 s; một consumer xử lý 11779–14437 phần tử, cho thấy không có bảo đảm chia đều. Chi tiết ở [bảng kết quả](../../results/week3/results-table.md) và [minh chứng Tuần 3](../../results/week3/README.md).
 
-Trước khi sửa code, bản Tuần 2 đã merge (`d125734`) được chạy lại trên máy Huy và đạt, ghi ở [báo cáo Tuần 2](week2.md) (commit `6f71779`).
+Trước khi sửa code, bản Tuần 2 đã merge (`d125734`, nay là `443c4dc` cùng nội dung) được chạy lại trên máy Huy và đạt, ghi ở [báo cáo Tuần 2](week2.md) (commit `452e38f`).
+
+**Kiểm tra lại ngày 01/11/2026**, sau khi lịch sử Git được viết lại (mục 5): Claude Code theo yêu cầu của Huy chạy lại `scripts/validate_week3.py` trên bản clone mới của `fc3ba2f`, exit 0, mọi nhóm ở bảng trên đều đạt lại; manifest khớp, không sửa mã nguồn. [Log](../../results/week3/recheck-2026-11-01.log).
 
 ## 5. Việc chưa hoàn thành hoặc đang vướng
 
 - Châu chưa review W3-C và chưa đọc/xác nhận mục 2–5 của báo cáo nháp; hai thành viên chưa đọc chéo code.
-- Commit `dd66ec3` khi build riêng có hai cảnh báo `-Wmissing-field-initializers` trong fixture của `tests/test_runtime_log.c` (không ở code chương trình); commit `d2329b6` ngay sau đã sửa.
-- Trước khi push, message của 4 commit Tuần 2–3 được viết lại để bỏ dòng ghi công AI theo quy định Git của nhóm; nội dung file không đổi. Log trong results/week3 vẫn ghi SHA cũ `3bda04b` cho commit W3-H, cùng tree với `d2329b6` (xem [minh chứng Tuần 3](../../results/week3/README.md)).
+- Commit `b9cb5e3` khi build riêng có hai cảnh báo `-Wmissing-field-initializers` trong fixture của `tests/test_runtime_log.c` (không ở code chương trình); commit `8afc7e9` ngay sau đã sửa.
+- Trước khi push, message của 4 commit Tuần 2–3 được viết lại để bỏ dòng ghi công AI theo quy định Git của nhóm; nội dung file không đổi. Log trong results/week3 vẫn ghi SHA cũ `3bda04b` cho commit W3-H, cùng tree với `8afc7e9` (xem [minh chứng Tuần 3](../../results/week3/README.md)).
+- Ngày 22/10/2026, sau khi `dev/huy` đã push, tài khoản GitHub `ChouPro205` force-push `main`, `dev/chau`, `dev/huy`, đổi tác giả Git của commit chốt review Tuần 2; mọi commit từ đó đổi SHA (ví dụ W3-C `dd66ec3` → `b9cb5e3`, W3-H `d2329b6` → `8afc7e9`), tree giữ nguyên. Bảng đối chiếu ở [tiến độ](../progress.md#lịch-sử-git-viết-lại); kiểm tra lại ngày 01/11/2026 đạt.
 - Kiểm thử, kể cả TSan, chỉ quan sát những lịch chạy đã xảy ra; lập luận ở báo cáo nháp bổ sung nhưng chưa được Châu kiểm tra.
 - Chưa đối chiếu giáo trình *Modern Operating Systems*; chưa có slide.
 - Các thay đổi Tuần 3 nằm trên `dev/huy`, chưa tạo PR vào main.
 
 ## 6. Công việc tiếp theo
 
-Push `dev/huy` và tạo PR vào main khi Huy đồng ý; Châu review W3-C và báo cáo nháp trước khi merge. Tuần 4 theo [kế hoạch](../plan.md): hoàn thiện báo cáo và slide, đọc chéo code, luyện demo, chuẩn bị gói nộp. [Tiến độ](../progress.md), [quy tắc báo cáo](README.md).
+`dev/huy` đã có trên GitHub; tạo PR vào main khi Huy đồng ý; Châu review W3-C và báo cáo nháp trước khi merge. Tuần 4 theo [kế hoạch](../plan.md): hoàn thiện báo cáo và slide, đọc chéo code, luyện demo, chuẩn bị gói nộp. [Tiến độ](../progress.md), [quy tắc báo cáo](README.md).

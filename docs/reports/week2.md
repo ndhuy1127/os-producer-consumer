@@ -78,4 +78,4 @@ Không còn vướng kỹ thuật trong W2-C/W2-H phạm vi Tuần 2 cơ bản; 
 
 ## 6. Công việc tiếp theo
 
-Đã bàn giao qua PR #3 bằng merge commit `d125734`, giữ commit gốc và hai nhánh thành viên; khi kiểm tra ngày 20/10/2026, main, dev/chau và dev/huy trên GitHub cùng trỏ `d125734`. Tuần 3 triển khai nhiều producer/consumer, T06/T07/phần nhiều luồng T09 và nới giới hạn CLI, xem [báo cáo Tuần 3](week3.md). [Tiến độ](../progress.md), [quy tắc báo cáo](README.md).
+Đã bàn giao qua PR #3 bằng merge commit `d125734`, giữ commit gốc và hai nhánh thành viên; khi kiểm tra ngày 20/10/2026, main, dev/chau và dev/huy trên GitHub cùng trỏ `d125734`. Ngày 22/10/2026 lịch sử trên GitHub được viết lại; main hiện trỏ `443c4dc`, cùng nội dung với `d125734` ([chi tiết](../progress.md#lịch-sử-git-viết-lại)). Tuần 3 triển khai nhiều producer/consumer, T06/T07/phần nhiều luồng T09 và nới giới hạn CLI, xem [báo cáo Tuần 3](week3.md). [Tiến độ](../progress.md), [quy tắc báo cáo](README.md).

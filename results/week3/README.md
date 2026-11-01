@@ -1,12 +1,12 @@
 # Minh chứng Tuần 3
 
-**Bản nhiều producer/consumer đạt toàn bộ kiểm thử đã chạy.** Chạy ngày 20/10/2026 lúc 23:17 (Asia/Saigon) trên máy của Huy (WSL2 Ubuntu 24.04, GCC 13.3.0, Make 4.3, Python 3.12.3), mã nguồn đúng commit `d2329b6` trên `dev/huy`, cây nguồn sạch. Claude Code thực hiện theo yêu cầu của Huy, bằng lệnh:
+**Bản nhiều producer/consumer đạt toàn bộ kiểm thử đã chạy.** Chạy ngày 20/10/2026 lúc 23:17 (Asia/Saigon) trên máy của Huy (WSL2 Ubuntu 24.04, GCC 13.3.0, Make 4.3, Python 3.12.3), mã nguồn đúng commit `8afc7e9` trên `dev/huy` (xem ghi chú SHA bên dưới), cây nguồn sạch. Claude Code thực hiện theo yêu cầu của Huy, bằng lệnh:
 
 ```sh
 python3 scripts/validate_week3.py
 ```
 
-**Về SHA trong log:** các log ghi `HEAD=3bda04b4091784c48898ce23589c4af9d5eb3b11`. Đó là SHA của commit W3-H trước khi message của nó được viết lại ngày 21/10/2026 (bỏ dòng ghi công AI, chưa từng push). Nội dung file không đổi: commit hiện tại `d2329b695fbc7ecbda68727ec5d87d0a81c6a328` có cùng tree `6d99a2d847f411adb2b296114f4dcc68b5c1ffd2`, kiểm tra bằng `git rev-parse d2329b6^{tree}`; manifest bên dưới vẫn khớp. Log được giữ nguyên như lúc chạy, không sửa SHA.
+**Về SHA trong log:** các log ghi `HEAD=3bda04b4091784c48898ce23589c4af9d5eb3b11`. Commit W3-H đã đổi SHA hai lần, nội dung file không đổi: ngày 21/10/2026 message được viết lại trước khi push (bỏ dòng ghi công AI) thành `d2329b6`; ngày 22/10/2026 lịch sử trên GitHub được viết lại bằng force-push ([chi tiết](../../docs/progress.md#lịch-sử-git-viết-lại)) thành `8afc7e956fd929c63dd4a99594ea2560eecc705e`. Cả ba có cùng tree `6d99a2d847f411adb2b296114f4dcc68b5c1ffd2`, kiểm tra bằng `git rev-parse 8afc7e9^{tree}`; manifest bên dưới vẫn khớp. Log được giữ nguyên như lúc chạy, không sửa SHA.
 
 Script chỉ ghi vào thư mục này, không sửa minh chứng Tuần 1–2. Manifest [source.sha256](source.sha256) (23 file) có SHA256 `8bb98e5f…c30a`; đối chiếu bằng `sha256sum -c results/week3/source.sha256`. Phần W3-C (lõi nhiều luồng) **chưa được Châu review/xác nhận**.
 
@@ -22,6 +22,7 @@ Script chỉ ghi vào thư mục này, không sửa minh chứng Tuần 1–2. M
 | Chạy lặp nhiều luồng | 7 cấu hình × 20 = 140/140 lần đạt oracle đầy đủ | [stress-tests.log](stress-tests.log) |
 | ASan + UBSan (bật phát hiện rò rỉ) và ThreadSanitizer | 9 cấu hình chương trình chính + 16 preset lõi cho mỗi công cụ, không cảnh báo | [sanitizers.log](sanitizers.log) |
 | Rà soát | Kiểm tra khung/liên kết, `git diff --check`, Tuần 1–2 không đổi, manifest không đổi trong lúc chạy | [review.log](review.log) |
+| Kiểm tra lại ngày 01/11/2026, sau khi lịch sử Git được viết lại | 7 cặp commit cũ/mới cùng tree; manifest khớp; `validate_week3.py` trên bản clone mới của `fc3ba2f` exit 0, mọi nhóm trên đạt lại. Chỉ lưu tóm tắt, các log ở trên không bị ghi đè | [recheck-2026-11-01.log](recheck-2026-11-01.log) |
 
 Bảng số liệu chi tiết (snapshot đầy/rỗng, số lần chờ, DATA từng consumer, khoảng giá trị khi chạy lặp): [results-table.md](results-table.md). Dữ liệu máy đọc được: [test-summary.json](test-summary.json).
 

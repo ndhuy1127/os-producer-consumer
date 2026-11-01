@@ -20,11 +20,11 @@ Kế hoạch 4 tuần, chưa có ngày bắt đầu/hạn nộp. Chi tiết ở 
 | Tuần | Nội dung | Trạng thái |
 | --- | --- | --- |
 | 1 | Lý thuyết, thiết kế, ví dụ luồng (Châu); môi trường, bộ đệm tuần tự, đặc tả CLI/log (Huy) | Hoàn thành, PR #1 và #2 |
-| 2 | Lõi 1 producer/1 consumer với semaphore và STOP (Châu); CLI, log, kiểm thử đầy/rỗng/N=1 (Huy) | Hoàn thành, PR #3 merge ở `d125734` |
+| 2 | Lõi 1 producer/1 consumer với semaphore và STOP (Châu); CLI, log, kiểm thử đầy/rỗng/N=1 (Huy) | Hoàn thành, PR #3 merge ở `d125734`; main hiện ở `443c4dc` cùng nội dung sau khi [lịch sử Git được viết lại](docs/progress.md#lịch-sử-git-viết-lại) |
 | 3 | Nhiều producer/consumer, ID riêng, rà soát đồng bộ, lý thuyết/thuật toán (phần Châu); script kiểm thử, xác thực FIFO, bảng kết quả, hướng dẫn chạy (phần Huy) | Hoàn thành trên `dev/huy`, **chưa PR**; do Claude Code thực hiện theo yêu cầu Huy, **Châu chưa review** |
 | 4 | Hoàn thiện báo cáo, slide, demo, đọc chéo, gói nộp | Chưa bắt đầu |
 
-Kết quả Tuần 3 (20/10/2026): 16/16 preset lõi, 32/32 ca tiêm lỗi, 30/30 lần chạy chương trình chính, 140/140 lần chạy lặp nhiều luồng; ASan/UBSan và ThreadSanitizer không cảnh báo. Xem [minh chứng](results/week3/README.md), [bảng kết quả](results/week3/results-table.md) và [báo cáo nháp](docs/final-report/bao-cao-nhap.md).
+Kết quả Tuần 3 (20/10/2026): 16/16 preset lõi, 32/32 ca tiêm lỗi, 30/30 lần chạy chương trình chính, 140/140 lần chạy lặp nhiều luồng; ASan/UBSan và ThreadSanitizer không cảnh báo; chạy lại ngày 01/11/2026 trên bản clone mới vẫn đạt. Xem [minh chứng](results/week3/README.md), [bảng kết quả](results/week3/results-table.md) và [báo cáo nháp](docs/final-report/bao-cao-nhap.md).
 
 ## Chạy nhanh
 
